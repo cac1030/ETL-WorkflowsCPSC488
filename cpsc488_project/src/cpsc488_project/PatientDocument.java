@@ -13,12 +13,14 @@ public class PatientDocument {
 	private final int docType;
 	private final String dateCreated;
 	private String dateModified;
+	private String createdBy;
 	
-	public PatientDocument(String filePath, String title, String[] notes, int docType, String dateCreated) {
+	public PatientDocument(String filePath, String title, String[] notes, int docType, String dateCreated, String createdBy) {
 		this.filePath = filePath;
 		this.title = title;
 		this.docType = docType;
 		this.dateCreated = dateCreated;
+		this.createdBy = createdBy;
 		
 		for(String note : notes) {
 			this.notes.add(note);
@@ -63,6 +65,10 @@ public class PatientDocument {
 
 	public void setDateModified(String dateModified) {
 		this.dateModified = dateModified;
+	}
+	
+	public String getCreatedBy() {
+		return createdBy;
 	}
 	
 	

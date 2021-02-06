@@ -16,7 +16,11 @@ public class Patient {
 		this.sex = sex;
 	}
 	
+	public void loadDocumentsFromSystem(int docType) {			// Retrieve patient docs from iRODS base
+		// Perhaps only of a desired type for efficiency
+	}
 	
+	// Getters n' setters ----------------------------------------------------------------------
 	
 	public String getFirstName() {
 		return firstName;
