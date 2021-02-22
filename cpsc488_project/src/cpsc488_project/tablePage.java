@@ -93,7 +93,7 @@ public class tablePage {
 		
 		textFieldNotes = new JTextField();
 		textFieldNotes.setColumns(10);
-		textFieldNotes.setBounds(183, 214, 86, 20);
+		textFieldNotes.setBounds(183, 214, 203, 51);
 		frame.getContentPane().add(textFieldNotes);
 		
 	
@@ -106,17 +106,17 @@ public class tablePage {
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
 				int i=table.getSelectedRow();
-				lblName.setText(model.getValueAt(i, 0).toString());
-				lblGender.setText(model.getValueAt(i, 1).toString());
-				lblAge.setText(model.getValueAt(i, 2).toString());
-				lblNotes.setText(model.getValueAt(i, 3).toString());
+				textFieldName.setText(model.getValueAt(i, 0).toString());
+				textFieldGender.setText(model.getValueAt(i, 1).toString());
+				textFieldAge.setText(model.getValueAt(i, 2).toString());
+				textFieldNotes.setText(model.getValueAt(i, 3).toString());
 				
 			}
 		});
 		
 		model=new DefaultTableModel();
 		Object[] column = {"Patient Name", "Gender", "Age", "Notes"};
-		final Object[] row = new Object[0];
+		final Object[] row = new Object[4];
 		model.setColumnIdentifiers(column);
 		table.setModel(model);
 		scrollPane.setViewportView(table);
@@ -125,10 +125,10 @@ public class tablePage {
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				row[0]= lblName.getText();
-				row[1]= lblGender.getText();
-				row[2]= lblAge.getText();
-				row[3]= lblNotes.getText();
+				row[0]= textFieldName.getText();
+				row[1]= textFieldGender.getText();
+				row[2]= textFieldAge.getText();
+				row[3]= textFieldNotes.getText();
 				model.addRow(row);
 			}
 		});
@@ -145,10 +145,10 @@ public class tablePage {
 				
 				if(i>=0)
 				{
-				model.setValueAt(lblName.getText(), i, 0);
-				model.setValueAt(lblGender.getText(), i, 0);
-				model.setValueAt(lblAge.getText(), i, 0);
-				model.setValueAt(lblNotes.getText(), i, 0);
+				model.setValueAt(textFieldName.getText(), i, 0);
+				model.setValueAt(textFieldGender.getText(), i, 0);
+				model.setValueAt(textFieldAge.getText(), i, 0);
+				model.setValueAt(textFieldNotes.getText(), i, 0);
 				JOptionPane.showMessageDialog(null,"Updated");
 				}
 				else
@@ -174,10 +174,10 @@ public class tablePage {
 		JButton btnClear = new JButton("Clear");
 		btnClear.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
-				lblName.setText("");
-				lblGender.setText("");
-				lblAge.setText("");
-				lblNotes.setText("");
+				textFieldName.setText("");
+				textFieldGender.setText("");
+				textFieldAge.setText("");
+				textFieldNotes.setText("");
 			}
 		});
 		btnClear.setBounds(491, 146, 89, 23);
@@ -189,6 +189,12 @@ public class tablePage {
 		frame.getContentPane().add(lblTitle);
 		
 		JButton btnUpload = new JButton("Upload");
+		btnUpload.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent arg0) {
+				//Upload to iRods
+			}
+		});
+		
 		btnUpload.setBounds(435, 193, 89, 23);
 		frame.getContentPane().add(btnUpload);
 	}
