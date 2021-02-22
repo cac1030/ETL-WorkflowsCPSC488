@@ -187,5 +187,9 @@ public class tablePage {
 		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 35));
 		lblTitle.setBounds(47, 35, 222, 53);
 		frame.getContentPane().add(lblTitle);
+		
+		JButton btnUpload = new JButton("Upload");
+		btnUpload.setBounds(435, 193, 89, 23);
+		frame.getContentPane().add(btnUpload);
 	}
 }
