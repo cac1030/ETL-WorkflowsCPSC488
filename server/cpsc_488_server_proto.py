@@ -1,4 +1,6 @@
 import socket
+import zipfile
+import json
 import tqdm
 import os
 
@@ -37,10 +39,27 @@ def handle_connection():
 	
 	return (client_socket, address)
 	
-# files always come as a file-metadata pair
+def process_request(client_socket, address):
+	# receive request from client
+	received = client_socket.recv(BUFFER_SIZE).decode()
+	
+	print(f"received {received} from {address}")
+	
+	request, data = received.split('!')
+	
+	switcher = {
+		"REQ_DOWNLOAD_META_SEARCH": "REQ_DOWNLOAD_META_SEARCH",
+		"REQ_DOWNLOAD_META_DEFAULT": "REQ_DOWNLOAD_META_DEFAULT",
+		"REQ_DOWNLOAD_FILE": "REQ_DOWNLOAD_FILE",
+		"REQ_UPLOAD_FILE": receive_file(client_socket, address, data)
+		}
+	
+	message = switcher.get(request, "invalid request")
+	print(message)
+	
 def receive_file(client_socket, address, data):
 	# receive the file infos
-	filename, filesize = data.split(SEPARATOR)
+	patient_name, filename, filesize = data.split(SEPARATOR)
 	# remove absolute path if there is
 	filename = os.path.basename(filename)
 	# convert to integer
@@ -61,28 +80,25 @@ def receive_file(client_socket, address, data):
 			f.write(bytes_read)
 			# update the progress bar
 			progress.update(len(bytes_read))
+			
+	unzip_file("./client.zip")
+	put_to_irods(filename, patient_name)
+	
+	return "\nREQUEST_UPLOAD_FILE by " + address[0] + " fulfilled"
 	
 	#put_to_irods(filename)
 	
-def process_request(client_socket, address):
-	# receive request from client
-	received = client_socket.recv(BUFFER_SIZE).decode()
-	
-	print(f"received {received} from {address}")
-	
-	request, data = received.split('!')
-	
-	switcher = {
-		"REQ_DOWNLOAD_META_SEARCH": "REQ_DOWNLOAD_META_SEARCH",
-		"REQ_DOWNLOAD_META_DEFAULT": "REQ_DOWNLOAD_META_DEFAULT",
-		"REQ_DOWNLOAD_FILE": "REQ_DOWNLOAD_FILE",
-		"REQ_UPLOAD_FILE": receive_file(client_socket, address, data)
-		}
-	
-	switcher.get(request, lambda: "Invalid request")
+def unzip_file(path):
+	with zipfile.ZipFile(path, 'r') as zip_ref:
+		zip_ref.extractall("./temp")
+	os.system("rm client.zip")
 
-def put_to_irods(filename):
-	os.system("iput ...")
+def put_to_irods(filename, patient_name):
+	with open("./temp/meta.json") as f:
+		data = json.load(f)
+	# still need info: file ext. and patient name
+	cmdstr = f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{filename} --metadata="dateAdded;{data['dateAdded']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;"
+	os.system(cmdstr)
 	
 setup_server()
 while True:
