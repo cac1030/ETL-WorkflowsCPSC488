@@ -2,21 +2,26 @@ import socket
 import tqdm
 import os
 import sys
+import zipfile
+
+def zip_file(filename):
+	with zipfile.ZipFile('client.zip', 'w') as zip:
+		zip.write(filename)
+		zip.write('meta.txt')
+	return os.path.getsize('client.zip')
 
 REQUEST = "REQ_UPLOAD_FILE"
 PATIENT_NAME = "DOE_JANE"
 SEPARATOR = "<SEPARATOR>"
 BUFFER_SIZE = 4096 #send 4096 bytes for each time step
 
-# the ip address or hostname of the server, the receiver
+# addressing
 #host = "52.168.52.180"
 host = "localhost"
-# the port, let's use 5001
 port = 5001
-# the name of file we want to send, make sure it exists
+
 filename = sys.argv[1]
-# get the file size
-filesize = os.path.getsize('client.zip')
+filesize = zip_file(filename)
 
 # create the client socket
 s = socket.socket()
