@@ -68,7 +68,7 @@ def receive_file(client_socket, address, data):
 	# start receiving the data file from the socket
 	# and writing to the file stream
 	progress = tqdm.tqdm(range(filesize), f"Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-	with open(filename, "wb") as f:
+	with open("client.zip", "wb") as f:
 		while True:
 			# read 1024 bytes from the socket (receive)
 			bytes_read = client_socket.recv(BUFFER_SIZE)
@@ -94,19 +94,23 @@ def unzip_file(path):
 	os.system("rm client.zip")
 
 def put_to_irods(filename, patient_name):
-	with open("./temp/meta.json") as f:
+	with open("./temp/meta.txt") as f:
 		data = json.load(f)
-	# still need info: file ext. and patient name
-	cmdstr = f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{filename} --metadata="dateAdded;{data['dateAdded']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;"
+		
+	# build the string of the command that will iput the file with metadata attached
+	cmdstr = f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{filename} --metadata=\"date_create;{data['date']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\""
+	os.system("echo " + cmdstr)
 	os.system(cmdstr)
 	
 setup_server()
-while True:
-	client_socket, address = handle_connection()
-	process_request(client_socket, address)
-	
+#while True:
+client_socket, address = handle_connection()
+process_request(client_socket, address)
+
 # close the server socket
 s.close()
+	
+
 
 #def update_client_meta:
     # for each loop that goes through the client whitelist and sends each IP
