@@ -182,6 +182,7 @@ public class tablePage {
 		btnImport.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
 				
+				JOptionPane.showMessageDialog(null,"Within your Txt document: Column Names should be seperated by , and rows by /. \n Example \n Name, Gender, Age \n Christian / Male / 21");
 				//Allow user to select file 
 				JFileChooser fileChooser = new JFileChooser();
 				int response = fileChooser.showOpenDialog(null);
