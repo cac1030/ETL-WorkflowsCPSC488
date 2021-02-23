@@ -1,6 +1,6 @@
 package cpsc488_project;
 
-import java.awt.Color;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +23,7 @@ public class LoginPage implements ActionListener{
 	JLabel userIDLabel = new JLabel("Username:");
 	JLabel userPasswordLabel = new JLabel("Password:");
 	JLabel noteLabel = new JLabel();
+	JLabel titleLabel = new JLabel("Login Page");
 	
 	
 	HashMap<String,String> logininfo = new HashMap<String,String>();
@@ -34,11 +35,14 @@ public class LoginPage implements ActionListener{
 		//x 50 y 100 75 long 25 height 
 		userIDLabel.setBounds(50,100,75,25);
 		userPasswordLabel.setBounds(50,150,75,25);
+		titleLabel.setBounds(40,30,200,50);
+		titleLabel.setFont(new Font(null,Font.BOLD,35));
 		
 		//Add Labels to Frame
 		frame.add(userIDLabel);
 		frame.add(userPasswordLabel);
 		frame.add(noteLabel);
+		frame.add(titleLabel);
 		
 		//Position of Note in Frame
 		noteLabel.setBounds(125,250,250,35);
@@ -98,7 +102,10 @@ public class LoginPage implements ActionListener{
 					noteLabel.setText("*Successful Login");
 					//Before Launching Page Delete Login Screen
 					frame.dispose();
-					HomePage homePage = new HomePage();
+					//Launch New Page
+					tablePage window = new tablePage();
+					window.frame.setVisible(true);
+					
 				}
 				else {
 					//User name/Password is wrong

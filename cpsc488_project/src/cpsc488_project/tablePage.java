@@ -1,6 +1,5 @@
 package cpsc488_project;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,49 +11,30 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import javax.swing.JTable;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import java.awt.Font;
 
+
 public class tablePage {
 
-	private JFrame frame;
-	private JTextField textFieldName;
-	private JTextField textFieldGender;
-	private JTextField textFieldAge;
-	private JTextField textFieldNotes;
-	private JTable table;
+	JFrame frame = new JFrame();
+	JTextField textFieldName = new JTextField();
+	JTextField textFieldGender = new JTextField();
+	JTextField textFieldAge = new  JTextField();
+	JTextField textFieldNotes = new JTextField();
+	JTable table = new JTable();
+
 	
 	DefaultTableModel model;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					tablePage window = new tablePage();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
-	 */
-	public tablePage() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
+	
+	
+	tablePage() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 693, 519);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -197,5 +177,44 @@ public class tablePage {
 		
 		btnUpload.setBounds(435, 193, 89, 23);
 		frame.getContentPane().add(btnUpload);
+		
+		JButton btnImport = new JButton("Import");
+		btnImport.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent arg0) {
+				
+				//Allow user to select file 
+				JFileChooser fileChooser = new JFileChooser();
+				int response = fileChooser.showOpenDialog(null);
+				File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+					
+				
+				
+				try {
+					//Separate Column Names by ,
+					BufferedReader br = new BufferedReader(new FileReader(file));
+					String firstLine = br.readLine().trim();
+					String[] columnsName = firstLine.split(",");
+					DefaultTableModel model = (DefaultTableModel)table.getModel();
+					model.setColumnIdentifiers(columnsName);
+					
+					Object [] tableLines = br.lines().toArray();
+					
+					//Separate Rows by /
+					for(int i = 0; i < tableLines.length; i++) {
+						String line = tableLines[i].toString().trim();
+						String[] dataRow = line.split("/");
+						model.addRow(dataRow);
+						
+					}
+					
+				} catch (Exception ex) {
+					// TODO Auto-generated catch block
+					ex.printStackTrace();
+				}
+				
+		}
+		});
+		btnImport.setBounds(435, 73, 89, 23);
+		frame.getContentPane().add(btnImport);
 	}
 }
