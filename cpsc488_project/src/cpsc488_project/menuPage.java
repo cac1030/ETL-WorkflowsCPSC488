@@ -27,6 +27,7 @@ public class menuPage {
 		JButton PatientDirectoryButton = new JButton("Patient Directory");
 		PatientDirectoryButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		PatientDirectoryButton.setBounds(339, 174, 163, 58);
+		PatientDirectoryButton.setFocusable(false);
 		PatientDirectoryButton.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
 				frame.dispose();
@@ -46,6 +47,7 @@ public class menuPage {
 			}
 		});
 		btnAddPatient.setBounds(181, 174, 148, 58);
+		btnAddPatient.setFocusable(false);
 		frame.getContentPane().add(btnAddPatient);
 		
 		JLabel menuLabel = new JLabel("Main Menu");

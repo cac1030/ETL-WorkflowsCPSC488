@@ -11,7 +11,10 @@ public class patientDirectory {
 
 	
 	public patientDirectory() {
-		frame.getContentPane().setBackground(new Color(255, 255, 255));
+		frame = new JFrame();
+		frame.getContentPane().setBackground(Color.WHITE);
+		frame.setBounds(100, 100, 773, 470);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 	}
