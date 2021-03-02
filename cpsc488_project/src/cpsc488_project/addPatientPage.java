@@ -25,208 +25,313 @@ import java.awt.Color;
 public class addPatientPage {
 
 	JFrame frame = new JFrame();
-	JTextField textFieldName = new JTextField();
-	JTextField textFieldGender = new JTextField();
-	JTextField textFieldAge = new  JTextField();
-	JTextField textFieldNotes = new JTextField();
-	JTable table = new JTable();
+
+	private JTextField nameField;
+	private JTextField addressField;
+	private JTextField cityField;
+	private JTextField birthField;
+	private JTextField stateField;
+	private JTextField zipField;
+	private JTextField countryField;
+	private JTextField phoneField;
+	private JTextField genderField;
+	private JTextField ethnicityField;
+	private JTextField emailField;
+
 
 	
 	DefaultTableModel model;
 	
 	
 	addPatientPage() {
-		frame = new JFrame();
-		frame.getContentPane().setBackground(Color.WHITE);
-		frame.setBounds(100, 100, 773, 470);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+
 		
-		JLabel lblName = new JLabel("Patient Name:");
-		lblName.setBounds(82, 116, 91, 20);
-		frame.getContentPane().add(lblName);
-		
-		JLabel lblGender = new JLabel("Gender:");
-		lblGender.setBounds(82, 147, 71, 20);
-		frame.getContentPane().add(lblGender);
-		
-		JLabel lblAge = new JLabel("Age:");
-		lblAge.setBounds(82, 183, 71, 20);
-		frame.getContentPane().add(lblAge);
-		
-		JLabel lblNotes = new JLabel("Notes:");
-		lblNotes.setBounds(82, 214, 71, 20);
-		frame.getContentPane().add(lblNotes);
-		
-		textFieldName = new JTextField();
-		textFieldName.setBounds(183, 116, 86, 20);
-		frame.getContentPane().add(textFieldName);
-		textFieldName.setColumns(10);
-		
-		textFieldGender = new JTextField();
-		textFieldGender.setColumns(10);
-		textFieldGender.setBounds(183, 147, 86, 20);
-		frame.getContentPane().add(textFieldGender);
-		
-		textFieldAge = new JTextField();
-		textFieldAge.setColumns(10);
-		textFieldAge.setBounds(183, 183, 86, 20);
-		frame.getContentPane().add(textFieldAge);
-		
-		textFieldNotes = new JTextField();
-		textFieldNotes.setColumns(10);
-		textFieldNotes.setBounds(183, 214, 86, 20);
-		frame.getContentPane().add(textFieldNotes);
-		
-	
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(27, 288, 704, 132);
-		frame.getContentPane().add(scrollPane);
-		
-		table = new JTable();
-		table.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent arg0) {
-				int i=table.getSelectedRow();
-				textFieldName.setText(model.getValueAt(i,0).toString());
-				textFieldGender.setText(model.getValueAt(i,1).toString());
-				textFieldAge.setText(model.getValueAt(i,2).toString());
-				textFieldNotes.setText(model.getValueAt(i,3).toString());
-				
-			}
-		});
-		
-		model=new DefaultTableModel();
-		Object[] column = {"Patient Name", "Gender", "Age", "Notes"};
-		final Object[] row = new Object[4];
-		model.setColumnIdentifiers(column);
-		table.setModel(model);
-		scrollPane.setViewportView(table);
-		
-		//Add TextField to Table
-		JButton btnAdd = new JButton("Add");
-		btnAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				row[0]= textFieldName.getText();
-				row[1]= textFieldGender.getText();
-				row[2]= textFieldAge.getText();
-				row[3]= textFieldNotes.getText();
-				model.addRow(row);
-			}
-		});
-		
-		
-		btnAdd.setBounds(413, 115, 89, 23);
-		frame.getContentPane().add(btnAdd);
-		
-		
-		JButton btnUpdate = new JButton("Update");
-		btnUpdate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int i =table.getSelectedRow();
-				
-				if(i>=0)
-				{
-				model.setValueAt(textFieldName.getText(), i, 0);
-				model.setValueAt(textFieldGender.getText(), i, 0);
-				model.setValueAt(textFieldAge.getText(), i, 0);
-				model.setValueAt(textFieldNotes.getText(), i, 0);
-				JOptionPane.showMessageDialog(null,"Updated");
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(null,"Please select a Row");
-				}
-			}
-		});
-		btnUpdate.setBounds(413, 146, 89, 23);
-		frame.getContentPane().add(btnUpdate);
-		
-		JButton btnDelete = new JButton("Delete");
-		btnDelete.addActionListener(new ActionListener() {
+			frame = new JFrame();
+			frame.getContentPane().setBackground(Color.WHITE);
+			frame.setBounds(100, 100, 835, 340);
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.getContentPane().setLayout(null);
+			
+			JLabel lblNewLabel = new JLabel("New Patient Registration Form");
+			lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
+			lblNewLabel.setBounds(205, 27, 475, 54);
+			frame.getContentPane().add(lblNewLabel);
+			
+			JLabel nameLabel = new JLabel("Patient Name:");
+			nameLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			nameLabel.setBounds(68, 115, 123, 22);
+			frame.getContentPane().add(nameLabel);
+			
+			JLabel addressLabel = new JLabel("Address:");
+			addressLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			addressLabel.setBounds(68, 148, 77, 22);
+			frame.getContentPane().add(addressLabel);
+			
+			JLabel cityLabel = new JLabel("City:");
+			cityLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			cityLabel.setBounds(68, 181, 51, 22);
+			frame.getContentPane().add(cityLabel);
+			
+			nameField = new JTextField();
+			nameField.setBounds(188, 119, 152, 20);
+			frame.getContentPane().add(nameField);
+			nameField.setColumns(10);
+			
+			addressField = new JTextField();
+			addressField.setColumns(10);
+			addressField.setBounds(144, 152, 196, 20);
+			frame.getContentPane().add(addressField);
+			
+			cityField = new JTextField();
+			cityField.setColumns(10);
+			cityField.setBounds(112, 185, 143, 20);
+			frame.getContentPane().add(cityField);
+			
+			JLabel birthLabel = new JLabel("Date of Birth:");
+			birthLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			birthLabel.setBounds(417, 115, 123, 22);
+			frame.getContentPane().add(birthLabel);
+			
+			JLabel stateLabel = new JLabel("State:");
+			stateLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			stateLabel.setBounds(417, 148, 62, 22);
+			frame.getContentPane().add(stateLabel);
+			
+			JLabel zipLabel = new JLabel("Zip:");
+			zipLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			zipLabel.setBounds(599, 148, 30, 22);
+			frame.getContentPane().add(zipLabel);
+			
+			birthField = new JTextField();
+			birthField.setColumns(10);
+			birthField.setBounds(528, 117, 170, 20);
+			frame.getContentPane().add(birthField);
+			
+			stateField = new JTextField();
+			stateField.setColumns(10);
+			stateField.setBounds(466, 152, 111, 20);
+			frame.getContentPane().add(stateField);
+			
+			zipField = new JTextField();
+			zipField.setColumns(10);
+			zipField.setBounds(631, 152, 87, 20);
+			frame.getContentPane().add(zipField);
+			
+			JLabel countryLabel = new JLabel("Country:");
+			countryLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			countryLabel.setBounds(284, 181, 79, 22);
+			frame.getContentPane().add(countryLabel);
+			
+			countryField = new JTextField();
+			countryField.setColumns(10);
+			countryField.setBounds(360, 185, 119, 20);
+			frame.getContentPane().add(countryField);
+			
+			JLabel phoneLabel = new JLabel("Phone:");
+			phoneLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			phoneLabel.setBounds(509, 181, 62, 22);
+			frame.getContentPane().add(phoneLabel);
+			
+			phoneField = new JTextField();
+			phoneField.setColumns(10);
+			phoneField.setBounds(567, 185, 151, 20);
+			frame.getContentPane().add(phoneField);
+			
+			JLabel genderLabel = new JLabel("Gender:");
+			genderLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			genderLabel.setBounds(68, 221, 71, 22);
+			frame.getContentPane().add(genderLabel);
+			
+			genderField = new JTextField();
+			genderField.setColumns(10);
+			genderField.setBounds(135, 225, 97, 20);
+			frame.getContentPane().add(genderField);
+			
+			JLabel ethnicityLabel = new JLabel("Ethnicity:");
+			ethnicityLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			ethnicityLabel.setBounds(257, 221, 83, 22);
+			frame.getContentPane().add(ethnicityLabel);
+			
+			ethnicityField = new JTextField();
+			ethnicityField.setColumns(10);
+			ethnicityField.setBounds(339, 225, 119, 20);
+			frame.getContentPane().add(ethnicityField);
+			
+			JLabel emailLabel = new JLabel("Email:");
+			emailLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			emailLabel.setBounds(485, 223, 51, 22);
+			frame.getContentPane().add(emailLabel);
+			
+			emailField = new JTextField();
+			emailField.setColumns(10);
+			emailField.setBounds(537, 225, 181, 20);
+			frame.getContentPane().add(emailField);
+			
+			
+			JLabel errorLabelBottom = new JLabel("");
+			errorLabelBottom.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			errorLabelBottom.setBounds(319, 261, 224, 29);
+			frame.getContentPane().add(errorLabelBottom);
+			
+			JLabel errorLabelDate = new JLabel("");
+			errorLabelDate.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			errorLabelDate.setBounds(697, 115, 30, 21);
+			frame.getContentPane().add(errorLabelDate);
+			
+			JLabel errorLabelPatient = new JLabel("");
+			errorLabelPatient.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			errorLabelPatient.setBounds(350, 118, 30, 21);
+			frame.getContentPane().add(errorLabelPatient);
+			
+			JLabel errorLabelAddress = new JLabel("");
+			errorLabelAddress.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			errorLabelAddress.setBounds(350, 149, 30, 21);
+			frame.getContentPane().add(errorLabelAddress);
+			
+			JLabel errorLabelState = new JLabel("");
+			errorLabelState.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			errorLabelState.setBounds(576, 151, 30, 21);
+			frame.getContentPane().add(errorLabelState);
+			
+			JLabel errorLabelZip = new JLabel("");
+			errorLabelZip.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			errorLabelZip.setBounds(717, 149, 30, 21);
+			frame.getContentPane().add(errorLabelZip);
+			
+			
+			JLabel errorLabelCity = new JLabel("");
+			errorLabelCity.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			errorLabelCity.setBounds(257, 184, 30, 21);
+			frame.getContentPane().add(errorLabelCity);
+			
+			JLabel errorLabelCountry = new JLabel("");
+			errorLabelCountry.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			errorLabelCountry.setBounds(480, 182, 30, 21);
+			frame.getContentPane().add(errorLabelCountry);
+			
+			JLabel errorLabelPhone = new JLabel("");
+			errorLabelPhone.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			errorLabelPhone.setBounds(717, 182, 30, 21);
+			frame.getContentPane().add(errorLabelPhone);
+			
+			JLabel errorLabelGender = new JLabel("");
+			errorLabelGender.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			errorLabelGender.setBounds(236, 222, 30, 21);
+			frame.getContentPane().add(errorLabelGender);
+			
+			JLabel errorLabelEthnicity = new JLabel("");
+			errorLabelEthnicity.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			errorLabelEthnicity.setBounds(463, 222, 30, 21);
+			frame.getContentPane().add(errorLabelEthnicity);
+			
+			JLabel errorLabelEmail = new JLabel("");
+			errorLabelEmail.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			errorLabelEmail.setBounds(717, 222, 30, 21);
+			frame.getContentPane().add(errorLabelEmail);
+			
+			
+			JButton btnSubmit = new JButton("Submit");
+			btnSubmit.addActionListener(new ActionListener() { 
 				public void actionPerformed(ActionEvent arg0) {
-					int i=table.getSelectedRow();
-					model.removeRow(i);
-				}
-		});
-		btnDelete.setBounds(524, 115, 89, 23);
-		frame.getContentPane().add(btnDelete);
-		
-		//Clear Out Rows
-		JButton btnClear = new JButton("Clear");
-		btnClear.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent arg0) {
-				textFieldName.setText("");
-				textFieldGender.setText("");
-				textFieldAge.setText("");
-				textFieldNotes.setText("");
-			}
-		});
-		btnClear.setBounds(524, 146, 89, 23);
-		frame.getContentPane().add(btnClear);
-		
-		JLabel lblTitle = new JLabel("Patient Data");
-		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 35));
-		lblTitle.setBounds(47, 35, 222, 53);
-		frame.getContentPane().add(lblTitle);
-		
-		JButton btnUpload = new JButton("Upload");
-		btnUpload.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnUpload.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent arg0) {
-				//Upload to iRods
-			}
-		});
-		
-		btnUpload.setBounds(413, 182, 200, 52);
-		frame.getContentPane().add(btnUpload);
-		
-		JButton btnImport = new JButton("Import Txt");
-		btnImport.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent arg0) {
-				
-				JOptionPane.showMessageDialog(null,"Within your Txt document: Column Names should be seperated by , and rows by /. \n Example \n Name, Gender, Age \n Christian / Male / 21");
-				//Allow user to select file 
-				JFileChooser fileChooser = new JFileChooser();
-				int response = fileChooser.showOpenDialog(null);
-				File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
-					
-				
-				
-				try {
-					//Separate Column Names by ,
-					BufferedReader br = new BufferedReader(new FileReader(file));
-					String firstLine = br.readLine().trim();
-					String[] columnsName = firstLine.split(",");
-					DefaultTableModel model = (DefaultTableModel)table.getModel();
-					model.setColumnIdentifiers(columnsName);
-					
-					Object [] tableLines = br.lines().toArray();
-					
-					//Separate Rows by /
-					for(int i = 0; i < tableLines.length; i++) {
-						String line = tableLines[i].toString().trim();
-						String[] dataRow = line.split("/");
-						model.addRow(dataRow);
+					if(nameField.getText().trim().isEmpty()) {
+						errorLabelBottom.setText("Some Fields are still Missing");
+						errorLabelPatient.setText("*");
+					}
+					if(birthField.getText().trim().isEmpty()){
+						errorLabelBottom.setText("Some Fields are still Missing");
+						errorLabelDate.setText("*");
+					}
+					if(addressField.getText().trim().isEmpty()){
+						errorLabelBottom.setText("Some Fields are still Missing");
+						errorLabelAddress.setText("*");
+					}
+					if(stateField.getText().trim().isEmpty()){
+						errorLabelBottom.setText("Some Fields are still Missing");
+						errorLabelState.setText("*");
+					}
+					if(zipField.getText().trim().isEmpty()){
+						errorLabelBottom.setText("Some Fields are still Missing");
+						errorLabelZip.setText("*");
+					}
+					if(cityField.getText().trim().isEmpty()){
+						errorLabelBottom.setText("Some Fields are still Missing");
+						errorLabelCity.setText("*");
+					}
+					if(countryField.getText().trim().isEmpty()){
+						errorLabelBottom.setText("Some Fields are still Missing");
+						errorLabelCountry.setText("*");
+					}
+					if(phoneField.getText().trim().isEmpty()){
+						errorLabelBottom.setText("Some Fields are still Missing");
+						errorLabelPhone.setText("*");
+					}
+					if(genderField.getText().trim().isEmpty()){
+						errorLabelBottom.setText("Some Fields are still Missing");
+						errorLabelGender.setText("*");
+					}
+					if(ethnicityField.getText().trim().isEmpty()){
+						errorLabelBottom.setText("Some Fields are still Missing");
+						errorLabelEthnicity.setText("*");
+					}
+					if(emailField.getText().trim().isEmpty()){
+						errorLabelBottom.setText("Some Fields are still Missing");
+						errorLabelEmail.setText("*");
+					}
+					else {
+						//Connect to Server
+						//.setString(1, nameField.getText());
+						//.setString(1, birthField.getText());
+						//.setString(1, addressField.getText());
+						//.setString(1, stateField.getText());
+						//.setString(1, zipField.getText());
+						//.setString(1, countryField.getText());
+						//.setString(1, phoneField.getText());
+						//.setString(1, genderField.getText());
+						//.setString(1, ethnicityField.getText());
+						//.setString(1, emailField.getText());
+						
+						JOptionPane.showMessageDialog(null, "Patient Added");
+						
 						
 					}
+					}
+				 
+		
+			});
+			
+			btnSubmit.setBounds(706, 267, 89, 23);
+			frame.getContentPane().add(btnSubmit);
+			JButton btnReset = new JButton("Reset");
+			btnReset.setBounds(609, 267, 89, 23);
+			frame.getContentPane().add(btnReset);
+			btnReset.addActionListener(new ActionListener() { 
+				public void actionPerformed(ActionEvent arg0) {
 					
-				} catch (Exception ex) {
-					// TODO Auto-generated catch block
-					ex.printStackTrace();
+					nameField.setText("");
+					birthField.setText("");
+					addressField.setText("");
+					stateField.setText("");
+					zipField.setText("");
+					cityField.setText("");
+					countryField.setText("");
+					phoneField.setText("");
+					genderField.setText("");
+					ethnicityField.setText("");
+					emailField.setText("");
+					errorLabelBottom.setText("");
+					errorLabelPatient.setText("");
+					errorLabelDate.setText("");
+					errorLabelAddress.setText("");
+					errorLabelState.setText("");
+					errorLabelZip.setText("");
+					errorLabelCity.setText("");
+					errorLabelCountry.setText("");
+					errorLabelPhone.setText("");
+					errorLabelGender.setText("");
+					errorLabelEthnicity.setText("");
+					errorLabelEmail.setText("");
+					
 				}
-				
+			});
 		}
-		});
-		btnImport.setBounds(469, 81, 89, 23);
-		frame.getContentPane().add(btnImport);
-		
-		JLabel lblImage = new JLabel("Image:");
-		lblImage.setBounds(82, 245, 71, 20);
-		frame.getContentPane().add(lblImage);
-		
-		JButton browseButton = new JButton("Browse");
-		browseButton.setBounds(180, 245, 89, 23);
-		frame.getContentPane().add(browseButton);
 	}
-}
