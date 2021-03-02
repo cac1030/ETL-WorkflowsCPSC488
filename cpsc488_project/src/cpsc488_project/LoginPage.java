@@ -103,7 +103,7 @@ public class LoginPage implements ActionListener{
 					//Before Launching Page Delete Login Screen
 					frame.dispose();
 					//Launch New Page
-					tablePage window = new tablePage();
+					menuPage window = new menuPage();
 					window.frame.setVisible(true);
 					
 				}

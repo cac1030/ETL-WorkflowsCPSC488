@@ -19,9 +19,10 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import java.awt.Font;
+import java.awt.Color;
 
 
-public class tablePage {
+public class addPatientPage {
 
 	JFrame frame = new JFrame();
 	JTextField textFieldName = new JTextField();
@@ -34,9 +35,10 @@ public class tablePage {
 	DefaultTableModel model;
 	
 	
-	tablePage() {
+	addPatientPage() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 693, 519);
+		frame.getContentPane().setBackground(Color.WHITE);
+		frame.setBounds(100, 100, 773, 470);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -73,23 +75,23 @@ public class tablePage {
 		
 		textFieldNotes = new JTextField();
 		textFieldNotes.setColumns(10);
-		textFieldNotes.setBounds(183, 214, 203, 51);
+		textFieldNotes.setBounds(183, 214, 86, 20);
 		frame.getContentPane().add(textFieldNotes);
 		
 	
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(47, 276, 591, 193);
+		scrollPane.setBounds(27, 288, 704, 132);
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
 				int i=table.getSelectedRow();
-				textFieldName.setText(model.getValueAt(i, 0).toString());
-				textFieldGender.setText(model.getValueAt(i, 1).toString());
-				textFieldAge.setText(model.getValueAt(i, 2).toString());
-				textFieldNotes.setText(model.getValueAt(i, 3).toString());
+				textFieldName.setText(model.getValueAt(i,0).toString());
+				textFieldGender.setText(model.getValueAt(i,1).toString());
+				textFieldAge.setText(model.getValueAt(i,2).toString());
+				textFieldNotes.setText(model.getValueAt(i,3).toString());
 				
 			}
 		});
@@ -114,7 +116,7 @@ public class tablePage {
 		});
 		
 		
-		btnAdd.setBounds(379, 115, 89, 23);
+		btnAdd.setBounds(413, 115, 89, 23);
 		frame.getContentPane().add(btnAdd);
 		
 		
@@ -137,7 +139,7 @@ public class tablePage {
 				}
 			}
 		});
-		btnUpdate.setBounds(491, 115, 89, 23);
+		btnUpdate.setBounds(413, 146, 89, 23);
 		frame.getContentPane().add(btnUpdate);
 		
 		JButton btnDelete = new JButton("Delete");
@@ -147,7 +149,7 @@ public class tablePage {
 					model.removeRow(i);
 				}
 		});
-		btnDelete.setBounds(379, 146, 89, 23);
+		btnDelete.setBounds(524, 115, 89, 23);
 		frame.getContentPane().add(btnDelete);
 		
 		//Clear Out Rows
@@ -160,7 +162,7 @@ public class tablePage {
 				textFieldNotes.setText("");
 			}
 		});
-		btnClear.setBounds(491, 146, 89, 23);
+		btnClear.setBounds(524, 146, 89, 23);
 		frame.getContentPane().add(btnClear);
 		
 		JLabel lblTitle = new JLabel("Patient Data");
@@ -169,16 +171,17 @@ public class tablePage {
 		frame.getContentPane().add(lblTitle);
 		
 		JButton btnUpload = new JButton("Upload");
+		btnUpload.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnUpload.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
 				//Upload to iRods
 			}
 		});
 		
-		btnUpload.setBounds(435, 193, 89, 23);
+		btnUpload.setBounds(413, 182, 200, 52);
 		frame.getContentPane().add(btnUpload);
 		
-		JButton btnImport = new JButton("Import");
+		JButton btnImport = new JButton("Import Txt");
 		btnImport.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -215,7 +218,15 @@ public class tablePage {
 				
 		}
 		});
-		btnImport.setBounds(435, 73, 89, 23);
+		btnImport.setBounds(469, 81, 89, 23);
 		frame.getContentPane().add(btnImport);
+		
+		JLabel lblImage = new JLabel("Image:");
+		lblImage.setBounds(82, 245, 71, 20);
+		frame.getContentPane().add(lblImage);
+		
+		JButton browseButton = new JButton("Browse");
+		browseButton.setBounds(180, 245, 89, 23);
+		frame.getContentPane().add(browseButton);
 	}
 }
