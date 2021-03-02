@@ -11,24 +11,24 @@ def zip_file(filename):
 	return os.path.getsize('client.zip')
 
 REQUEST = "REQ_UPLOAD_FILE"
-PATIENT_NAME = "DOE_JANE"
+PATIENT_NAME = sys.argv[1]
+
+# transfer config
+HOST = "52.168.52.180"
+# HOST = "localhost"
+PORT = 5001
 SEPARATOR = "<SEPARATOR>"
-BUFFER_SIZE = 4096 #send 4096 bytes for each time step
+BUFFER_SIZE = 4096 # send 4096 bytes for each time step
 
-# addressing
-#host = "52.168.52.180"
-host = "localhost"
-port = 5001
-
-filename = sys.argv[1]
+filename = sys.argv[2]
 filesize = zip_file(filename)
 
 # create the client socket
 s = socket.socket()
 
 # connect to the server
-print(f"[+] Connecting to {host}:{port}")
-s.connect((host, port))
+print(f"[+] Connecting to {HOST}:{PORT}")
+s.connect((HOST, PORT))
 print("[+] Connected.")
 
 # send the request type, filename, and filesize

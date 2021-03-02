@@ -3,6 +3,7 @@ import zipfile
 import json
 import tqdm
 import os
+import subprocess
 
 def setup_server():
 	global s
@@ -33,7 +34,7 @@ def handle_connection():
 	print(f"\n[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
 
 	# accept connection if there is any
-	client_socket, address = s.accept() 
+	client_socket, address = s.accept()
 	# if below code is executed, that means the sender is connected
 	print(f"[+] {address} is connected.")
 	
@@ -83,10 +84,14 @@ def receive_file(client_socket, address, data):
 			
 	unzip_file("./client.zip")
 	put_to_irods(filename, patient_name)
-	
 	return "\nREQUEST_UPLOAD_FILE by " + address[0] + " fulfilled"
 	
-	#put_to_irods(filename)
+def download_meta_default(addr, patient_name):
+    # supplies metadata on the most recently accessed or uploaded patient files
+	# if date_create or date_modify are within the last (x amount of time)
+	cmdstr = "imeta qu -d date_create like 12/__/2020 | awk '/dataObj:/ {print $2}'"
+	# imeta qu -d date_create_month 'n<=' 12 | awk '/dataObj:/ {print $2}'
+	print(cmdstr)
 	
 def unzip_file(path):
 	with zipfile.ZipFile(path, 'r') as zip_ref:
@@ -126,10 +131,3 @@ s.close()
     # send the full specified file to the client
 	#file, meta = s.recvfrom(256)
 	#command = iput file 
-	
-	
-#def upload(file, meta):
-	# parse metadata and upload file to base
-	# iput file|temporaryStorageDir
-	
-#def input_to_terminal(command):
