@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
+import java.awt.Color;
 
 public class LoginPage implements ActionListener{
 
@@ -23,7 +25,8 @@ public class LoginPage implements ActionListener{
 	JLabel userIDLabel = new JLabel("Username:");
 	JLabel userPasswordLabel = new JLabel("Password:");
 	JLabel noteLabel = new JLabel();
-	JLabel titleLabel = new JLabel("Login Page");
+	JLabel titleLabel = new JLabel("User Login");
+	
 	
 	
 	HashMap<String,String> logininfo = new HashMap<String,String>();
@@ -31,53 +34,61 @@ public class LoginPage implements ActionListener{
 	LoginPage(HashMap<String,String> loginInfoOriginal){
 		
 		logininfo = loginInfoOriginal;
+		userIDLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
 		//x 50 y 100 75 long 25 height 
-		userIDLabel.setBounds(50,100,75,25);
-		userPasswordLabel.setBounds(50,150,75,25);
-		titleLabel.setBounds(40,30,200,50);
-		titleLabel.setFont(new Font(null,Font.BOLD,35));
+		userIDLabel.setBounds(137,150,75,25);
+		userPasswordLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		userPasswordLabel.setBounds(137,193,75,25);
+		titleLabel.setBounds(185,69,200,50);
+		titleLabel.setFont(new Font("Georgia", Font.BOLD, 35));
 		
 		//Add Labels to Frame
-		frame.add(userIDLabel);
-		frame.add(userPasswordLabel);
-		frame.add(noteLabel);
-		frame.add(titleLabel);
+		frame.getContentPane().add(userIDLabel);
+		frame.getContentPane().add(userPasswordLabel);
+		frame.getContentPane().add(noteLabel);
+		frame.getContentPane().add(titleLabel);
 		
 		//Position of Note in Frame
-		noteLabel.setBounds(125,250,250,35);
+		noteLabel.setBounds(117,366,250,35);
 		noteLabel.setFont(new Font(null,Font.BOLD,15));
 		
 		//Position of UserName in Frame
-		userIDField.setBounds(125,100,200,25);
-		userPasswordField.setBounds(125,150,200,25);
+		userIDField.setBounds(222,150,200,25);
+		userPasswordField.setBounds(222,193,200,25);
 		
 		//Position of Login Button
-		loginButton.setBounds(125,200,100,25);
+		loginButton.setBounds(185,240,100,25);
 		//Turn off Blue Highlight around button
 		loginButton.setFocusable(false);
 		//Listener
 		loginButton.addActionListener(this);
 		
 		//Position for Clear Button
-		clearButton.setBounds(225,200,100,25);
+		clearButton.setBounds(295,240,100,25);
 		clearButton.setFocusable(false);
 		clearButton.addActionListener(this);
 		
 		//Add Frame to screen
-		frame.add(userIDLabel);
-		frame.add(userPasswordLabel);
-		frame.add(noteLabel);
-		frame.add(userIDField);
-		frame.add(userPasswordField);
-		frame.add(loginButton);
-		frame.add(clearButton);
+		frame.getContentPane().add(userIDLabel);
+		frame.getContentPane().add(userPasswordLabel);
+		frame.getContentPane().add(noteLabel);
+		frame.getContentPane().add(userIDField);
+		frame.getContentPane().add(userPasswordField);
+		frame.getContentPane().add(loginButton);
+		frame.getContentPane().add(clearButton);
+		frame.getContentPane().setBackground(Color.WHITE);
 		
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//Size of Frame
-		frame.setSize(500,500);
-		frame.setLayout(null);
+		frame.setSize(570,395);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel ImageLabel = new JLabel("");
+		ImageLabel.setIcon(new ImageIcon("C:\\Users\\Christian\\Documents\\Classes\\Senior Classes\\Spring\\Eclipse\\ETL-WorkflowsCPSC488\\cpsc488_project\\src\\cpsc488_project\\lock.png"));
+		ImageLabel.setBounds(23, 128, 91, 90);
+		frame.getContentPane().add(ImageLabel);
 		//Visible
 		frame.setVisible(true);
 	}

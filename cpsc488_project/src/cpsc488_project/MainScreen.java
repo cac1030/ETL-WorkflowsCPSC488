@@ -8,7 +8,7 @@ public class MainScreen {
 		
 		
 		
-		LoginPage loginPage = new LoginPage(idPasswords.getLoginInfo());
+		LoginPage2 loginPage2 = new LoginPage2(idPasswords.getLoginInfo());
 		
 	}
 }
