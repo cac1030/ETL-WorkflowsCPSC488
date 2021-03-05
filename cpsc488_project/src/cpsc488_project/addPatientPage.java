@@ -12,8 +12,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -283,7 +293,7 @@ public class addPatientPage {
 					//All Fields are filled in
 					//Parse Data into Json format
 					
-					String patientJson = "{\n \"Patient Name\"" + ":" + "\"" + nameField.getText() + "\"" + "," + "\n"
+					String patientJson = "{\n\"Patient Name\"" + ":" + "\"" + nameField.getText() + "\"" + "," + "\n"
 					+ "\"Birth\"" + ":" + "\"" + birthField.getText() + "\"" + "," + "\n"
 					+"\"Address\"" + ":" + "\"" + addressField.getText() + "\"" + "," + "\n"
 					+"\"State\"" + ":" + "\"" + stateField.getText() + "\"" + "," + "\n"
@@ -293,10 +303,24 @@ public class addPatientPage {
 					+"\"Phone\"" + ":" + "\"" + phoneField.getText() + "\"" + "," + "\n"
 					+"\"Gender\"" + ":" + "\"" + genderField.getText() + "\"" + "," + "\n"
 					+"\"Ethnicity\"" + ":" + "\"" + ethnicityField.getText() + "\"" + "," + "\n"
-					+"\"Email\"" + ":" + "\"" + emailField.getText() + "\"" + "," + "\n"
+					+"\"Email\"" + ":" + "\"" + emailField.getText() + "\"" + "\n"
 					+ "}";
 					
+					//Save String to downloads folder
+					try {
+						String home = System.getProperty("user.home");
+					
+						String str = "Patient.txt";
+						
+						FileWriter fw = new FileWriter(new File(home+"/Downloads/",str));
+				        fw.write(patientJson);
+				        fw.close();
+						
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				
+				    
 					//Run Script
 					
 					
