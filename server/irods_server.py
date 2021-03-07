@@ -90,7 +90,7 @@ def receive_file(client_socket, address, data):
 	
 def add_patient(patient_data):
 	data = json.load(patient_data)
-	dir_name = {data['lastName']}_{data'firstName'}
+	dir_name = f"{data['lastName']}_{data'firstName'}"
 	
 	cmdstrs = [f"imkdir /tempZone/home/public/{dir_name}"]
 	cmdstr.append(f"imeta add -C {dir_name} first_name {data['first_name']})
