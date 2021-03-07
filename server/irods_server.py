@@ -70,18 +70,18 @@ def receive_file(client_socket, address, data):
 	
 def add_patient(patient_data):
 	data = json.loads(patient_data)
-	dir_name = f"{data['last_name']}_{data['first_name']}"
+	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
 	
-	cmdstrs = [f"imkdir /tempZone/home/public/{dir_name}"]
-	cmdstrs.append(f"imeta add -C {dir_name} first_name {data['first_name']}")
-	cmdstrs.append(f"imeta add -C {dir_name} last_name {data['last_name']}")
-	cmdstrs.append(f"imeta add -C {dir_name} date_created {data['date_created']}")
-	cmdstrs.append(f"imeta add -C {dir_name} date_modified {data['date_modified']}")
-	cmdstrs.append(f"imeta add -C {dir_name} height {data['height']}")
-	cmdstrs.append(f"imeta add -C {dir_name} weight {data['weight']}")
-	cmdstrs.append(f"imeta add -C {dir_name} dob {data['dob']}")
-	cmdstrs.append(f"imeta add -C {dir_name} sex {data['sex']}")
-	cmdstrs.append(f"imeta add -C {dir_name} ethnicity {data['ethnicity']}")
+	cmdstrs = [f"imkdir {dir_path}"]
+	cmdstrs.append(f"imeta add -C {dir_path} first_name {data['first_name']}")
+	cmdstrs.append(f"imeta add -C {dir_path} last_name {data['last_name']}")
+	cmdstrs.append(f"imeta add -C {dir_path} date_created {data['date_created']}")
+	cmdstrs.append(f"imeta add -C {dir_path} date_modified {data['date_modified']}")
+	cmdstrs.append(f"imeta add -C {dir_path} height {data['height']}")
+	cmdstrs.append(f"imeta add -C {dir_path} weight {data['weight']}")
+	cmdstrs.append(f"imeta add -C {dir_path} dob {data['dob']}")
+	cmdstrs.append(f"imeta add -C {dir_path} sex {data['sex']}")
+	cmdstrs.append(f"imeta add -C {dir_path} ethnicity {data['ethnicity']}")
 	
 	for cmd in cmdstrs:
 		os.system(cmd)
@@ -90,17 +90,17 @@ def add_patient(patient_data):
 		
 def edit_patient(patient_data):
 	data = json.load(patient_data)
-	dir_name = f"{data['lastName']}_{data['firstName']}"
+	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
 	
 	cmdstrs = [(f"imeta mod -C {dir_name} first_name {data['first_name']}")]
-	cmdstrs.append(f"imeta mod -C {dir_name} last_name {data['last_name']}")
-	cmdstrs.append(f"imeta mod -C {dir_name} date_created {data['date_created']}")
-	cmdstrs.append(f"imeta mod -C {dir_name} date_modified {data['date_modified']}")
-	cmdstrs.append(f"imeta mod -C {dir_name} height {data['height']}")
-	cmdstrs.append(f"imeta mod -C {dir_name} weight {data['weight']}")
-	cmdstrs.append(f"imeta mod -C {dir_name} dob {data['dob']}")
-	cmdstrs.append(f"imeta mod -C {dir_name} sex {data['sex']}")
-	cmdstrs.append(f"imeta mod -C {dir_name} ethnicity {data['ethnicity']}")
+	cmdstrs.append(f"imeta mod -C {dir_path} last_name {data['last_name']}")
+	cmdstrs.append(f"imeta mod -C {dir_path} date_created {data['date_created']}")
+	cmdstrs.append(f"imeta mod -C {dir_path} date_modified {data['date_modified']}")
+	cmdstrs.append(f"imeta mod -C {dir_path} height {data['height']}")
+	cmdstrs.append(f"imeta mod -C {dir_path} weight {data['weight']}")
+	cmdstrs.append(f"imeta mod -C {dir_path} dob {data['dob']}")
+	cmdstrs.append(f"imeta mod -C {dir_path} sex {data['sex']}")
+	cmdstrs.append(f"imeta mod -C {dir_path} ethnicity {data['ethnicity']}")
 	
 	for cmd in cmdstrs:
 		os.system(cmd)
