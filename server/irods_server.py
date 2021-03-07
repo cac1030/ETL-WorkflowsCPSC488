@@ -89,7 +89,7 @@ def add_patient(patient_data):
 	return"\nREQ_PATIENT_ADD by " + address[0] + " fulfilled"
 		
 def edit_patient(patient_data):
-	data = json.load(patient_data)
+	data = json.loads(patient_data)
 	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
 	
 	cmdstrs = [(f"imeta mod -C {dir_name} first_name {data['first_name']}")]
