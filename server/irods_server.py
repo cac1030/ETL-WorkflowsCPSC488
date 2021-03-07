@@ -5,6 +5,15 @@ import tqdm
 import os
 import subprocess
 
+switcher = {
+	"REQ_UPLOAD_FILE": receive_file(client_socket, address, data),
+	"REQ_PATIENT_ADD": add_patient(data),
+	"REQ_PATIENT_EDIT": edit_patient(data)
+	#"REQ_DOWNLOAD_FILE": "REQ_DOWNLOAD_FILE",
+	#"REQ_DOWNLOAD_META_SEARCH": "REQ_DOWNLOAD_META_SEARCH",
+	#"REQ_DOWNLOAD_META_DEFAULT": "REQ_DOWNLOAD_META_DEFAULT"
+}
+
 def setup_server():
 	global s
 	global SERVER_HOST
@@ -47,15 +56,6 @@ def process_request(client_socket, address):
 	print(f"received {received} from {address}")
 	
 	request, data = received.split('!')
-	
-	switcher = {
-		"REQ_UPLOAD_FILE": receive_file(client_socket, address, data),
-		"REQ_PATIENT_ADD": add_patient(data),
-		"REQ_PATIENT_EDIT": edit_patient(data),
-		"REQ_DOWNLOAD_FILE": "REQ_DOWNLOAD_FILE",
-		"REQ_DOWNLOAD_META_SEARCH": "REQ_DOWNLOAD_META_SEARCH",
-		"REQ_DOWNLOAD_META_DEFAULT": "REQ_DOWNLOAD_META_DEFAULT"
-		}
 	
 	message = switcher.get(request, "invalid request")
 	print(message)

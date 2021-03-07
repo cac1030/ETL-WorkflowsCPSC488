@@ -2,7 +2,7 @@ import socket
 import tqdm
 
 REQUEST = "REQ_PATIENT_ADD"
-DATA = sys.argv[1]
+DATA = "{\"first_name\":\"james\",\"last_name\":\"jamison\",\"date_created\":\"01/02/2019\",\"date_modified\":\"03/18/2019\",\"height\":\"73\",\"weight\":\"230\",\"dob\":\"05/19/2000\",\"sex\":\"female\",\"ethnicity\":\"white\"}"
 
 # transfer config
 HOST = "52.168.52.180"
@@ -18,7 +18,7 @@ s.connect((HOST, PORT))
 print("[+] Connected.")
 
 # send the request type, filename, and filesize
-s.send(f"{REQUEST}!{DATA}.encode())
+s.send(f"{REQUEST}!{DATA}".encode())
 
 # close the socket
 s.close()
