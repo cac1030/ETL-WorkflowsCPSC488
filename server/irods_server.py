@@ -55,10 +55,10 @@ def process_request(client_socket, address):
 		#"REQ_DOWNLOAD_FILE": "REQ_DOWNLOAD_FILE",
 		#"REQ_DOWNLOAD_META_SEARCH": "REQ_DOWNLOAD_META_SEARCH",
 		#"REQ_DOWNLOAD_META_DEFAULT": "REQ_DOWNLOAD_META_DEFAULT"
-	}
+		}
 	
 	# message = switcher.get(request, "invalid request")
-	print(swticher[request])
+	print(switcher[request])
 	
 def receive_file(client_socket, address, data):
 	# receive the file infos
