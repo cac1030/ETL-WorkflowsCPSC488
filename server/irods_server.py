@@ -69,19 +69,19 @@ def receive_file(client_socket, address, data):
 	return "\nREQ_UPLOAD_FILE by " + address[0] + " fulfilled"
 	
 def add_patient(patient_data):
-	data = json.load(patient_data)
-	dir_name = f"{data['lastName']}_{data['firstName']}"
+	data = json.loads(patient_data)
+	dir_name = f"{data['last_name']}_{data['first_name']}"
 	
 	cmdstrs = [f"imkdir /tempZone/home/public/{dir_name}"]
-	cmdstr.append(f"imeta add -C {dir_name} first_name {data['first_name']}")
-	cmdstr.append(f"imeta add -C {dir_name} last_name {data['last_name']}")
-	cmdstr.append(f"imeta add -C {dir_name} date_created {data['date_created']}")
-	cmdstr.append(f"imeta add -C {dir_name} date_modified {data['date_modified']}")
-	cmdstr.append(f"imeta add -C {dir_name} height {data['height']}")
-	cmdstr.append(f"imeta add -C {dir_name} weight {data['weight']}")
-	cmdstr.append(f"imeta add -C {dir_name} dob {data['dob']}")
-	cmdstr.append(f"imeta add -C {dir_name} sex {data['sex']}")
-	cmdstr.append(f"imeta add -C {dir_name} ethnicity {data['ethnicity']}")
+	cmdstrs.append(f"imeta add -C {dir_name} first_name {data['first_name']}")
+	cmdstrs.append(f"imeta add -C {dir_name} last_name {data['last_name']}")
+	cmdstrs.append(f"imeta add -C {dir_name} date_created {data['date_created']}")
+	cmdstrs.append(f"imeta add -C {dir_name} date_modified {data['date_modified']}")
+	cmdstrs.append(f"imeta add -C {dir_name} height {data['height']}")
+	cmdstrs.append(f"imeta add -C {dir_name} weight {data['weight']}")
+	cmdstrs.append(f"imeta add -C {dir_name} dob {data['dob']}")
+	cmdstrs.append(f"imeta add -C {dir_name} sex {data['sex']}")
+	cmdstrs.append(f"imeta add -C {dir_name} ethnicity {data['ethnicity']}")
 	
 	for cmd in cmdstrs:
 		os.system(cmd)
@@ -92,15 +92,15 @@ def edit_patient(patient_data):
 	data = json.load(patient_data)
 	dir_name = f"{data['lastName']}_{data['firstName']}"
 	
-	cmdstr.append(f"imeta mod -C {dir_name} first_name {data['first_name']}")
-	cmdstr.append(f"imeta mod -C {dir_name} last_name {data['last_name']}")
-	cmdstr.append(f"imeta mod -C {dir_name} date_created {data['date_created']}")
-	cmdstr.append(f"imeta mod -C {dir_name} date_modified {data['date_modified']}")
-	cmdstr.append(f"imeta mod -C {dir_name} height {data['height']}")
-	cmdstr.append(f"imeta mod -C {dir_name} weight {data['weight']}")
-	cmdstr.append(f"imeta mod -C {dir_name} dob {data['dob']}")
-	cmdstr.append(f"imeta mod -C {dir_name} sex {data['sex']}")
-	cmdstr.append(f"imeta mod -C {dir_name} ethnicity {data['ethnicity']}")
+	cmdstrs = [(f"imeta mod -C {dir_name} first_name {data['first_name']}")]
+	cmdstrs.append(f"imeta mod -C {dir_name} last_name {data['last_name']}")
+	cmdstrs.append(f"imeta mod -C {dir_name} date_created {data['date_created']}")
+	cmdstrs.append(f"imeta mod -C {dir_name} date_modified {data['date_modified']}")
+	cmdstrs.append(f"imeta mod -C {dir_name} height {data['height']}")
+	cmdstrs.append(f"imeta mod -C {dir_name} weight {data['weight']}")
+	cmdstrs.append(f"imeta mod -C {dir_name} dob {data['dob']}")
+	cmdstrs.append(f"imeta mod -C {dir_name} sex {data['sex']}")
+	cmdstrs.append(f"imeta mod -C {dir_name} ethnicity {data['ethnicity']}")
 	
 	for cmd in cmdstrs:
 		os.system(cmd)
@@ -115,17 +115,21 @@ def process_request(client_socket, address):
 	
 	request, data = received.split('!')
 	
+	print(request)
+	
 	switcher = {
-		"REQ_UPLOAD_FILE": receive_file(client_socket, address, data),
-		"REQ_PATIENT_ADD": add_patient(data),
-		"REQ_PATIENT_EDIT": edit_patient(data)
-		#"REQ_DOWNLOAD_FILE": "REQ_DOWNLOAD_FILE",
-		#"REQ_DOWNLOAD_META_SEARCH": "REQ_DOWNLOAD_META_SEARCH",
-		#"REQ_DOWNLOAD_META_DEFAULT": "REQ_DOWNLOAD_META_DEFAULT"
+		"REQ_UPLOAD_FILE": receive_file,
+		"REQ_PATIENT_ADD": add_patient,
+		"REQ_PATIENT_EDIT": edit_patient
 		}
 	
-	# message = switcher.get(request, "invalid request")
-	print(switcher[request])
+	args = {
+		"REQ_UPLOAD_FILE": (client_socket, address, data),
+		"REQ_PATIENT_ADD": (data),
+		"REQ_PATIENT_EDIT": (data)
+		}
+	message = switcher[request](args[request])
+	print(message)
 	
 def download_meta_default(addr, patient_name):
     # supplies metadata on the most recently accessed or uploaded patient files
