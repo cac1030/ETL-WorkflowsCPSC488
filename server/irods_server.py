@@ -40,26 +40,6 @@ def handle_connection():
 	
 	return (client_socket, address)
 	
-def process_request(client_socket, address):
-	# receive request from client
-	received = client_socket.recv(BUFFER_SIZE).decode()
-	
-	print(f"received {received} from {address}")
-	
-	request, data = received.split('!')
-	
-	switcher = {
-		"REQ_UPLOAD_FILE": receive_file(client_socket, address, data),
-		"REQ_PATIENT_ADD": add_patient(data),
-		"REQ_PATIENT_EDIT": edit_patient(data)
-		#"REQ_DOWNLOAD_FILE": "REQ_DOWNLOAD_FILE",
-		#"REQ_DOWNLOAD_META_SEARCH": "REQ_DOWNLOAD_META_SEARCH",
-		#"REQ_DOWNLOAD_META_DEFAULT": "REQ_DOWNLOAD_META_DEFAULT"
-		}
-	
-	# message = switcher.get(request, "invalid request")
-	print(switcher[request])
-	
 def receive_file(client_socket, address, data):
 	# receive the file infos
 	patient_name, filename, filesize = data.split(SEPARATOR)
@@ -126,6 +106,26 @@ def edit_patient(patient_data):
 		os.system(cmd)
 		
 	return"\nREQ_PATIENT_EDIT by " + address[0] + " fulfilled"
+	
+def process_request(client_socket, address):
+	# receive request from client
+	received = client_socket.recv(BUFFER_SIZE).decode()
+	
+	print(f"received {received} from {address}")
+	
+	request, data = received.split('!')
+	
+	switcher = {
+		"REQ_UPLOAD_FILE": receive_file(client_socket, address, data),
+		"REQ_PATIENT_ADD": add_patient(data),
+		"REQ_PATIENT_EDIT": edit_patient(data)
+		#"REQ_DOWNLOAD_FILE": "REQ_DOWNLOAD_FILE",
+		#"REQ_DOWNLOAD_META_SEARCH": "REQ_DOWNLOAD_META_SEARCH",
+		#"REQ_DOWNLOAD_META_DEFAULT": "REQ_DOWNLOAD_META_DEFAULT"
+		}
+	
+	# message = switcher.get(request, "invalid request")
+	print(switcher[request])
 	
 def download_meta_default(addr, patient_name):
     # supplies metadata on the most recently accessed or uploaded patient files
