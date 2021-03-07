@@ -92,15 +92,15 @@ def edit_patient(patient_data):
 	data = json.loads(patient_data)
 	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
 	
-	cmdstrs = [(f"imeta mod -C {dir_path} first_name {data['first_name']}")]
-	cmdstrs.append(f"imeta mod -C {dir_path} last_name {data['last_name']}")
-	cmdstrs.append(f"imeta mod -C {dir_path} date_created {data['date_created']}")
-	cmdstrs.append(f"imeta mod -C {dir_path} date_modified {data['date_modified']}")
-	cmdstrs.append(f"imeta mod -C {dir_path} height {data['height']}")
-	cmdstrs.append(f"imeta mod -C {dir_path} weight {data['weight']}")
-	cmdstrs.append(f"imeta mod -C {dir_path} dob {data['dob']}")
-	cmdstrs.append(f"imeta mod -C {dir_path} sex {data['sex']}")
-	cmdstrs.append(f"imeta mod -C {dir_path} ethnicity {data['ethnicity']}")
+	cmdstrs = [(f"imeta set -C {dir_path} first_name {data['first_name']}")]
+	cmdstrs.append(f"imeta set -C {dir_path} last_name {data['last_name']}")
+	cmdstrs.append(f"imeta set -C {dir_path} date_created {data['date_created']}")
+	cmdstrs.append(f"imeta set -C {dir_path} date_modified {data['date_modified']}")
+	cmdstrs.append(f"imeta set -C {dir_path} height {data['height']}")
+	cmdstrs.append(f"imeta set -C {dir_path} weight {data['weight']}")
+	cmdstrs.append(f"imeta set -C {dir_path} dob {data['dob']}")
+	cmdstrs.append(f"imeta set -C {dir_path} sex {data['sex']}")
+	cmdstrs.append(f"imeta set -C {dir_path} ethnicity {data['ethnicity']}")
 	
 	for cmd in cmdstrs:
 		os.system(cmd)
