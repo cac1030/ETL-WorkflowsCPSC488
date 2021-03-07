@@ -92,7 +92,7 @@ def edit_patient(patient_data):
 	data = json.loads(patient_data)
 	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
 	
-	cmdstrs = [(f"imeta mod -C {dir_name} first_name {data['first_name']}")]
+	cmdstrs = [(f"imeta mod -C {dir_path} first_name {data['first_name']}")]
 	cmdstrs.append(f"imeta mod -C {dir_path} last_name {data['last_name']}")
 	cmdstrs.append(f"imeta mod -C {dir_path} date_created {data['date_created']}")
 	cmdstrs.append(f"imeta mod -C {dir_path} date_modified {data['date_modified']}")
