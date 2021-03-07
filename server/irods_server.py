@@ -49,10 +49,12 @@ def process_request(client_socket, address):
 	request, data = received.split('!')
 	
 	switcher = {
+		"REQ_UPLOAD_FILE": receive_file(client_socket, address, data)
+		"REQ_PATIENT_ADD": add_patient(data)
+		"REQ_PATIENT_EDIT": edit_patient(data)
+		"REQ_DOWNLOAD_FILE": "REQ_DOWNLOAD_FILE",
 		"REQ_DOWNLOAD_META_SEARCH": "REQ_DOWNLOAD_META_SEARCH",
 		"REQ_DOWNLOAD_META_DEFAULT": "REQ_DOWNLOAD_META_DEFAULT",
-		"REQ_DOWNLOAD_FILE": "REQ_DOWNLOAD_FILE",
-		"REQ_UPLOAD_FILE": receive_file(client_socket, address, data)
 		}
 	
 	message = switcher.get(request, "invalid request")
@@ -84,7 +86,46 @@ def receive_file(client_socket, address, data):
 			
 	unzip_file("./client.zip")
 	put_to_irods(filename, patient_name)
-	return "\nREQUEST_UPLOAD_FILE by " + address[0] + " fulfilled"
+	return "\nREQ_UPLOAD_FILE by " + address[0] + " fulfilled"
+	
+def add_patient(patient_data):
+	data = json.load(patient_data)
+	dir_name = {data['lastName']}_{data'firstName'}
+	
+	cmdstrs = [f"imkdir /tempZone/home/public/{dir_name}"]
+	cmdstr.append(f"imeta add -C {dir_name} first_name {data['first_name']})
+	cmdstr.append(f"imeta add -C {dir_name} last_name {data['last_name']})
+	cmdstr.append(f"imeta add -C {dir_name} date_created {data['date_created']})
+	cmdstr.append(f"imeta add -C {dir_name} date_modified {data['date_modified']})
+	cmdstr.append(f"imeta add -C {dir_name} height {data['height']})
+	cmdstr.append(f"imeta add -C {dir_name} weight {data['weight']})
+	cmdstr.append(f"imeta add -C {dir_name} dob {data['dob']})
+	cmdstr.append(f"imeta add -C {dir_name} sex {data['sex']})
+	cmdstr.append(f"imeta add -C {dir_name} ethnicity {data['ethnicity']})
+	
+	for cmd in cmdstrs:
+		os.system(cmd)
+		
+	return"\nREQ_PATIENT_ADD by " + address[0] + " fulfilled"
+		
+def edit_patient(patient_data):
+	data = json.load(patient_data)
+	dir_name = {data['lastName']}_{data'firstName'}
+	
+	cmdstr.append(f"imeta mod -C {dir_name} first_name {data['first_name']})
+	cmdstr.append(f"imeta mod -C {dir_name} last_name {data['last_name']})
+	cmdstr.append(f"imeta mod -C {dir_name} date_created {data['date_created']})
+	cmdstr.append(f"imeta mod -C {dir_name} date_modified {data['date_modified']})
+	cmdstr.append(f"imeta mod -C {dir_name} height {data['height']})
+	cmdstr.append(f"imeta mod -C {dir_name} weight {data['weight']})
+	cmdstr.append(f"imeta mod -C {dir_name} dob {data['dob']})
+	cmdstr.append(f"imeta mod -C {dir_name} sex {data['sex']})
+	cmdstr.append(f"imeta mod -C {dir_name} ethnicity {data['ethnicity']})
+	
+	for cmd in cmdstrs:
+		os.system(cmd)
+		
+	return"\nREQ_PATIENT_EDIT by " + address[0] + " fulfilled"
 	
 def download_meta_default(addr, patient_name):
     # supplies metadata on the most recently accessed or uploaded patient files

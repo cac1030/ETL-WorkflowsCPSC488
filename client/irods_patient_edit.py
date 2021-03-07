@@ -1,7 +1,7 @@
 import socket
 import tqdm
 
-REQUEST = "REQ_PATIENT_ADD"
+REQUEST = "REQ_PATIENT_EDIT"
 DATA = sys.argv[1]
 
 # transfer config
