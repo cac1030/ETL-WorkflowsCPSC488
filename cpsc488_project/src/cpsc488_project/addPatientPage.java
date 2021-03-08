@@ -37,6 +37,7 @@ public class addPatientPage {
 
 	JFrame frame = new JFrame();
 
+	//TextFields
 	private JTextField nameField;
 	private JTextField addressField;
 	private JTextField cityField;
@@ -48,7 +49,7 @@ public class addPatientPage {
 	private JTextField genderField;
 	private JTextField ethnicityField;
 	private JTextField emailField;
-
+	
 	
 	
 	DefaultTableModel model;
