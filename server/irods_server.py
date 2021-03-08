@@ -40,24 +40,6 @@ def handle_connection():
 	
 	return (client_socket, address)
 	
-def process_request(client_socket, address):
-	# receive request from client
-	received = client_socket.recv(BUFFER_SIZE).decode()
-	
-	print(f"received {received} from {address}")
-	
-	request, data = received.split('!')
-	
-	switcher = {
-		"REQ_DOWNLOAD_META_SEARCH": "REQ_DOWNLOAD_META_SEARCH",
-		"REQ_DOWNLOAD_META_DEFAULT": "REQ_DOWNLOAD_META_DEFAULT",
-		"REQ_DOWNLOAD_FILE": "REQ_DOWNLOAD_FILE",
-		"REQ_UPLOAD_FILE": receive_file(client_socket, address, data)
-		}
-	
-	message = switcher.get(request, "invalid request")
-	print(message)
-	
 def receive_file(client_socket, address, data):
 	# receive the file infos
 	patient_name, filename, filesize = data.split(SEPARATOR)
@@ -84,7 +66,70 @@ def receive_file(client_socket, address, data):
 			
 	unzip_file("./client.zip")
 	put_to_irods(filename, patient_name)
-	return "\nREQUEST_UPLOAD_FILE by " + address[0] + " fulfilled"
+	return "\nREQ_UPLOAD_FILE by " + address[0] + " fulfilled"
+	
+def add_patient(patient_data):
+	data = json.loads(patient_data)
+	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
+	
+	cmdstrs = [f"imkdir {dir_path}"]
+	cmdstrs.append(f"imeta add -C {dir_path} first_name {data['first_name']}")
+	cmdstrs.append(f"imeta add -C {dir_path} last_name {data['last_name']}")
+	cmdstrs.append(f"imeta add -C {dir_path} date_created {data['date_created']}")
+	cmdstrs.append(f"imeta add -C {dir_path} date_modified {data['date_modified']}")
+	cmdstrs.append(f"imeta add -C {dir_path} height {data['height']}")
+	cmdstrs.append(f"imeta add -C {dir_path} weight {data['weight']}")
+	cmdstrs.append(f"imeta add -C {dir_path} dob {data['dob']}")
+	cmdstrs.append(f"imeta add -C {dir_path} sex {data['sex']}")
+	cmdstrs.append(f"imeta add -C {dir_path} ethnicity {data['ethnicity']}")
+	
+	for cmd in cmdstrs:
+		os.system(cmd)
+		
+	return"\nREQ_PATIENT_ADD by " + address[0] + " fulfilled"
+		
+def edit_patient(patient_data):
+	data = json.loads(patient_data)
+	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
+	
+	cmdstrs = [(f"imeta set -C {dir_path} first_name {data['first_name']}")]
+	cmdstrs.append(f"imeta set -C {dir_path} last_name {data['last_name']}")
+	cmdstrs.append(f"imeta set -C {dir_path} date_created {data['date_created']}")
+	cmdstrs.append(f"imeta set -C {dir_path} date_modified {data['date_modified']}")
+	cmdstrs.append(f"imeta set -C {dir_path} height {data['height']}")
+	cmdstrs.append(f"imeta set -C {dir_path} weight {data['weight']}")
+	cmdstrs.append(f"imeta set -C {dir_path} dob {data['dob']}")
+	cmdstrs.append(f"imeta set -C {dir_path} sex {data['sex']}")
+	cmdstrs.append(f"imeta set -C {dir_path} ethnicity {data['ethnicity']}")
+	
+	for cmd in cmdstrs:
+		os.system(cmd)
+		
+	return"\nREQ_PATIENT_EDIT by " + address[0] + " fulfilled"
+	
+def process_request(client_socket, address):
+	# receive request from client
+	received = client_socket.recv(BUFFER_SIZE).decode()
+	
+	print(f"received {received} from {address}")
+	
+	request, data = received.split('!')
+	
+	print(request)
+	
+	switcher = {
+		"REQ_UPLOAD_FILE": receive_file,
+		"REQ_PATIENT_ADD": add_patient,
+		"REQ_PATIENT_EDIT": edit_patient
+		}
+	
+	args = {
+		"REQ_UPLOAD_FILE": (client_socket, address, data),
+		"REQ_PATIENT_ADD": (data),
+		"REQ_PATIENT_EDIT": (data)
+		}
+	message = switcher[request](args[request])
+	print(message)
 	
 def download_meta_default(addr, patient_name):
     # supplies metadata on the most recently accessed or uploaded patient files
