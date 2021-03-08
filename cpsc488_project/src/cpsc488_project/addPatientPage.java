@@ -30,6 +30,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import java.awt.Font;
 import java.awt.Color;
+import java.io.*;
 
 
 public class addPatientPage {
@@ -48,9 +49,28 @@ public class addPatientPage {
 	private JTextField ethnicityField;
 	private JTextField emailField;
 
-
+	
 	
 	DefaultTableModel model;
+	
+	
+	public class CmdTest {
+		public void test() throws Exception {
+			
+        ProcessBuilder builder = new ProcessBuilder(
+        		"cmd.exe", "/c", "dir");
+        builder.redirectErrorStream(true);
+        Process p = builder.start();
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        while (true) {
+            line = r.readLine();
+            if (line == null) { break; }
+            System.out.println(line);
+        	}
+		}
+	}
+	
 	
 	
 	addPatientPage() {
@@ -292,7 +312,7 @@ public class addPatientPage {
 				else {
 					//All Fields are filled in
 					//Parse Data into Json format
-					
+					/*
 					String patientJson = "{\n\"Patient Name\"" + ":" + "\"" + nameField.getText() + "\"" + "," + "\n"
 					+ "\"Birth\"" + ":" + "\"" + birthField.getText() + "\"" + "," + "\n"
 					+"\"Address\"" + ":" + "\"" + addressField.getText() + "\"" + "," + "\n"
@@ -305,26 +325,31 @@ public class addPatientPage {
 					+"\"Ethnicity\"" + ":" + "\"" + ethnicityField.getText() + "\"" + "," + "\n"
 					+"\"Email\"" + ":" + "\"" + emailField.getText() + "\"" + "\n"
 					+ "}";
+					*/
 					
-					//Save String to downloads folder
-					try {
-						String home = System.getProperty("user.home");
+					String DATA = "{\"first_name\"" + ":" + "\"" + nameField.getText() + "\"" + ","
+							+ "\"last_name\"" + ":" + "\"" + birthField.getText() + "\"" + ","
+							+"\"date_created\"" + ":" + "\"" + addressField.getText() + "\"" + ","
+							+"\"date_modified\"" + ":" + "\"" + stateField.getText() + "\"" + ","
+							+"\"height\"" + ":" + "\"" + zipField.getText() + "\"" + ","
+							+"\"weight\"" + ":" + "\"" + cityField.getText() + "\"" + ","
+							+"\"dob\"" + ":" + "\"" + countryField.getText() + "\"" + ","
+							+"\"sex\"" + ":" + "\"" + phoneField.getText() + "\"" + ","
+							+"\"ethnicity\"" + ":" + "\"" + genderField.getText() + "\"" + ","
+							+ "}";
+							
 					
-						String str = "Patient.txt";
-						
-						FileWriter fw = new FileWriter(new File(home+"/Downloads/",str));
-				        fw.write(patientJson);
-				        fw.close();
-						
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				
 				    
 					//Run Script
+					CmdTest cmd = new CmdTest();
+					try {
+						cmd.test();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
-					
-					JOptionPane.showMessageDialog(null, patientJson);
+					//JOptionPane.showMessageDialog(null, patientJson);
 					JOptionPane.showMessageDialog(null, "Patient Added");
 				}
 			}
