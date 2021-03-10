@@ -74,8 +74,8 @@ public class patientDirectory {
 		ArrayList<String> names=getNames();
 		
 		names.stream().forEach((name) -> {
-			String starName=name.toString().toLowerCase();
-			if (starName.contains(searchTerm.toLowerCase())) {
+			String filteredName=name.toString().toLowerCase();
+			if (filteredName.contains(searchTerm.toLowerCase())) {
 				filterItems.addElement(name);
 			}
 		});

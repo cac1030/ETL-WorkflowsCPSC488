@@ -53,7 +53,8 @@ public class addPatientPage {
 	DefaultTableModel model;
 	
 	
-	public class CmdTest {
+	//Resource https://stackoverflow.com/questions/15464111/run-cmd-commands-through-java
+	public class Cmd {
 		public void test(String DATA) throws Exception {
 			
 		//Navigate into Clint folder and run python script to add patient
@@ -303,7 +304,7 @@ public class addPatientPage {
 							
 					
 					//Run Script through CMD
-					CmdTest cmd = new CmdTest();
+					Cmd cmd = new Cmd();
 					try {
 						cmd.test(DATA);
 					} catch (Exception e) {
