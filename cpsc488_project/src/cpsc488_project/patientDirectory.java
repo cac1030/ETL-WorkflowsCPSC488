@@ -137,10 +137,10 @@ public class patientDirectory {
 		searchLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		searchLabel.setBounds(118, 130, 53, 14);
 		frame.getContentPane().add(searchLabel);
-		biometricsLabel.setBounds(108, 472, 216, 14);
+		biometricsLabel.setBounds(108, 472, 249, 14);
 		
 		frame.getContentPane().add(biometricsLabel);
-		addFileLabel.setBounds(108, 488, 216, 14);
+		addFileLabel.setBounds(108, 488, 249, 14);
 		
 		frame.getContentPane().add(addFileLabel);
 		

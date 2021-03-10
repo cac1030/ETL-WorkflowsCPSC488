@@ -25,12 +25,12 @@ public class menuPage {
 		
 		
 		JButton PatientDirectoryButton = new JButton("Patient Directory");
-		PatientDirectoryButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		PatientDirectoryButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		PatientDirectoryButton.setBounds(339, 174, 163, 58);
 		PatientDirectoryButton.setFocusable(false);
 		PatientDirectoryButton.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
-				frame.dispose();
+				//frame.dispose();
 				patientDirectory window = new patientDirectory();
 				window.frame.setVisible(true);
 			}
@@ -38,10 +38,10 @@ public class menuPage {
 		frame.getContentPane().add(PatientDirectoryButton);
 		
 		JButton btnAddPatient = new JButton("Add Patient");
-		btnAddPatient.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnAddPatient.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnAddPatient.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
-				frame.dispose();
+				//frame.dispose();
 				addPatientPage window = new addPatientPage();
 				window.frame.setVisible(true);
 			}
@@ -52,7 +52,7 @@ public class menuPage {
 		
 		JLabel menuLabel = new JLabel("Main Menu");
 		menuLabel.setFont(new Font("Tahoma", Font.BOLD, 40));
-		menuLabel.setBounds(222, 76, 236, 101);
+		menuLabel.setBounds(232, 76, 236, 101);
 		frame.getContentPane().add(menuLabel);
 		
 	}
