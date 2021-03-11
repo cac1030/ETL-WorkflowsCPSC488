@@ -40,7 +40,11 @@ def handle_connection():
 	
 	return (client_socket, address)
 	
-def receive_file(client_socket, address, data):
+def receive_file(args):
+	client_socket = args[0]
+	address = args[1]
+	data = args[2]
+
 	# receive the file infos
 	patient_name, filename, filesize = data.split(SEPARATOR)
 	# remove absolute path if there is
@@ -124,7 +128,7 @@ def process_request(client_socket, address):
 		}
 	
 	args = {
-		"REQ_UPLOAD_FILE": (client_socket, address, data),
+		"REQ_UPLOAD_FILE": [client_socket, address, data],
 		"REQ_PATIENT_ADD": (data),
 		"REQ_PATIENT_EDIT": (data)
 		}
