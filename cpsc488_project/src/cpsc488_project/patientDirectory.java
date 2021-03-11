@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -103,8 +104,17 @@ public class patientDirectory {
 			nameList.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					updatePatientPage window = new updatePatientPage();
-					window.frame.setVisible(true);
+					
+					if (SwingUtilities.isLeftMouseButton(e))
+					{
+						updatePatientPage window = new updatePatientPage();
+						window.frame.setVisible(true);
+					}
+					else if (SwingUtilities.isRightMouseButton(e))
+					{
+						addFilesPage window = new addFilesPage();
+						window.frame.setVisible(true);
+					}
 				}
 			});
 			nameList.setModel(DLM);
