@@ -57,7 +57,7 @@ public class addFilesPage {
 		fileTitleLabel.setBounds(10, 32, 284, 50);
 		frame.getContentPane().add(fileTitleLabel);
 		
-		JLabel filesPatientLabel = new JLabel("Placeholder");
+		JLabel filesPatientLabel = new JLabel("Christian");
 		filesPatientLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		filesPatientLabel.setBounds(304, 49, 103, 20);
 		frame.getContentPane().add(filesPatientLabel);
@@ -78,7 +78,7 @@ public class addFilesPage {
 				
 				if(response == JFileChooser.APPROVE_OPTION) {
 					filename = filechooser.getSelectedFile();
-					
+					filename.getName();
 					CmdFiles cmd = new CmdFiles();
 					try {
 						cmd.test2(PATIENT_NAME,filename,address,data);

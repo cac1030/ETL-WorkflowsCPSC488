@@ -14,8 +14,8 @@ REQUEST = "REQ_UPLOAD_FILE"
 PATIENT_NAME = sys.argv[1]
 
 # transfer config
-#HOST = "52.168.52.180"
-HOST = "localhost"
+HOST = "52.168.52.180"
+#HOST = "localhost"
 PORT = 5001
 SEPARATOR = "<SEPARATOR>"
 BUFFER_SIZE = 4096 # send 4096 bytes for each time step
