@@ -161,6 +161,8 @@ def fetch_patient_data():
 	for output in cmdoutputs:
 		print(output)
 
+	print(cmdoutputs[1])
+
 def download_meta_default(addr, patient_name):
     # supplies metadata on the most recently accessed or uploaded patient files
 	# if date_create or date_modify are within the last (x amount of time)
