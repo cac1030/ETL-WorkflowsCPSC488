@@ -154,10 +154,12 @@ def fetch_patient_data():
 
 	cmdstrs.append("ils /tempZone/home/public | awk -F '/' '{print $5}'")
 
+	result = subprocess.run(['ils', '/tempZone/home/public', '|', 'awk -F', '\'/\'' '\'{print $5}\''], stdout=subprocess.PIPE)
+	result.stdout.decode('utf-8')
+
 	for cmd in cmdstrs:
 		# cmdoutputs.append((subprocess.check_output(cmd)).split("\n"))
-		result = subprocess.run(cmd, stdout=subprocess.PIPE)
-		result.stdout.decode('utf-8')
+
 
 def download_meta_default(addr, patient_name):
     # supplies metadata on the most recently accessed or uploaded patient files
