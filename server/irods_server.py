@@ -173,7 +173,7 @@ def fetch_patient_data():
 	with open("./temp/patient_json.json") as f:
 		f.write(f"{{patients:{str(data)}}}")
 
-	break
+	return
 
 	# send to client
 	filename = "patient_json.json"
