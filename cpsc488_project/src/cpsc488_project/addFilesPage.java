@@ -29,7 +29,7 @@ public class addFilesPage {
 	JFrame frame = new JFrame();
 
 	public class CmdFiles {
-		public void test2(String PATIENT_NAME, File filename, String address, String data) throws Exception {
+		public void test2(String PATIENT_NAME, String filename, String address, String data) throws Exception {
 		
 		//Navigate into Client folder and run Python3 script to add patient
         ProcessBuilder builder = new ProcessBuilder(
@@ -65,7 +65,7 @@ public class addFilesPage {
 		JButton addSingleFileButton = new JButton("Add File");
 		addSingleFileButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				File filename;
+				String filename;
 				String PATIENT_NAME = "DOE_JANE";
 				String address = "52.168.52.180";
 				String data = "1247";
@@ -77,8 +77,8 @@ public class addFilesPage {
 				response = filechooser.showOpenDialog(null);
 				
 				if(response == JFileChooser.APPROVE_OPTION) {
-					filename = filechooser.getSelectedFile();
-					filename.getName();
+					filename = filechooser.getSelectedFile().getName();
+					 
 					CmdFiles cmd = new CmdFiles();
 					try {
 						cmd.test2(PATIENT_NAME,filename,address,data);
