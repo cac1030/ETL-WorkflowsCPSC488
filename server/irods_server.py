@@ -34,6 +34,7 @@ def handle_connection():
 	print(f"\n[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
 
 	# accept connection if there is any
+	global client_socket
 	client_socket, address = s.accept()
 	# if below code is executed, that means the sender is connected
 	print(f"[+] {address} is connected.")
@@ -96,6 +97,8 @@ def add_patient(patient_data):
 	for cmd in cmdstrs:
 		os.system(cmd)
 
+	fetch_patient_data()
+
 	return"\nREQ_PATIENT_ADD by " + address[0] + " fulfilled"
 
 def edit_patient(patient_data):
@@ -121,6 +124,8 @@ def edit_patient(patient_data):
 
 	for cmd in cmdstrs:
 		os.system(cmd)
+
+	fetch_patient_data()
 
 	return"\nREQ_PATIENT_EDIT by " + address[0] + " fulfilled"
 
@@ -162,12 +167,31 @@ def fetch_patient_data():
 		result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
 		for i in range(0, len(result), 2):
 			meta[result[i]] = result[i+1]
-			#pairs.append(f"\"{result[i]}\":\"{result[i+1]}\"")
 		data.append(meta)
 
-	print(data)
-	# for i in range(0, len(data)):
-	# 	print(data[i])
+	# write to file in json format
+	with open("./temp/patient_json.json") as f:
+		f.write(f"{{patients:{str(data)}}}")
+
+	break
+
+	# send to client
+	filename = "patient_json.json"
+	filesize = os.path.getsize(filename)
+
+	progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
+	with open('./temp/patient_json.json', "rb") as f:
+	    while True:
+	        # read the bytes from the file
+	        bytes_read = f.read(BUFFER_SIZE)
+	        if not bytes_read:
+	            # file transmitting is done
+	            break
+	        # we use sendall to assure transimission in
+	        # busy networks
+	        s.sendall(bytes_read)
+	        # update the progress bar
+	        progress.update(len(bytes_read))
 
 
 def download_meta_default(addr, patient_name):
