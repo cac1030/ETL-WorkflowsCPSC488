@@ -165,8 +165,9 @@ def fetch_patient_data():
 			#pairs.append(f"\"{result[i]}\":\"{result[i+1]}\"")
 		data.append(meta)
 
-	for i in range(0, len(data)):
-		print(data[i])
+	print(data)
+	# for i in range(0, len(data)):
+	# 	print(data[i])
 
 
 def download_meta_default(addr, patient_name):
