@@ -157,12 +157,12 @@ def fetch_patient_data():
 
 	for cmd in cmdstrs:
 		result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE)
-		cmdoutputs.append(result.stdout.decode('utf-8').split('\n'))
+		cmdoutputs.append(result.stdout.decode('utf-8').splitlines())
 
 	print(cmdoutputs[0])
-	#data['dir_names'] = cmdoutputs[0]
+	# data['dir_names'] = cmdoutputs[0]
 
-	for output in cmdoutputs['dir_names']:
+	for output in data['dir_names']:
 		print(output)
 
 def download_meta_default(addr, patient_name):
