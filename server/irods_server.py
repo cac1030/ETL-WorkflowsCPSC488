@@ -161,6 +161,9 @@ def fetch_patient_data():
 		result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE)
 		cmdoutputs.append(result.stdout.decode('utf-8'))
 
+	for output in cmdoutputs:
+		print(output)
+
 def download_meta_default(addr, patient_name):
     # supplies metadata on the most recently accessed or uploaded patient files
 	# if date_create or date_modify are within the last (x amount of time)
