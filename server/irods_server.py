@@ -151,17 +151,19 @@ def process_request(client_socket, address):
 def fetch_patient_data():
 	cmdstrs = []
 	cmdoutputs = []
+	data = {'dir_names':[], 'meta':[]}
 
 	cmdstrs.append("ils /tempZone/home/public | awk -F '/' '{print $5}'")
 
 	for cmd in cmdstrs:
 		result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE)
-		cmdoutputs.extend(result.stdout.decode('utf-8').split('\n'))
+		cmdoutputs.append(result.stdout.decode('utf-8').split('\n'))
 
-	for output in cmdoutputs:
+	print(cmdoutputs[0])
+	#data['dir_names'] = cmdoutputs[0]
+
+	for output in cmdoutputs['dir_names']:
 		print(output)
-
-	print(cmdoutputs[1])
 
 def download_meta_default(addr, patient_name):
     # supplies metadata on the most recently accessed or uploaded patient files
