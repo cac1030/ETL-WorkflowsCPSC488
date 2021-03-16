@@ -169,7 +169,7 @@ def fetch_patient_data():
 
 	for i in range(0, len(data['dir_names'])):
 		print(data['dir_names'][i])
-		print(data['meta'])
+		print(data['meta'][i])
 
 
 def download_meta_default(addr, patient_name):
