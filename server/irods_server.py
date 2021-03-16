@@ -170,7 +170,7 @@ def fetch_patient_data():
 		data.append(meta)
 
 	# write to file in json format
-	with open("./temp/patient_json.json") as f:
+	with open("./temp/patient_json.json", 'w+') as f:
 		f.write(f"{{patients:{str(data)}}}")
 
 	return
