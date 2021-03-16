@@ -163,7 +163,7 @@ def fetch_patient_data():
 	            break
 	        # we use sendall to assure transimission in
 	        # busy networks
-	        s.sendall(bytes_read)
+	        client_socket.sendall(bytes_read)
 	        # update the progress bar
 	        progress.update(len(bytes_read))
 
