@@ -217,7 +217,7 @@ setup_server()
 client_socket, address = handle_connection()
 process_request(client_socket, address)
 
-close the server socket
+#close the server socket
 s.close()
 
 #def update_client_meta:
