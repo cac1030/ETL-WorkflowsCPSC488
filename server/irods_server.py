@@ -153,14 +153,17 @@ def fetch_patient_data():
 	cmdoutputs = []
 	data = {'dir_names':[], 'meta':[]}
 
-	cmdstrs.append("ils /tempZone/home/public | awk -F '/' '{print $5}'")
+	# fetch patient dir names
+	cmd = "ils /tempZone/home/public | awk -F '/' '/_/ {print $5}'"
+	result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE)
+	data['dir_names'] = result.stdout.decode('utf-8').splitlines()
 
-	for cmd in cmdstrs:
+	# fetch patient dir metadata
+	for dir_name in data['dir_names']:
+		cmd = f"imeta ls -C {dir_name} | awk '/[attribute value]/' | cut -f1"
 		result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE)
-		cmdoutputs.append(result.stdout.decode('utf-8').splitlines())
+		print(result.stdout.decode('utf-8'))
 
-	print(cmdoutputs[0])
-	# data['dir_names'] = cmdoutputs[0]
 
 	for output in data['dir_names']:
 		print(output)
