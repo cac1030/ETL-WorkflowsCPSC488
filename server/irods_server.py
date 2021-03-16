@@ -158,7 +158,7 @@ def fetch_patient_data():
 	cmdoutputs.append(result.stdout.decode('utf-8'))
 
 	for cmd in cmdstrs:
-		result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).split("\n")
+		result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE)
 		cmdoutputs.append(result.stdout.decode('utf-8'))
 
 def download_meta_default(addr, patient_name):
