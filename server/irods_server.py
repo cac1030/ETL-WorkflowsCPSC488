@@ -119,8 +119,8 @@ def edit_patient(patient_data):
 	cmdstrs.append(f"imeta set -C {dir_path} ethnicity {data['ethnicity']}")
 
 	# optional fields
-	cmdstrs.append(f"imeta add -C {dir_path} middle_name {data['middle_name']}")
-	cmdstrs.append(f"imeta add -C {dir_path} ethnicity {data['ethnicity']}")
+	cmdstrs.append(f"imeta set -C {dir_path} middle_name {data['middle_name']}")
+	cmdstrs.append(f"imeta set -C {dir_path} ethnicity {data['ethnicity']}")
 
 	for cmd in cmdstrs:
 		os.system(cmd)
