@@ -154,7 +154,7 @@ def fetch_patient_data():
 
 	cmdstrs.append("ils /tempZone/home/public | awk -F '/' '{print $5}'")
 
-	result = subprocess.run(['ils', '/tempZone/home/public', '|', 'awk -F', '\'/\'', '\'{print $5}\''], stdout=subprocess.PIPE)
+	result = subprocess.run(['ils', '/tempZone/home/public | awk -F \'/\' \'{print $5}\''], stdout=subprocess.PIPE)
 	result.stdout.decode('utf-8')
 
 	#for cmd in cmdstrs:
