@@ -165,7 +165,7 @@ def fetch_patient_data():
 			#pairs.append(f"\"{result[i]}\":\"{result[i+1]}\"")
 		data.append(meta)
 
-	for i in range(0, len(data['dir_names'])):
+	for i in range(0, len(data)):
 		print(data[i])
 
 
