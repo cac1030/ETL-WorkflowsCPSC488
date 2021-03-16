@@ -129,6 +129,44 @@ def edit_patient(patient_data):
 
 	return"\nREQ_PATIENT_EDIT by " + address[0] + " fulfilled"
 
+def fetch_patient_data():
+	data = []
+
+	# fetch patient dir names
+	cmd = "ils /tempZone/home/public | awk -F '/' '/_/ {print $5}'"
+	dir_names = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
+
+	# fetch patient dir metadata
+	for dir_name in dir_names:
+		meta = {}
+		cmd = f"imeta ls -C /tempZone/home/public/{dir_name} | awk '/^[av]/ {{print}}' | cut -f2 -d ' '"
+		result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
+		for i in range(0, len(result), 2):
+			meta[result[i]] = result[i+1]
+		data.append(meta)
+
+	# write to file in json format
+	with open("./temp/patient_json.json", 'w+') as f:
+		f.write(f"{{patients:{str(data)}}}")
+
+	# send to client
+	filename = "patient_json.json"
+	filesize = os.path.getsize(filename)
+
+	progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
+	with open('./temp/patient_json.json', "rb") as f:
+	    while True:
+	        # read the bytes from the file
+	        bytes_read = f.read(BUFFER_SIZE)
+	        if not bytes_read:
+	            # file transmitting is done
+	            break
+	        # we use sendall to assure transimission in
+	        # busy networks
+	        s.sendall(bytes_read)
+	        # update the progress bar
+	        progress.update(len(bytes_read))
+
 def process_request(client_socket, address):
 	# receive request from client
 	received = client_socket.recv(BUFFER_SIZE).decode()
@@ -153,47 +191,6 @@ def process_request(client_socket, address):
 	message = switcher[request](args[request])
 	print(message)
 
-def fetch_patient_data():
-	data = []
-
-	# fetch patient dir names
-	cmd = "ils /tempZone/home/public | awk -F '/' '/_/ {print $5}'"
-	dir_names = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
-
-	# fetch patient dir metadata
-	for dir_name in dir_names:
-		meta = {}
-		cmd = f"imeta ls -C /tempZone/home/public/{dir_name} | awk '/^[av]/ {{print}}' | cut -f2 -d ' '"
-		result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
-		for i in range(0, len(result), 2):
-			meta[result[i]] = result[i+1]
-		data.append(meta)
-
-	# write to file in json format
-	with open("./temp/patient_json.json", 'w+') as f:
-		f.write(f"{{patients:{str(data)}}}")
-
-	return
-
-	# send to client
-	filename = "patient_json.json"
-	filesize = os.path.getsize(filename)
-
-	progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-	with open('./temp/patient_json.json', "rb") as f:
-	    while True:
-	        # read the bytes from the file
-	        bytes_read = f.read(BUFFER_SIZE)
-	        if not bytes_read:
-	            # file transmitting is done
-	            break
-	        # we use sendall to assure transimission in
-	        # busy networks
-	        s.sendall(bytes_read)
-	        # update the progress bar
-	        progress.update(len(bytes_read))
-
-
 def download_meta_default(addr, patient_name):
     # supplies metadata on the most recently accessed or uploaded patient files
 	# if date_create or date_modify are within the last (x amount of time)
@@ -215,15 +212,13 @@ def put_to_irods(filename, patient_name):
 	os.system("echo " + cmdstr)
 	os.system(cmdstr)
 
-# setup_server()
-# #while True:
-# client_socket, address = handle_connection()
-# process_request(client_socket, address)
+setup_server()
+#while True:
+client_socket, address = handle_connection()
+process_request(client_socket, address)
 
-# close the server socket
-# s.close()
-
-fetch_patient_data()
+close the server socket
+s.close()
 
 #def update_client_meta:
     # for each loop that goes through the client whitelist and sends each IP
