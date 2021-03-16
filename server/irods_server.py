@@ -149,27 +149,24 @@ def process_request(client_socket, address):
 	print(message)
 
 def fetch_patient_data():
-	cmdstrs = []
-	cmdoutputs = []
-	data = {'dir_names':[], 'meta':[]}
+	data = []
 
 	# fetch patient dir names
 	cmd = "ils /tempZone/home/public | awk -F '/' '/_/ {print $5}'"
-	result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE)
-	data['dir_names'] = result.stdout.decode('utf-8').splitlines()
+	dir_names = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
 
 	# fetch patient dir metadata
-	for dir_name in data['dir_names']:
-		pairs = []
+	for dir_name in dir_names:
+		meta = {}
 		cmd = f"imeta ls -C /tempZone/home/public/{dir_name} | awk '/^[av]/ {{print}}' | cut -f2 -d ' '"
 		result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
 		for i in range(0, len(result), 2):
-			pairs.append(f"\"{result[i]}\":\"{result[i+1]}\"")
-		data['meta'].append(pairs)
+			meta[result[i]] = result[i+1]
+			#pairs.append(f"\"{result[i]}\":\"{result[i+1]}\"")
+		data.append(meta)
 
 	for i in range(0, len(data['dir_names'])):
-		print(data['dir_names'][i])
-		print(data['meta'][i])
+		print(data[i])
 
 
 def download_meta_default(addr, patient_name):
