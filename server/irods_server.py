@@ -160,7 +160,7 @@ def fetch_patient_data():
 
 	# fetch patient dir metadata
 	for dir_name in data['dir_names']:
-		cmd = f"imeta ls -C /tempZone/home/public/{dir_name} | awk '/^[av]/ {{print}}' | cut -f2"
+		cmd = f"imeta ls -C /tempZone/home/public/{dir_name} | awk '/^[av]/ {{print}}' | cut -f2 -d ' '"
 		result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
 		for i in range(0, len(result), 2):
 			data['meta'].append(f"\"{result[i]}\":\"{result[i+1]}\"")
