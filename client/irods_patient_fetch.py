@@ -2,7 +2,7 @@ import socket
 import tqdm
 import sys
 
-REQUEST = "REQ_FETCH_PATIENT_DATA"
+REQUEST = "REQ_FETCH"
 DATA = "null"
 
 # transfer config

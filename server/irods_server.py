@@ -221,10 +221,15 @@ def put_to_irods(filename, patient_name):
 setup_server()
 #while True:
 client_socket, address = handle_connection()
-process_request(client_socket, address)
+try:
+	process_request(client_socket, address)
+except Exception as e:
+	print(f"something went wrong: {e}")
+finally:
+	# close the server socket
+	s.close()
 
-# close the server socket
-s.close()
+
 
 #def update_client_meta:
     # for each loop that goes through the client whitelist and sends each IP
