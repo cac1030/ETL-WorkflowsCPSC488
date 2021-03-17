@@ -18,7 +18,7 @@ PATIENT_NAME = sys.argv[1]
 HOST = "localhost"
 PORT = 5001
 SEPARATOR = "<SEPARATOR>"
-BUFFER_SIZE = 4096 # send 4096 bytes for each time step
+BUFFER_SIZE = 4096
 
 filename = sys.argv[2]
 filesize = zip_file(filename)
@@ -43,7 +43,7 @@ with open('client.zip', "rb") as f:
         if not bytes_read:
             # file transmitting is done
             break
-        # we use sendall to assure transimission in 
+        # we use sendall to assure transimission in
         # busy networks
         s.sendall(bytes_read)
         # update the progress bar

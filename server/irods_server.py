@@ -34,7 +34,6 @@ def handle_connection():
 	print(f"\n[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
 
 	# accept connection if there is any
-	global client_socket
 	client_socket, address = s.accept()
 	# if below code is executed, that means the sender is connected
 	print(f"[+] {address} is connected.")
@@ -46,19 +45,16 @@ def receive_file(args):
 	address = args[1]
 	data = args[2]
 
-	# receive the file infos
+	# receive and transform the file infos
 	patient_name, filename, filesize = data.split(SEPARATOR)
-	# remove absolute path if there is
 	filename = os.path.basename(filename)
-	# convert to integer
 	filesize = int(filesize)
 
-	# start receiving the data file from the socket
-	# and writing to the file stream
+	# receive file
 	progress = tqdm.tqdm(range(filesize), f"Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
 	with open("client.zip", "wb") as f:
 		while True:
-			# read 1024 bytes from the socket (receive)
+			# read bytes from the socket (receive)
 			bytes_read = client_socket.recv(BUFFER_SIZE)
 			if not bytes_read:
 				# nothing is received
@@ -129,7 +125,7 @@ def edit_patient(patient_data):
 
 	return"\nREQ_PATIENT_EDIT by " + address[0] + " fulfilled"
 
-def fetch_patient_data():
+def fetch_patient_data(client_socket):
 	data = []
 
 	# fetch patient dir names
@@ -153,8 +149,10 @@ def fetch_patient_data():
 	filename = "./temp/patient_json.json"
 	filesize = os.path.getsize(filename)
 
+	client_socket.send(f"{filename}{SEPARATOR}{filesize}".encode())
+
 	progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-	with open('./temp/patient_json.json', "rb") as f:
+	with open(filename, "rb") as f:
 	    while True:
 	        # read the bytes from the file
 	        bytes_read = f.read(BUFFER_SIZE)
@@ -180,13 +178,15 @@ def process_request(client_socket, address):
 	switcher = {
 		"REQ_UPLOAD_FILE": receive_file,
 		"REQ_PATIENT_ADD": add_patient,
-		"REQ_PATIENT_EDIT": edit_patient
+		"REQ_PATIENT_EDIT": edit_patient,
+		"REQ_FETCH_PATIENT_DATA": fetch_patient_data
 		}
 
 	args = {
 		"REQ_UPLOAD_FILE": [client_socket, address, data],
 		"REQ_PATIENT_ADD": (data),
-		"REQ_PATIENT_EDIT": (data)
+		"REQ_PATIENT_EDIT": (data),
+		"REQ_FETCH_PATIENT_DATA": (client_socket)
 		}
 	message = switcher[request](args[request])
 	print(message)

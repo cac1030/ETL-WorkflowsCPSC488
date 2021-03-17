@@ -10,7 +10,6 @@ DATA = sys.argv[1]
 HOST = "52.168.52.180"
 # HOST = "localhost"
 PORT = 5001
-BUFFER_SIZE = 4096 # send 4096 bytes for each time step
 
 s = socket.socket()
 
@@ -19,7 +18,7 @@ print(f"[+] Connecting to {HOST}:{PORT}")
 s.connect((HOST, PORT))
 print("[+] Connected.")
 
-# send the request type, filename, and filesize
+# send the request and associated data
 s.send(f"{REQUEST}!{DATA}".encode())
 
 # close the socket
