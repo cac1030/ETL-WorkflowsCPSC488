@@ -3,12 +3,13 @@ import tqdm
 import sys
 
 REQUEST = "REQ_FETCH_PATIENT_DATA"
-DATA = ""
+DATA = "null"
 
 # transfer config
 HOST = "52.168.52.180"
 # HOST = "localhost"
 PORT = 5001
+SEPARATOR = "<SEPARATOR>"
 BUFFER_SIZE = 4096
 s = socket.socket()
 

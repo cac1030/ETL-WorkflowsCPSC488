@@ -67,9 +67,12 @@ def receive_file(args):
 
 	unzip_file("./client.zip")
 	put_to_irods(filename, patient_name)
-	return "\nREQ_UPLOAD_FILE by " + address[0] + " fulfilled"
+	return f"\nREQ_UPLOAD_FILE by {address} fulfilled"
 
-def add_patient(patient_data):
+def add_patient(args):
+	patient_data = args[0]
+	address = args[1]
+
 	# TODO: validation (dir already exists), optional fields functionality
 	data = json.loads(patient_data)
 	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
@@ -93,14 +96,14 @@ def add_patient(patient_data):
 	for cmd in cmdstrs:
 		os.system(cmd)
 
-	fetch_patient_data()
+	return f"\nREQ_PATIENT_ADD by {address} fulfilled"
 
-	return"\nREQ_PATIENT_ADD by " + address[0] + " fulfilled"
+def edit_patient(args):
+	patient_data = args[0]
+	address = args[1]
 
-def edit_patient(patient_data):
 	data = json.loads(patient_data)
 	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
-
 
 	# build a command sequence
 	cmdstrs = []
@@ -121,11 +124,12 @@ def edit_patient(patient_data):
 	for cmd in cmdstrs:
 		os.system(cmd)
 
-	fetch_patient_data()
+	return f"\nREQ_PATIENT_EDIT by {address} fulfilled"
 
-	return"\nREQ_PATIENT_EDIT by " + address[0] + " fulfilled"
+def fetch_patient_data(args):
+	client_socket = args[0]
+	address = args[1]
 
-def fetch_patient_data(client_socket):
 	data = []
 
 	# fetch patient dir names
@@ -165,6 +169,8 @@ def fetch_patient_data(client_socket):
 	        # update the progress bar
 	        progress.update(len(bytes_read))
 
+	return f"\nREQ_FETCH by {address} fulfilled"
+
 def process_request(client_socket, address):
 	# receive request from client
 	received = client_socket.recv(BUFFER_SIZE).decode()
@@ -179,14 +185,14 @@ def process_request(client_socket, address):
 		"REQ_UPLOAD_FILE": receive_file,
 		"REQ_PATIENT_ADD": add_patient,
 		"REQ_PATIENT_EDIT": edit_patient,
-		"REQ_FETCH_PATIENT_DATA": fetch_patient_data
+		"REQ_FETCH": fetch_patient_data
 		}
 
 	args = {
 		"REQ_UPLOAD_FILE": [client_socket, address, data],
-		"REQ_PATIENT_ADD": (data),
-		"REQ_PATIENT_EDIT": (data),
-		"REQ_FETCH_PATIENT_DATA": (client_socket)
+		"REQ_PATIENT_ADD": [data, address],
+		"REQ_PATIENT_EDIT": [data, address],
+		"REQ_FETCH": [client_socket, address]
 		}
 	message = switcher[request](args[request])
 	print(message)
