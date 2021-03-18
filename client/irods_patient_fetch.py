@@ -15,17 +15,37 @@ BUFFER_SIZE = 4096
 s = socket.socket()
 
 # connect to the server
-print(f"[+] Connecting to {HOST}:{PORT}")
-s.connect((HOST, PORT))
-print("[+] Connected.")
+print(f"[...] Connecting to {HOST}:{PORT}")
+try:
+	s.connect((HOST, PORT))
+except Exception as e:
+    print(f"[X] Connection failed: {e}")
+    s.close()
+    exit()
+else:
+    print("[+] Connected")
 
 # send the request
-s.send(f"{REQUEST}!{DATA}".encode())
+try:
+    s.send(f"{REQUEST}!{DATA}".encode())
+except Exception as e:
+    print(f"[X] Sending request failed: {e}")
+    s.close()
+    exit()
+else:
+    print(f"[>] {REQUEST} sent")
 
 # receive and write
-received = s.recv(BUFFER_SIZE).decode()
-with open('patient_data.json', w+) as f:
-    f.write(received)
-
-# close the socket
-s.close()
+try:
+    with open("patient_data.json", "wb") as f:
+        while True:
+            bytes_read = s.recv(BUFFER_SIZE)
+            if not bytes_read:
+            	break
+            f.write(bytes_read)
+except Exception as e:
+    print(f"[X] Receiving file failed: {e}")
+else:
+    print(f"[<] {REQUEST} fulfilled")
+finally:
+    s.close()

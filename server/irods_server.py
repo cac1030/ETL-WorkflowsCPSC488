@@ -67,7 +67,7 @@ def receive_file(args):
 
 	unzip_file("./client.zip")
 	put_to_irods(filename, patient_name)
-	return f"\nREQ_UPLOAD_FILE by {address} fulfilled"
+	return f"[!] REQ_UPLOAD_FILE by {address} fulfilled"
 
 def add_patient(args):
 	patient_data = args[0]
@@ -96,7 +96,7 @@ def add_patient(args):
 	for cmd in cmdstrs:
 		os.system(cmd)
 
-	return f"\nREQ_PATIENT_ADD by {address} fulfilled"
+	return f"[!] REQ_PATIENT_ADD by {address} fulfilled"
 
 def edit_patient(args):
 	patient_data = args[0]
@@ -124,7 +124,7 @@ def edit_patient(args):
 	for cmd in cmdstrs:
 		os.system(cmd)
 
-	return f"\nREQ_PATIENT_EDIT by {address} fulfilled"
+	return f"[!] REQ_PATIENT_EDIT by {address} fulfilled"
 
 def fetch_patient_data(args):
 	client_socket = args[0]
@@ -154,13 +154,13 @@ def fetch_patient_data(args):
 	except OSError as e:
 		return e
 
-	return f"\nREQ_FETCH by {address} fulfilled"
+	return f"[!] REQ_FETCH by {address} fulfilled"
 
 def process_request(client_socket, address):
 	# receive request from client
 	received = client_socket.recv(BUFFER_SIZE).decode()
 
-	print(f"received {received} from {address}")
+	print(f"[!] Received {received} from {address}")
 
 	request, data = received.split('!')
 

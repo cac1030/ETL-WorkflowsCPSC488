@@ -14,12 +14,24 @@ PORT = 5001
 s = socket.socket()
 
 # connect to the server
-print(f"[+] Connecting to {HOST}:{PORT}")
-s.connect((HOST, PORT))
-print("[+] Connected.")
+print(f"[...] Connecting to {HOST}:{PORT}")
+try:
+	s.connect((HOST, PORT))
+except Exception as e:
+	print(f"[X] Connection failed: {e}")
+    s.close()
+    exit()
+else:
+	print("[+] Connected")
 
 # send the request and associated data
-s.send(f"{REQUEST}!{DATA}".encode())
-
-# close the socket
-s.close()
+try:
+    s.send(f"{REQUEST}!{DATA}".encode())
+except Exception as e:
+    print(f"[X] Send failed: {e}")
+    s.close()
+    exit()
+else:
+    print(f"[>] {REQUEST} sent")
+finally:
+    s.close()

@@ -27,26 +27,41 @@ filesize = zip_file(filename)
 s = socket.socket()
 
 # connect to the server
-print(f"[+] Connecting to {HOST}:{PORT}")
-s.connect((HOST, PORT))
-print("[+] Connected.")
+print(f"[...] Connecting to {HOST}:{PORT}")
+try:
+	s.connect((HOST, PORT))
+except Exception as e:
+	print(f"[X] Connection failed: {e}")
+    s.close()
+    exit()
+else:
+	print("[+] Connected")
 
-# send the request type, filename, and filesize
-s.send(f"{REQUEST}!{PATIENT_NAME}{SEPARATOR}{filename}{SEPARATOR}{filesize}".encode())
+# send the request, filename, and filesize
+try:
+    s.send(f"{REQUEST}!{PATIENT_NAME}{SEPARATOR}{filename}{SEPARATOR}{filesize}".encode())
+except Exception as e:
+    print(f"[X] Sending request failed: {e}")
+    s.close()
+    exit()
+else:
+    print(f"[>] {REQUEST} sent")
 
-# start sending the file
-progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-with open('client.zip', "rb") as f:
-    while True:
-        # read the bytes from the file
-        bytes_read = f.read(BUFFER_SIZE)
-        if not bytes_read:
-            # file transmitting is done
-            break
-        # we use sendall to assure transimission in
-        # busy networks
-        s.sendall(bytes_read)
-        # update the progress bar
-        progress.update(len(bytes_read))
-# close the socket
-s.close()
+# send the file
+try:
+    progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
+	with open('client.zip', "rb") as f:
+	    while True:
+	        bytes_read = f.read(BUFFER_SIZE)
+	        if not bytes_read:
+	            break
+	        s.sendall(bytes_read)
+	        progress.update(len(bytes_read))
+except Exception as e:
+    print(f"[X] Sending file failed: {e}")
+    s.close()
+    exit()
+else:
+    print(f"[>] File sent")
+finally:
+	s.close()
