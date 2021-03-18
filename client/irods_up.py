@@ -17,7 +17,7 @@ PATIENT_NAME = sys.argv[1]
 #HOST = "52.168.52.180"
 HOST = "localhost"
 PORT = 5001
-SEPARATOR = "<SEPARATOR>"
+SEPARATOR = "[-]"
 BUFFER_SIZE = 4096
 
 filename = sys.argv[2]

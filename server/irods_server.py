@@ -18,7 +18,7 @@ def setup_server():
 
 	# receive 4096 bytes each time
 	BUFFER_SIZE = 4096
-	SEPARATOR = "<SEPARATOR>"
+	SEPARATOR = "[-]"
 
 	# create the TCP server socket
 	s = socket.socket()
