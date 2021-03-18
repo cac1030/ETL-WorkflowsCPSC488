@@ -1,6 +1,7 @@
 import socket
 import tqdm
 import sys
+import os
 
 REQUEST = "REQ_FETCH"
 DATA = "null"
@@ -21,29 +22,10 @@ print("[+] Connected.")
 # send the request
 s.send(f"{REQUEST}!{DATA}".encode())
 
-# receive
+# receive and write
 received = s.recv(BUFFER_SIZE).decode()
-print(f"received response from server: {received}")
-filename, filesize = received.split(SEPARATOR)
-
-#transform
-filename = os.path.basename(filename)
-filesize = int(filesize)
-
-# receive file
-progress = tqdm.tqdm(range(filesize), f"Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-with open(filename, "wb") as f:
-    while True:
-        # read bytes from the socket (receive)
-        bytes_read = s.recv(BUFFER_SIZE)
-        if not bytes_read:
-            # nothing is received
-            # file transmitting is done
-            break
-        # write to the file the bytes we just received
-        f.write(bytes_read)
-        # update the progress bar
-        progress.update(len(bytes_read))
+with open('patient_data.json', w+) as f:
+    f.write(received)
 
 # close the socket
 s.close()

@@ -145,29 +145,14 @@ def fetch_patient_data(args):
 			meta[result[i]] = result[i+1]
 		data.append(meta)
 
-	# write to file in json format
-	with open("./temp/patient_json.json", 'w+') as f:
-		f.write(f"{{patients:{str(data)}}}")
-
 	# send to client
 	filename = "./temp/patient_json.json"
 	filesize = os.path.getsize(filename)
 
-	client_socket.send(f"{filename}{SEPARATOR}{filesize}".encode())
-
-	progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-	with open(filename, "rb") as f:
-	    while True:
-	        # read the bytes from the file
-	        bytes_read = f.read(BUFFER_SIZE)
-	        if not bytes_read:
-	            # file transmitting is done
-	            break
-	        # we use sendall to assure transimission in
-	        # busy networks
-	        client_socket.sendall(bytes_read)
-	        # update the progress bar
-	        progress.update(len(bytes_read))
+	try:
+		client_socket.send(json.dumps(data).encode())
+	except OSError as e:
+		return e
 
 	return f"\nREQ_FETCH by {address} fulfilled"
 
@@ -178,8 +163,6 @@ def process_request(client_socket, address):
 	print(f"received {received} from {address}")
 
 	request, data = received.split('!')
-
-	print(request)
 
 	switcher = {
 		"REQ_UPLOAD_FILE": receive_file,
