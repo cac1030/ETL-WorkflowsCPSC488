@@ -18,7 +18,7 @@ def setup_server():
 
 	# receive 4096 bytes each time
 	BUFFER_SIZE = 4096
-	SEPARATOR = "<SEPARATOR>"
+	SEPARATOR = "[-]"
 
 	# create the TCP server socket
 	s = socket.socket()
@@ -45,19 +45,16 @@ def receive_file(args):
 	address = args[1]
 	data = args[2]
 
-	# receive the file infos
+	# receive and transform the file infos
 	patient_name, filename, filesize = data.split(SEPARATOR)
-	# remove absolute path if there is
 	filename = os.path.basename(filename)
-	# convert to integer
 	filesize = int(filesize)
 
-	# start receiving the data file from the socket
-	# and writing to the file stream
+	# receive file
 	progress = tqdm.tqdm(range(filesize), f"Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
 	with open("client.zip", "wb") as f:
 		while True:
-			# read 1024 bytes from the socket (receive)
+			# read bytes from the socket (receive)
 			bytes_read = client_socket.recv(BUFFER_SIZE)
 			if not bytes_read:
 				# nothing is received
@@ -70,13 +67,19 @@ def receive_file(args):
 
 	unzip_file("./client.zip")
 	put_to_irods(filename, patient_name)
-	return "\nREQ_UPLOAD_FILE by " + address[0] + " fulfilled"
+	return f"[!] REQ_UPLOAD_FILE by {address} fulfilled"
 
-def add_patient(patient_data):
+def add_patient(args):
+	patient_data = args[0]
+	address = args[1]
+
+	# TODO: validation (dir already exists), optional fields functionality
 	data = json.loads(patient_data)
 	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
 
-	cmdstrs = [f"imkdir {dir_path}"]
+	# build a command sequence
+	cmdstrs = []
+	cmdstrs.append(f"imkdir {dir_path}")
 	cmdstrs.append(f"imeta add -C {dir_path} first_name {data['first_name']}")
 	cmdstrs.append(f"imeta add -C {dir_path} last_name {data['last_name']}")
 	cmdstrs.append(f"imeta add -C {dir_path} date_created {data['date_created']}")
@@ -85,18 +88,26 @@ def add_patient(patient_data):
 	cmdstrs.append(f"imeta add -C {dir_path} weight {data['weight']}")
 	cmdstrs.append(f"imeta add -C {dir_path} dob {data['dob']}")
 	cmdstrs.append(f"imeta add -C {dir_path} sex {data['sex']}")
+
+	# optional fields
+	cmdstrs.append(f"imeta add -C {dir_path} middle_name {data['middle_name']}")
 	cmdstrs.append(f"imeta add -C {dir_path} ethnicity {data['ethnicity']}")
 
 	for cmd in cmdstrs:
 		os.system(cmd)
 
-	return"\nREQ_PATIENT_ADD by " + address[0] + " fulfilled"
+	return f"[!] REQ_PATIENT_ADD by {address} fulfilled"
 
-def edit_patient(patient_data):
+def edit_patient(args):
+	patient_data = args[0]
+	address = args[1]
+
 	data = json.loads(patient_data)
 	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
 
-	cmdstrs = [(f"imeta set -C {dir_path} first_name {data['first_name']}")]
+	# build a command sequence
+	cmdstrs = []
+	cmdstrs.append(f"imeta set -C {dir_path} first_name {data['first_name']}")
 	cmdstrs.append(f"imeta set -C {dir_path} last_name {data['last_name']}")
 	cmdstrs.append(f"imeta set -C {dir_path} date_created {data['date_created']}")
 	cmdstrs.append(f"imeta set -C {dir_path} date_modified {data['date_modified']}")
@@ -106,31 +117,65 @@ def edit_patient(patient_data):
 	cmdstrs.append(f"imeta set -C {dir_path} sex {data['sex']}")
 	cmdstrs.append(f"imeta set -C {dir_path} ethnicity {data['ethnicity']}")
 
+	# optional fields
+	cmdstrs.append(f"imeta set -C {dir_path} middle_name {data['middle_name']}")
+	cmdstrs.append(f"imeta set -C {dir_path} ethnicity {data['ethnicity']}")
+
 	for cmd in cmdstrs:
 		os.system(cmd)
 
-	return"\nREQ_PATIENT_EDIT by " + address[0] + " fulfilled"
+	return f"[!] REQ_PATIENT_EDIT by {address} fulfilled"
+
+def fetch_patient_data(args):
+	client_socket = args[0]
+	address = args[1]
+
+	data = []
+
+	# fetch patient dir names
+	cmd = "ils /tempZone/home/public | awk -F '/' '/_/ {print $5}'"
+	dir_names = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
+
+	# fetch patient dir metadata
+	for dir_name in dir_names:
+		meta = {}
+		cmd = f"imeta ls -C /tempZone/home/public/{dir_name} | awk '/^[av]/ {{print}}' | cut -f2 -d ' '"
+		result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
+		for i in range(0, len(result), 2):
+			meta[result[i]] = result[i+1]
+		data.append(meta)
+
+	# send to client
+	filename = "./temp/patient_json.json"
+	filesize = os.path.getsize(filename)
+
+	try:
+		client_socket.send(json.dumps(data).encode())
+	except OSError as e:
+		return e
+
+	return f"[!] REQ_FETCH by {address} fulfilled"
 
 def process_request(client_socket, address):
 	# receive request from client
 	received = client_socket.recv(BUFFER_SIZE).decode()
 
-	print(f"received {received} from {address}")
+	print(f"[!] Received {received} from {address}")
 
 	request, data = received.split('!')
-
-	print(request)
 
 	switcher = {
 		"REQ_UPLOAD_FILE": receive_file,
 		"REQ_PATIENT_ADD": add_patient,
-		"REQ_PATIENT_EDIT": edit_patient
+		"REQ_PATIENT_EDIT": edit_patient,
+		"REQ_FETCH": fetch_patient_data
 		}
 
 	args = {
 		"REQ_UPLOAD_FILE": [client_socket, address, data],
-		"REQ_PATIENT_ADD": (data),
-		"REQ_PATIENT_EDIT": (data)
+		"REQ_PATIENT_ADD": [data, address],
+		"REQ_PATIENT_EDIT": [data, address],
+		"REQ_FETCH": [client_socket, address]
 		}
 	message = switcher[request](args[request])
 	print(message)
@@ -159,10 +204,13 @@ def put_to_irods(filename, patient_name):
 setup_server()
 #while True:
 client_socket, address = handle_connection()
-process_request(client_socket, address)
-
-# close the server socket
-s.close()
+try:
+	process_request(client_socket, address)
+except Exception as e:
+	print(f"something went wrong: {e}")
+finally:
+	# close the server socket
+	s.close()
 
 
 
@@ -179,4 +227,4 @@ s.close()
 #def download_file(addr, patient, path):
     # send the full specified file to the client
 	#file, meta = s.recvfrom(256)
-	#command = iput file 
+	#command = iput file
