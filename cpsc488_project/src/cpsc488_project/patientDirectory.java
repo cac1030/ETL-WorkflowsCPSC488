@@ -105,11 +105,13 @@ public class patientDirectory {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					
+					//If left click
 					if (SwingUtilities.isLeftMouseButton(e))
 					{
 						updatePatientPage window = new updatePatientPage();
 						window.frame.setVisible(true);
 					}
+					//If right click
 					else if (SwingUtilities.isRightMouseButton(e))
 					{
 						addFilesPage window = new addFilesPage();
@@ -119,7 +121,7 @@ public class patientDirectory {
 			});
 			nameList.setModel(DLM);
 			nameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		nameList.setBackground(Color.LIGHT_GRAY);
+			nameList.setBackground(Color.LIGHT_GRAY);
 		
 		
 		

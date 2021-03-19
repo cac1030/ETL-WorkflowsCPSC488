@@ -50,7 +50,7 @@ public class LoginPage implements ActionListener{
 		frame.getContentPane().add(titleLabel);
 		
 		//Position of Note in Frame
-		noteLabel.setBounds(117,366,250,35);
+		noteLabel.setBounds(130,280,250,35);
 		noteLabel.setFont(new Font(null,Font.BOLD,15));
 		
 		//Position of UserName in Frame
@@ -100,6 +100,7 @@ public class LoginPage implements ActionListener{
 			//Empty Text Boxes
 			userIDField.setText("");
 			userPasswordField.setText("");
+			noteLabel.setText("");
 		}
 		
 		if(e.getSource()==loginButton) {
