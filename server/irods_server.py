@@ -80,7 +80,7 @@ def receive_file(args):
 	unzip_file("./client.zip")
 	put_to_irods(filename, patient_name)
 
-	return f"[!] REQ_UPLOAD_FILE by {address} fulfilled"
+	return f"[O] REQ_UPLOAD_FILE by {address} fulfilled"
 
 def add_patient(args):
 	patient_data = args[0]
@@ -117,13 +117,18 @@ def add_patient(args):
 			print(f"Error creating new patient file: {e}")
 			sys.exit(1)
 
-	return f"[!] REQ_PATIENT_ADD by {address} fulfilled"
+	return f"[O] REQ_PATIENT_ADD by {address} fulfilled"
 
 def edit_patient(args):
 	patient_data = args[0]
 	address = args[1]
 
-	data = json.loads(patient_data)
+	try:
+		data = json.loads(patient_data)
+	except ValueError as e:
+		print(f"[X] Error loading json: {e}")
+		sys.exit(1)
+
 	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
 
 	# build a command sequence
@@ -143,9 +148,13 @@ def edit_patient(args):
 	cmdstrs.append(f"imeta set -C {dir_path} ethnicity {data['ethnicity']}")
 
 	for cmd in cmdstrs:
-		os.system(cmd)
+		try:
+			subprocess.run(cmd, shell = True, check = True)
+		except subprocess.CalledProcessError as e:
+			print(f"[X] Error editing patient file: {e}")
+			sys.exit(1)
 
-	return f"[!] REQ_PATIENT_EDIT by {address} fulfilled"
+	return f"[O] REQ_PATIENT_EDIT by {address} fulfilled"
 
 def fetch_patient_data(args):
 	client_socket = args[0]
@@ -173,9 +182,12 @@ def fetch_patient_data(args):
 	try:
 		client_socket.send(json.dumps(data).encode())
 	except OSError as e:
-		return e
+		print(f"[X] Error sending patient data: {e}")
+		sys.exit(1)
+	else:
+		print(f"[>] Patient data sent successfully")
 
-	return f"[!] REQ_FETCH by {address} fulfilled"
+	return f"[O] REQ_FETCH by {address} fulfilled"
 
 def process_request(client_socket, address):
 	# receive request from client
@@ -183,6 +195,7 @@ def process_request(client_socket, address):
 		received = client_socket.recv(BUFFER_SIZE).decode()
 	except socket.error as e:
 		print(f"[X] Error receiving request: {e}")
+		sys.exit(1)
 	else:
 		print(f"[<] Received {received} from {address}")
 		request, data = received.split('!')
