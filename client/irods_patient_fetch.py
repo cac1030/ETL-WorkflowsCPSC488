@@ -45,6 +45,10 @@ except Exception as e:
     print(f"[X] Receiving file failed: {e}")
     sys.exit(1)
 else:
-    print(f"[<] {REQUEST} fulfilled")
+	size = os.path.getsize("patient_data.json")
+	if size <= 2:
+		print(f"[!<] Received empty file")
+	else:
+		print(f"[<] Received data from server | {size} bytes")
 finally:
     s.close()

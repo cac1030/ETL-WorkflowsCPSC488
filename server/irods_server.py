@@ -4,6 +4,7 @@ import json
 import tqdm
 import os
 import subprocess
+import sys
 
 def setup_server():
 	global s
