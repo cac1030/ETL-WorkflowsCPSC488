@@ -28,14 +28,14 @@ def setup_server():
 		print(f"[X] Error creating and binding socket: {e}")
 		sys.exit(1)
 	else:
-		print(f"\n[...] Socket created and bound successfully")
+		print(f"[...] Socket created and bound successfully")
 
 def handle_connection():
 	# enabling our server to accept connections
 	# 5 here is the number of unaccepted connections that
 	# the system will allow before refusing new connections
 	s.listen(5)
-	print(f"\n[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
+	print(f"[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
 
 	# accept connection
 	try:
@@ -176,9 +176,6 @@ def fetch_patient_data(args):
 		data.append(meta)
 
 	# send to client
-	filename = "./temp/patient_json.json"
-	filesize = os.path.getsize(filename)
-
 	try:
 		client_socket.send(json.dumps(data).encode())
 	except OSError as e:
