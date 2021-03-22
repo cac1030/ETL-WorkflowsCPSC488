@@ -6,11 +6,12 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JList;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+
+
+
 
 import cpsc488_project.addPatientPage.Cmd;
-
+import java.text.ParseException;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -18,16 +19,23 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+
+
 
 public class patientDirectory {
 
@@ -66,12 +74,9 @@ public class patientDirectory {
 		
 		
 		
-		//for (i=0; i< json.first_name.length;i++) {
-		//	names.add(json.first_name[i]);
+		//for (i=0; i< .length;i++) {
+		//	names.add(first_name[i]);
 		//}
-		
-		
-		
 		
 		
 		
@@ -125,15 +130,15 @@ public class patientDirectory {
 		
 	}
 	
-	public patientDirectory() {
+	
+	public patientDirectory() throws org.json.simple.parser.ParseException {
 		
 		this.bindData();
 		///////////////////////////////////////////////////////////////
 		
 		
 		
-		
-		
+	
 		CmdPatients cmd = new CmdPatients();
 		try {
 			cmd.patientName();
@@ -142,13 +147,33 @@ public class patientDirectory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		///////////////////////////////////////////
+		
+		/*
+		
+		JSONParser jsonP = new JSONParser();
+		
+		try(FileReader reader = new FileReader("patient_data.json")){
+			Object obj = jsonP.parse(reader);
+			JSONArray patientList = (JSONArray) obj;
+			System.out.println(patientList);
+			
+			
+			//Iterate
+			patientList.forEach(fName -> parsePatientObj((JSONObject)fName));
+		}
+		catch(FileNotFoundException e) {
+			e.printStackTrace();
+		} catch(IOException e) {
+			e.printStackTrace();
+		} 
 		
 		
 		
+		*/
 		
 		
-		
-		
+		////////////////////////////////////////////////////////
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 460, 576);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -216,4 +241,16 @@ public class patientDirectory {
 		
 		
 	}
+	
+	
+	/*
+	private static void parsePatientObj(JSONObject fName)
+	{
+	JSONObject fNameObj = (JSONObject) fName.get("first_name");
+	String fnameslist = (String) fName.get("first_name");
+	System.out.println("First Name: " + fnameslist);
+	}
+	
+	*/
+	
 }

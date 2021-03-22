@@ -4,6 +4,9 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+
+import org.json.simple.parser.ParseException;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -31,8 +34,15 @@ public class menuPage {
 		PatientDirectoryButton.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
 				//frame.dispose();
-				patientDirectory window = new patientDirectory();
-				window.frame.setVisible(true);
+				patientDirectory window;
+				try {
+					window = new patientDirectory();
+					window.frame.setVisible(true);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 		});
 		frame.getContentPane().add(PatientDirectoryButton);
