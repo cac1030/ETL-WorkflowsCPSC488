@@ -7,9 +7,6 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JList;
 
-
-
-
 import cpsc488_project.addPatientPage.Cmd;
 import java.text.ParseException;
 import javax.swing.JScrollPane;
@@ -73,7 +70,7 @@ public class patientDirectory {
 	
 	
 	
-	private void bindData() {
+	private void bindData() throws IOException, org.json.simple.parser.ParseException {
 		getNames().stream().forEach((name) -> {
 			DLM.addElement(name);
 		});
@@ -81,7 +78,7 @@ public class patientDirectory {
 	}
 	
 	//Search Box to filter through strings
-	private void searchFilter(String searchTerm)
+	private void searchFilter(String searchTerm) throws IOException, org.json.simple.parser.ParseException
 	{
 		DefaultListModel<Object> filterItems = new DefaultListModel<Object>();
 		ArrayList<String> names=getNames();
@@ -98,7 +95,7 @@ public class patientDirectory {
 	}
 	
 	
-	public patientDirectory() throws org.json.simple.parser.ParseException {
+	public patientDirectory() throws org.json.simple.parser.ParseException, IOException {
 		
 		this.bindData();
 		///////////////////////////////////////////////////////////////
@@ -116,27 +113,6 @@ public class patientDirectory {
 			e.printStackTrace();
 		}
 		///////////////////////////////////////////
-		
-		
-		
-		JSONParser jsonP = new JSONParser();
-		
-		//Read from client folder
-		try(FileReader reader = new FileReader("../client/patient_data.json")){
-			Object obj = jsonP.parse(reader);
-			JSONArray patientList = (JSONArray) obj;
-			System.out.println(patientList);
-			
-			
-			//Iterate through json file
-			patientList.forEach(fName -> parsePatientObj((JSONObject)fName));
-		}
-		catch(FileNotFoundException e) {
-			e.printStackTrace();
-		} catch(IOException e) {
-			e.printStackTrace();
-		} 
-		
 		
 		
 		
@@ -188,7 +164,12 @@ public class patientDirectory {
 		searchField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				searchFilter(searchField.getText());
+				try {
+					searchFilter(searchField.getText());
+				} catch (IOException | org.json.simple.parser.ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			
 		
@@ -213,50 +194,33 @@ public class patientDirectory {
 	
 	
 	
-	private static void parsePatientObj(JSONObject fName)
-	{
-	//Get fnames from json file
-	String fnameslist = (String) fName.get("first_name");
-	//Debug Print Fnames
-	System.out.println("First Name: " + fnameslist);
-	}
-	
-	private ArrayList<String> getNames()
+	private ArrayList<String> getNames() throws IOException, org.json.simple.parser.ParseException
 	{
 		ArrayList<String> names =new ArrayList<String>();
+		FileReader reader = new FileReader("../client/patient_data.json");
+		JSONParser parser = new JSONParser();
 		
+		// json
 		
-		
-		//for (i=0; i< .length;i++) {
-		//	names.add(first_name[i]);
-		//}
-		
-		//names.add(fnameslist);
-		
-		
-		
-		//PlaceHolder Names/needs iterate through fnamelist above
-		
-		names.add("John");
-		names.add("Christian");
-		names.add("Wayne");
-		names.add("Jeff");
-		names.add("Jesse");
-		names.add("Peach");
-		names.add("Mario");
-		names.add("Frank");
-		names.add("Brittany");
-		names.add("Benny");
-		names.add("Jordan");
-		names.add("Dan");
-		names.add("Nick");
-		names.add("Justin");
-		names.add("Mike");
-		names.add("Kathy");
-		names.add("Dave");
-		names.add("Joe");
-		
+		JSONArray a = (JSONArray) parser.parse(reader);
+		System.out.println(a);
+		// https://stackoverflow.com/questions/10926353/how-to-read-json-file-into-java-with-simple-json-library
+		String name, fName, lName;
+		for (Object o : a) {
+		    JSONObject person = (JSONObject) o;
+
+		    name = (String) person.get("first_name");
+		    fName = name.substring(0, 1).toUpperCase() + name.substring(1);
+		    System.out.println(fName);
+
+		    name = (String) person.get("last_name");
+		    lName = name.substring(0, 1).toUpperCase() + name.substring(1);
+		    System.out.println(lName);
+		    
+		    names.add(fName + " " + lName);
+		}
 		
 		return names;
 	}
+	
 }
