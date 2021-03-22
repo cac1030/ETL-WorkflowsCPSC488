@@ -8,6 +8,9 @@ import java.awt.Color;
 import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import cpsc488_project.addPatientPage.Cmd;
+
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -18,8 +21,13 @@ import javax.swing.SwingUtilities;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 
 public class patientDirectory {
 
@@ -33,10 +41,42 @@ public class patientDirectory {
 	private final JScrollPane scrollPane = new JScrollPane();
 	
 	
+	public class CmdPatients {
+		public void patientName() throws Exception {
+			
+		//Navigate into Client folder and run python script to fetch patients
+        ProcessBuilder builder = new ProcessBuilder(
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient_fetch.py ");
+        builder.redirectErrorStream(true);
+        Process p = builder.start();
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        while (true) {
+            line = r.readLine();
+            if (line == null) { break; }
+            System.out.println(line);
+        	}
+		}
+	}
+	
 	
 	private ArrayList<String> getNames()
 	{
 		ArrayList<String> names =new ArrayList<String>();
+		
+		
+		
+		//for (i=0; i< json.first_name.length;i++) {
+		//	names.add(json.first_name[i]);
+		//}
+		
+		
+		
+		
+		
+		
+		
+		
 		//PlaceHolder Names/Needs Fetched from database
 		names.add("John");
 		names.add("Christian");
@@ -89,6 +129,24 @@ public class patientDirectory {
 		
 		this.bindData();
 		///////////////////////////////////////////////////////////////
+		
+		
+		
+		
+		
+		CmdPatients cmd = new CmdPatients();
+		try {
+			cmd.patientName();
+			 System.out.println();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
 		
 		
 		frame.getContentPane().setBackground(Color.WHITE);

@@ -14,8 +14,8 @@ REQUEST = "REQ_UPLOAD_FILE"
 PATIENT_NAME = sys.argv[1]
 
 # transfer config
-#HOST = "52.168.52.180"
-HOST = "localhost"
+HOST = "54.227.89.39"
+# HOST = "localhost"
 PORT = 5001
 SEPARATOR = "[-]"
 BUFFER_SIZE = 4096
@@ -32,8 +32,7 @@ try:
 	s.connect((HOST, PORT))
 except Exception as e:
 	print(f"[X] Connection failed: {e}")
-    s.close()
-    exit()
+    sys.exit(1)
 else:
 	print("[+] Connected")
 
@@ -42,8 +41,7 @@ try:
     s.send(f"{REQUEST}!{PATIENT_NAME}{SEPARATOR}{filename}{SEPARATOR}{filesize}".encode())
 except Exception as e:
     print(f"[X] Sending request failed: {e}")
-    s.close()
-    exit()
+    sys.exit(1)
 else:
     print(f"[>] {REQUEST} sent")
 
@@ -59,8 +57,7 @@ try:
 	        progress.update(len(bytes_read))
 except Exception as e:
     print(f"[X] Sending file failed: {e}")
-    s.close()
-    exit()
+    sys.exit(1)
 else:
     print(f"[>] File sent")
 finally:

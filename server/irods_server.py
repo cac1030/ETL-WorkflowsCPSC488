@@ -4,6 +4,7 @@ import json
 import tqdm
 import os
 import subprocess
+import sys
 
 def setup_server():
 	global s
@@ -20,23 +21,31 @@ def setup_server():
 	BUFFER_SIZE = 4096
 	SEPARATOR = "[-]"
 
-	# create the TCP server socket
-	s = socket.socket()
-
-	# bind the socket to our local address
-	s.bind((SERVER_HOST, SERVER_PORT))
+	# create and bind
+	try:
+		s = socket.socket()
+		s.bind((SERVER_HOST, SERVER_PORT))
+	except socket.error as e:
+		print(f"[X] Error creating and binding socket: {e}")
+		sys.exit(1)
+	else:
+		print(f"[...] Socket created and bound successfully")
 
 def handle_connection():
 	# enabling our server to accept connections
 	# 5 here is the number of unaccepted connections that
 	# the system will allow before refusing new connections
 	s.listen(5)
-	print(f"\n[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
+	print(f"[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
 
-	# accept connection if there is any
-	client_socket, address = s.accept()
-	# if below code is executed, that means the sender is connected
-	print(f"[+] {address} is connected.")
+	# accept connection
+	try:
+		client_socket, address = s.accept()
+	except socket.error as e:
+		print(f"[X] Error establishing connection: {e}")
+		sys.exit(1)
+	else:
+		print(f"[+] {address} is connected.")
 
 	return (client_socket, address)
 
@@ -53,28 +62,37 @@ def receive_file(args):
 	# receive file
 	progress = tqdm.tqdm(range(filesize), f"Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
 	with open("client.zip", "wb") as f:
-		while True:
-			# read bytes from the socket (receive)
-			bytes_read = client_socket.recv(BUFFER_SIZE)
-			if not bytes_read:
-				# nothing is received
-				# file transmitting is done
-				break
-			# write to the file the bytes we just received
-			f.write(bytes_read)
-			# update the progress bar
-			progress.update(len(bytes_read))
+		try:
+			while True:
+				bytes_read = client_socket.recv(BUFFER_SIZE)
+				if not bytes_read:
+					break
+				f.write(bytes_read)
+				progress.update(len(bytes_read))
+		except socket.error as e:
+			print(f"[X] Error receiving file: {e}")
+			sys.exit(1)
+		except IOError as e:
+			print(f"[X] Error writing file: {e}")
+			sys.exit(1)
+		else:
+			print(f"[<] {filename} received from {address}")
 
 	unzip_file("./client.zip")
 	put_to_irods(filename, patient_name)
-	return f"[!] REQ_UPLOAD_FILE by {address} fulfilled"
+
+	return f"[O] REQ_UPLOAD_FILE by {address} fulfilled"
 
 def add_patient(args):
 	patient_data = args[0]
 	address = args[1]
 
-	# TODO: validation (dir already exists), optional fields functionality
-	data = json.loads(patient_data)
+	try:
+		data = json.loads(patient_data)
+	except ValueError as e:
+		print(f"Error loading json: {e}")
+		sys.exit(1)
+
 	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
 
 	# build a command sequence
@@ -94,15 +112,24 @@ def add_patient(args):
 	cmdstrs.append(f"imeta add -C {dir_path} ethnicity {data['ethnicity']}")
 
 	for cmd in cmdstrs:
-		os.system(cmd)
+		try:
+			subprocess.run(cmd, shell = True, check = True)
+		except subprocess.CalledProcessError as e:
+			print(f"Error creating new patient file: {e}")
+			sys.exit(1)
 
-	return f"[!] REQ_PATIENT_ADD by {address} fulfilled"
+	return f"[O] REQ_PATIENT_ADD by {address} fulfilled"
 
 def edit_patient(args):
 	patient_data = args[0]
 	address = args[1]
 
-	data = json.loads(patient_data)
+	try:
+		data = json.loads(patient_data)
+	except ValueError as e:
+		print(f"[X] Error loading json: {e}")
+		sys.exit(1)
+
 	dir_path = f"/tempZone/home/public/{data['last_name'].upper()}_{data['first_name'].upper()}"
 
 	# build a command sequence
@@ -122,9 +149,13 @@ def edit_patient(args):
 	cmdstrs.append(f"imeta set -C {dir_path} ethnicity {data['ethnicity']}")
 
 	for cmd in cmdstrs:
-		os.system(cmd)
+		try:
+			subprocess.run(cmd, shell = True, check = True)
+		except subprocess.CalledProcessError as e:
+			print(f"[X] Error editing patient file: {e}")
+			sys.exit(1)
 
-	return f"[!] REQ_PATIENT_EDIT by {address} fulfilled"
+	return f"[O] REQ_PATIENT_EDIT by {address} fulfilled"
 
 def fetch_patient_data(args):
 	client_socket = args[0]
@@ -146,24 +177,28 @@ def fetch_patient_data(args):
 		data.append(meta)
 
 	# send to client
-	filename = "./temp/patient_json.json"
-	filesize = os.path.getsize(filename)
-
 	try:
 		client_socket.send(json.dumps(data).encode())
 	except OSError as e:
-		return e
+		print(f"[X] Error sending patient data: {e}")
+		sys.exit(1)
+	else:
+		print(f"[>] Patient data sent successfully")
 
-	return f"[!] REQ_FETCH by {address} fulfilled"
+	return f"[O] REQ_FETCH by {address} fulfilled"
 
 def process_request(client_socket, address):
 	# receive request from client
-	received = client_socket.recv(BUFFER_SIZE).decode()
+	try:
+		received = client_socket.recv(BUFFER_SIZE).decode()
+	except socket.error as e:
+		print(f"[X] Error receiving request: {e}")
+		sys.exit(1)
+	else:
+		print(f"[<] Received {received} from {address}")
+		request, data = received.split('!')
 
-	print(f"[!] Received {received} from {address}")
-
-	request, data = received.split('!')
-
+	# execute function based on request
 	switcher = {
 		"REQ_UPLOAD_FILE": receive_file,
 		"REQ_PATIENT_ADD": add_patient,
@@ -177,6 +212,7 @@ def process_request(client_socket, address):
 		"REQ_PATIENT_EDIT": [data, address],
 		"REQ_FETCH": [client_socket, address]
 		}
+
 	message = switcher[request](args[request])
 	print(message)
 
@@ -188,18 +224,38 @@ def download_meta_default(addr, patient_name):
 	print(cmdstr)
 
 def unzip_file(path):
-	with zipfile.ZipFile(path, 'r') as zip_ref:
-		zip_ref.extractall("./temp")
-	os.system("rm client.zip")
+	try:
+		with zipfile.ZipFile(path, 'r') as zip_ref:
+			zip_ref.extractall("./temp")
+	except Exception as e:
+		print(f"Error unzipping file: {e}")
+		sys.exit(1)
+	else:
+		os.system("rm client.zip")
 
 def put_to_irods(filename, patient_name):
-	with open("./temp/meta.txt") as f:
-		data = json.load(f)
+	# read data from file
+	try:
+		with open("./temp/meta.txt") as f:
+			data = json.load(f)
+	except IOError as e:
+		print(f"Error opening metadata file: {e}")
+		sys.exit(1)
+	except ValueError as e:
+		print(f"Error loading json: {e}")
+		sys.exit(1)
 
 	# build the string of the command that will iput the file with metadata attached
 	cmdstr = f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{filename} --metadata=\"date_create;{data['date']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\""
 	os.system("echo " + cmdstr)
-	os.system(cmdstr)
+
+	try:
+		subprocess.run(cmd, shell = True, check = True)
+	except subprocess.CalledProcessError as e:
+		print(f"Error executing iput: {e}")
+		sys.exit(1)
+	else:
+		print(f"{filename} successfully put to database")
 
 setup_server()
 #while True:

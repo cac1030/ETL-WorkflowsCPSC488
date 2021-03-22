@@ -7,7 +7,7 @@ DATA = "{\"first_name\":\"james\",\"middle_name\":\"joe\",\"last_name\":\"jamiso
 # DATA = sys.argv[1]
 
 # transfer config
-HOST = "52.168.52.180"
+HOST = "54.227.89.39"
 # HOST = "localhost"
 PORT = 5001
 
@@ -19,8 +19,7 @@ try:
 	s.connect((HOST, PORT))
 except Exception as e:
 	print(f"[X] Connection failed: {e}")
-    s.close()
-    exit()
+    sys.exit(1)
 else:
 	print("[+] Connected")
 
@@ -29,8 +28,7 @@ try:
     s.send(f"{REQUEST}!{DATA}".encode())
 except Exception as e:
     print(f"[X] Send failed: {e}")
-    s.close()
-    exit()
+    sys.exit(1)
 else:
     print(f"[>] {REQUEST} sent")
 finally:

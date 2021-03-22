@@ -46,12 +46,12 @@ public class addPatientPage {
 	private JTextField heightField;
 	private JTextField dobField;
 	private JTextField sexField;
+	private JTextField mnameField;
 	private JTextField ethnicityField;
 	
 	
 	
 	DefaultTableModel model;
-	
 	
 	//Resource https://stackoverflow.com/questions/15464111/run-cmd-commands-through-java
 	public class Cmd {
@@ -89,7 +89,7 @@ public class addPatientPage {
 		
 		JLabel fnameLabel = new JLabel("First Name:");
 		fnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		fnameLabel.setBounds(68, 115, 123, 22);
+		fnameLabel.setBounds(68, 115, 102, 22);
 		frame.getContentPane().add(fnameLabel);
 		
 		JLabel dateCreatedLabel = new JLabel("Date Created:");
@@ -103,7 +103,7 @@ public class addPatientPage {
 		frame.getContentPane().add(weightLabel);
 		
 		fnameField = new JTextField();
-		fnameField.setBounds(188, 117, 179, 20);
+		fnameField.setBounds(163, 119, 142, 20);
 		frame.getContentPane().add(fnameField);
 		fnameField.setColumns(10);
 		
@@ -119,7 +119,7 @@ public class addPatientPage {
 		
 		JLabel lnameLabel = new JLabel("Last Name:");
 		lnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lnameLabel.setBounds(417, 115, 123, 22);
+		lnameLabel.setBounds(338, 115, 93, 22);
 		frame.getContentPane().add(lnameLabel);
 		
 		JLabel dateModfiedLabel = new JLabel("Date Modified:");
@@ -134,7 +134,7 @@ public class addPatientPage {
 		
 		lnameField = new JTextField();
 		lnameField.setColumns(10);
-		lnameField.setBounds(528, 117, 175, 20);
+		lnameField.setBounds(430, 119, 152, 20);
 		frame.getContentPane().add(lnameField);
 		
 		dateModifiedField = new JTextField();
@@ -154,7 +154,7 @@ public class addPatientPage {
 		
 		dobField = new JTextField();
 		dobField.setColumns(10);
-		dobField.setBounds(561, 183, 142, 20);
+		dobField.setBounds(561, 183, 162, 20);
 		frame.getContentPane().add(dobField);
 		
 		JLabel sexLabel = new JLabel("Sex:");
@@ -185,12 +185,12 @@ public class addPatientPage {
 		
 		JLabel errorLabellName = new JLabel("");
 		errorLabellName.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		errorLabellName.setBounds(708, 116, 30, 21);
+		errorLabellName.setBounds(586, 116, 30, 21);
 		frame.getContentPane().add(errorLabellName);
 		
 		JLabel errorLabelfName = new JLabel("");
 		errorLabelfName.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		errorLabelfName.setBounds(377, 116, 30, 21);
+		errorLabelfName.setBounds(310, 116, 30, 21);
 		frame.getContentPane().add(errorLabelfName);
 		
 		JLabel errorLabelDateC = new JLabel("");
@@ -200,7 +200,7 @@ public class addPatientPage {
 		
 		JLabel errorLabeldateM = new JLabel("");
 		errorLabeldateM.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		errorLabeldateM.setBounds(708, 149, 30, 21);
+		errorLabeldateM.setBounds(708, 148, 30, 21);
 		frame.getContentPane().add(errorLabeldateM);
 		
 		JLabel errorLabelHeight = new JLabel("");
@@ -229,8 +229,39 @@ public class addPatientPage {
 		errorLabelEthnicity.setBounds(500, 215, 30, 21);
 		frame.getContentPane().add(errorLabelEthnicity);
 		
-		
 		JButton btnSubmit = new JButton("Submit");
+		btnSubmit.setBounds(664, 268, 89, 23);
+		frame.getContentPane().add(btnSubmit);
+		JButton btnReset = new JButton("Reset");
+		btnReset.setBounds(565, 268, 89, 23);
+		frame.getContentPane().add(btnReset);
+		
+		JLabel ftLabel = new JLabel("FT");
+		ftLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		ftLabel.setBounds(215, 186, 30, 14);
+		frame.getContentPane().add(ftLabel);
+		
+		JLabel lbsLabel = new JLabel("LBS");
+		lbsLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lbsLabel.setBounds(438, 186, 46, 14);
+		frame.getContentPane().add(lbsLabel);
+		
+		JLabel mnameLabel = new JLabel("M Initial:");
+		mnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		mnameLabel.setBounds(615, 115, 77, 22);
+		frame.getContentPane().add(mnameLabel);
+		
+		mnameField = new JTextField();
+		mnameField.setColumns(10);
+		mnameField.setBounds(687, 119, 36, 20);
+		frame.getContentPane().add(mnameField);
+		
+		JLabel errorLabelmName = new JLabel("");
+		errorLabelmName.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		errorLabelmName.setBounds(735, 118, 30, 21);
+		frame.getContentPane().add(errorLabelmName);
+		
+		
 		btnSubmit.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
 				//If user didn't fill out all fields
@@ -242,6 +273,10 @@ public class addPatientPage {
 				if(lnameField.getText().trim().isEmpty()){
 					errorLabelBottom.setText("Some Fields are still Missing");
 					errorLabellName.setText("*");
+				}
+				if(mnameField.getText().trim().isEmpty()){
+					errorLabelBottom.setText("Some Fields are still Missing");
+					errorLabelmName.setText("*");
 				}
 				if(dateCreatedField.getText().trim().isEmpty()){
 					errorLabelBottom.setText("Some Fields are still Missing");
@@ -275,21 +310,6 @@ public class addPatientPage {
 				else {
 					//All Fields are filled in
 					
-					//Old
-					/*
-					String patientJson = "{\n\"Patient Name\"" + ":" + "\"" + nameField.getText() + "\"" + "," + "\n"
-					+ "\"Birth\"" + ":" + "\"" + birthField.getText() + "\"" + "," + "\n"
-					+"\"Address\"" + ":" + "\"" + addressField.getText() + "\"" + "," + "\n"
-					+"\"State\"" + ":" + "\"" + stateField.getText() + "\"" + "," + "\n"
-					+"\"Zip\"" + ":" + "\"" + zipField.getText() + "\"" + "," + "\n"
-					+"\"City\"" + ":" + "\"" + cityField.getText() + "\"" + "," + "\n"
-					+"\"Country\"" + ":" + "\"" + countryField.getText() + "\"" + "," + "\n"
-					+"\"Phone\"" + ":" + "\"" + phoneField.getText() + "\"" + "," + "\n"
-					+"\"Gender\"" + ":" + "\"" + genderField.getText() + "\"" + "," + "\n"
-					+"\"Ethnicity\"" + ":" + "\"" + ethnicityField.getText() + "\"" + "," + "\n"
-					+"\"Email\"" + ":" + "\"" + emailField.getText() + "\"" + "\n"
-					+ "}";
-					*/
 					//Parse Data into Json format
 					String DATA = "\""+ "{\\\"\"first_name\\\"" + ":" + "\\\"" + fnameField.getText() + "\\\"" + ","
 							+ "\\\"last_name\\\"" + ":" + "\\\"" + lnameField.getText() + "\\\"" + ","
@@ -299,6 +319,7 @@ public class addPatientPage {
 							+"\\\"weight\\\"" + ":" + "\\\"" + weightField.getText() + "\\\"" + ","
 							+"\\\"dob\\\"" + ":" + "\\\"" + dobField.getText() + "\\\"" + ","
 							+"\\\"sex\\\"" + ":" + "\\\"" + sexField.getText() + "\\\"" + ","
+							+"\\\"middle_name\\\"" + ":" + "\\\"" + mnameField.getText() + "\\\"" + ","
 							+"\\\"ethnicity\\\"" + ":" + "\\\"" + ethnicityField.getText() + "\\\"" +
 							"}"+ "\"";
 							
@@ -318,27 +339,14 @@ public class addPatientPage {
 			}
 		});
 		
-		btnSubmit.setBounds(664, 268, 89, 23);
-		frame.getContentPane().add(btnSubmit);
-		JButton btnReset = new JButton("Reset");
-		btnReset.setBounds(565, 268, 89, 23);
-		frame.getContentPane().add(btnReset);
 		
-		JLabel ftLabel = new JLabel("FT");
-		ftLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		ftLabel.setBounds(215, 186, 30, 14);
-		frame.getContentPane().add(ftLabel);
-		
-		JLabel lbsLabel = new JLabel("LBS");
-		lbsLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbsLabel.setBounds(438, 186, 46, 14);
-		frame.getContentPane().add(lbsLabel);
 		btnReset.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
 				//Clear out all text fields when user clicks reset
 				
 				fnameField.setText("");
 				lnameField.setText("");
+				mnameField.setText("");
 				dateCreatedField.setText("");
 				dateModifiedField.setText("");
 				heightField.setText("");
@@ -355,6 +363,7 @@ public class addPatientPage {
 				errorLabelWeight.setText("");
 				errorLabeldob.setText("");
 				errorLabelSex.setText("");
+				errorLabelmName.setText("");
 				errorLabelEthnicity.setText("");
 			}
 		});
