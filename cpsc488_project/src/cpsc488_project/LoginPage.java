@@ -86,8 +86,7 @@ public class LoginPage implements ActionListener{
 		frame.getContentPane().setLayout(null);
 		
 		JLabel ImageLabel = new JLabel("");
-		//ImageLabel.setIcon(new ImageIcon("C:\\Users\\Christian\\Documents\\Classes\\Senior Classes\\Spring\\Eclipse\\ETL-WorkflowsCPSC488\\cpsc488_project\\src\\cpsc488_project\\lock.png"));
-		ImageLabel.setIcon(new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/lock.png")));
+		ImageLabel.setIcon(new ImageIcon(LoginPage.class.getResource("/cpsc488_project/lock.png")));
 		ImageLabel.setBounds(23, 128, 91, 90);
 		frame.getContentPane().add(ImageLabel);
 		//Visible
