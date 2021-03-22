@@ -54,7 +54,8 @@ public class patientDirectory {
 			
 		//Navigate into Client folder and run python script to fetch patients
         ProcessBuilder builder = new ProcessBuilder(
-        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient_fetch.py ");
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient_fetch.py && dir && cd ");
+      
         builder.redirectErrorStream(true);
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -68,43 +69,7 @@ public class patientDirectory {
 	}
 	
 	
-	private ArrayList<String> getNames()
-	{
-		ArrayList<String> names =new ArrayList<String>();
-		
-		
-		
-		//for (i=0; i< .length;i++) {
-		//	names.add(first_name[i]);
-		//}
-		
-		
-		
-		
-		
-		//PlaceHolder Names/Needs Fetched from database
-		names.add("John");
-		names.add("Christian");
-		names.add("Wayne");
-		names.add("Jeff");
-		names.add("Jesse");
-		names.add("Peach");
-		names.add("Mario");
-		names.add("Frank");
-		names.add("Brittany");
-		names.add("Benny");
-		names.add("Jordan");
-		names.add("Dan");
-		names.add("Nick");
-		names.add("Justin");
-		names.add("Mike");
-		names.add("Kathy");
-		names.add("Dave");
-		names.add("Joe");
-		
-
-		return names;
-	}
+	
 	
 	
 	private void bindData() {
@@ -114,6 +79,7 @@ public class patientDirectory {
 		
 	}
 	
+	//Search Box to filter through strings
 	private void searchFilter(String searchTerm)
 	{
 		DefaultListModel<Object> filterItems = new DefaultListModel<Object>();
@@ -141,6 +107,7 @@ public class patientDirectory {
 	
 		CmdPatients cmd = new CmdPatients();
 		try {
+			//Run Command Prompt
 			cmd.patientName();
 			 System.out.println();
 		} catch (Exception e) {
@@ -149,17 +116,18 @@ public class patientDirectory {
 		}
 		///////////////////////////////////////////
 		
-		/*
+		
 		
 		JSONParser jsonP = new JSONParser();
 		
-		try(FileReader reader = new FileReader("patient_data.json")){
+		//Read from client folder
+		try(FileReader reader = new FileReader("../client/patient_data.json")){
 			Object obj = jsonP.parse(reader);
 			JSONArray patientList = (JSONArray) obj;
 			System.out.println(patientList);
 			
 			
-			//Iterate
+			//Iterate through json file
 			patientList.forEach(fName -> parsePatientObj((JSONObject)fName));
 		}
 		catch(FileNotFoundException e) {
@@ -170,7 +138,7 @@ public class patientDirectory {
 		
 		
 		
-		*/
+		
 		
 		
 		////////////////////////////////////////////////////////
@@ -183,7 +151,7 @@ public class patientDirectory {
 		frame.getContentPane().add(scrollPane);
 			scrollPane.setViewportView(nameList);
 		
-			//When Name is clicked open update biometrics
+			//When Name is clicked open update BIO-metrics
 			nameList.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -243,14 +211,52 @@ public class patientDirectory {
 	}
 	
 	
-	/*
+	
 	private static void parsePatientObj(JSONObject fName)
 	{
-	JSONObject fNameObj = (JSONObject) fName.get("first_name");
+	//Get fnames from json file
 	String fnameslist = (String) fName.get("first_name");
+	//Debug Print Fnames
 	System.out.println("First Name: " + fnameslist);
 	}
 	
-	*/
+	private ArrayList<String> getNames()
+	{
+		ArrayList<String> names =new ArrayList<String>();
+		
+		
+		
+		//for (i=0; i< .length;i++) {
+		//	names.add(first_name[i]);
+		//}
+		
+		//names.add(fnameslist);
+		
+		
+		
+		//PlaceHolder Names/needs iterate through fnamelist above
+		
+		names.add("John");
+		names.add("Christian");
+		names.add("Wayne");
+		names.add("Jeff");
+		names.add("Jesse");
+		names.add("Peach");
+		names.add("Mario");
+		names.add("Frank");
+		names.add("Brittany");
+		names.add("Benny");
+		names.add("Jordan");
+		names.add("Dan");
+		names.add("Nick");
+		names.add("Justin");
+		names.add("Mike");
+		names.add("Kathy");
+		names.add("Dave");
+		names.add("Joe");
+		
+		
+		return names;
+	}
 	
 }
