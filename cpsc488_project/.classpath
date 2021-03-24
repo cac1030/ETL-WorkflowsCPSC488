@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="E:/School/Year 4/Semester 2/CPSC 488 - SE/ETL-WorkflowsCPSC488/json-simple-1.1.1.jar">
+	<classpathentry kind="lib" path="C:/Users/Christian/Documents/Classes/Senior Classes/Spring/Project/json-simple-1.1.1.jar/json-simple-1.1.1.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

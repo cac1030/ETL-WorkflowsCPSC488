@@ -45,7 +45,8 @@ public class patientDirectory {
 	private final JLabel biometricsLabel = new JLabel("Left Click a Name to Edit Biometics*");
 	private final JLabel addFileLabel = new JLabel("Right Click a Name to add a file to patient*");
 	private final JScrollPane scrollPane = new JScrollPane();
-	
+	public static String nameSelected="";
+	private final JLabel backgroundpic2 = new JLabel("");
 	
 	public class CmdPatients {
 		public void patientName() throws Exception {
@@ -133,11 +134,19 @@ public class patientDirectory {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					
+					
+					
+					nameSelected=nameList.getSelectedValue().toString();
+					
 					//If left click
 					if (SwingUtilities.isLeftMouseButton(e))
 					{
-						updatePatientPage window = new updatePatientPage();
-						window.frame.setVisible(true);
+						
+						System.out.println(nameSelected);
+						
+						
+						//updatePatientPage window = new updatePatientPage();
+						//window.frame.setVisible(true);
 					}
 					//If right click
 					else if (SwingUtilities.isRightMouseButton(e))
@@ -149,14 +158,14 @@ public class patientDirectory {
 			});
 			nameList.setModel(DLM);
 			nameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			nameList.setBackground(Color.LIGHT_GRAY);
+			nameList.setBackground(Color.WHITE);
 		
 		
 		
 		
 		JLabel lblNewLabel = new JLabel("Patient Directory");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 35));
-		lblNewLabel.setBounds(86, 34, 271, 56);
+		lblNewLabel.setFont(new Font("Rockwell", Font.PLAIN, 35));
+		lblNewLabel.setBounds(76, 39, 291, 56);
 		frame.getContentPane().add(lblNewLabel);
 		
 		searchField = new JTextField();
@@ -187,7 +196,12 @@ public class patientDirectory {
 		frame.getContentPane().add(biometricsLabel);
 		addFileLabel.setBounds(108, 488, 249, 14);
 		
+		//Image Source https://www.vecteezy.com/vector-art/1432251-light-blue-background-with-rectangles
 		frame.getContentPane().add(addFileLabel);
+		backgroundpic2.setIcon(new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/bluebackground.jpg")));
+		backgroundpic2.setBounds(0, 85, 444, 504);
+		
+		frame.getContentPane().add(backgroundpic2);
 		
 		
 	}

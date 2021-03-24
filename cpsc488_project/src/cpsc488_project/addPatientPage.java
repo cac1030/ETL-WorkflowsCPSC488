@@ -31,6 +31,7 @@ import javax.swing.JScrollPane;
 import java.awt.Font;
 import java.awt.Color;
 import java.io.*;
+import javax.swing.ImageIcon;
 
 
 public class addPatientPage {
@@ -260,6 +261,11 @@ public class addPatientPage {
 		errorLabelmName.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		errorLabelmName.setBounds(735, 118, 30, 21);
 		frame.getContentPane().add(errorLabelmName);
+		
+		JLabel backgroundPic3 = new JLabel("");
+		backgroundPic3.setIcon(new ImageIcon(addPatientPage.class.getResource("/cpsc488_project/bluebackground.jpg")));
+		backgroundPic3.setBounds(0, 0, 775, 304);
+		frame.getContentPane().add(backgroundPic3);
 		
 		
 		btnSubmit.addActionListener(new ActionListener() { 
