@@ -6,7 +6,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JList;
-
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import cpsc488_project.addPatientPage.Cmd;
 import java.text.ParseException;
 import javax.swing.JScrollPane;
@@ -32,6 +33,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import javax.swing.ImageIcon;
+
 
 
 
@@ -143,7 +145,7 @@ public class patientDirectory {
 					{
 						
 						System.out.println(nameSelected);
-						
+					
 						
 						//updatePatientPage window = new updatePatientPage();
 						//window.frame.setVisible(true);
@@ -236,5 +238,19 @@ public class patientDirectory {
 		
 		return names;
 	}
+	
+	
+	
+	private void popup() {
+		
+		
+		JMenuItem add = new JMenuItem("Add File");
+		JMenuItem edit = new JMenuItem("Edit Patient");
+		
+		//popupMenu.add(add);
+		//popupMenu.add(edit);
+		
+	}
+	
 	
 }

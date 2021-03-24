@@ -24,10 +24,12 @@ import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
 import javax.swing.ImageIcon;
+import javax.swing.JTextField;
 
 public class addFilesPage {
 
 	JFrame frame = new JFrame();
+	private JTextField metadataField;
 
 	public class CmdFiles {
 		public void test2(String PATIENT_NAME, String filename, String address, String data) throws Exception {
@@ -64,6 +66,38 @@ public class addFilesPage {
 		filesPatientLabel.setBounds(145, 55, 234, 20);
 		frame.getContentPane().add(filesPatientLabel);
 		
+		JList listfiles = new JList();
+		listfiles.setBackground(Color.LIGHT_GRAY);
+		listfiles.setBounds(10, 141, 148, 313);
+		frame.getContentPane().add(listfiles);
+		
+		JButton fetchButton = new JButton("Fetch New Files");
+		fetchButton.setBounds(23, 110, 125, 23);
+		frame.getContentPane().add(fetchButton);
+		
+		JLabel picLabel = new JLabel("");
+		picLabel.setIcon(new ImageIcon(addFilesPage.class.getResource("/cpsc488_project/FolderPic.png")));
+		
+		picLabel.setBounds(20, 11, 80, 80);
+		frame.getContentPane().add(picLabel);
+		
+		metadataField = new JTextField();
+		metadataField.setBounds(168, 240, 256, 214);
+		frame.getContentPane().add(metadataField);
+		metadataField.setColumns(10);
+		
+		JLabel metadataLabel = new JLabel("Attach Notes:");
+		metadataLabel.setBounds(168, 225, 99, 14);
+		frame.getContentPane().add(metadataLabel);
+		
+		JLabel fileNameLabel = new JLabel("");
+		fileNameLabel.setForeground(new Color(0, 0, 255));
+		fileNameLabel.setBounds(303, 142, 99, 14);
+		frame.getContentPane().add(fileNameLabel);
+		frame.setBounds(100, 100, 450, 504);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		
 		filesPatientLabel.setText(patientDirectory.nameSelected);
 		
 		
@@ -72,8 +106,8 @@ public class addFilesPage {
 			public void actionPerformed(ActionEvent e) {
 				String filename;
 				String PATIENT_NAME = patientDirectory.nameSelected;
-				String address = "52.168.52.180";
-				String data = "1247";
+				String address = "54.227.89.39";
+				String data = metadataLabel.getText();
 				//Scanner fileIn;
 				int response;
 				JFileChooser filechooser = new JFileChooser("//Documents");
@@ -83,7 +117,7 @@ public class addFilesPage {
 				
 				if(response == JFileChooser.APPROVE_OPTION) {
 					filename = filechooser.getSelectedFile().getName();
-					 
+					fileNameLabel.setText(filename);  
 					CmdFiles cmd = new CmdFiles();
 					try {
 						cmd.test2(PATIENT_NAME,filename,address,data);
@@ -97,25 +131,9 @@ public class addFilesPage {
 			}
 		});
 					
-	
 		addSingleFileButton.setBounds(168, 141, 125, 63);
 		frame.getContentPane().add(addSingleFileButton);
 		
-		JList listfiles = new JList();
-		listfiles.setBackground(Color.LIGHT_GRAY);
-		listfiles.setBounds(10, 141, 148, 313);
-		frame.getContentPane().add(listfiles);
 		
-		JButton fetchButton = new JButton("Fetch Files");
-		fetchButton.setBounds(23, 110, 125, 23);
-		frame.getContentPane().add(fetchButton);
-		
-		JLabel picLabel = new JLabel("");
-		picLabel.setIcon(new ImageIcon(addFilesPage.class.getResource("/cpsc488_project/FolderPic.png")));
-		
-		picLabel.setBounds(20, 11, 80, 80);
-		frame.getContentPane().add(picLabel);
-		frame.setBounds(100, 100, 450, 504);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
