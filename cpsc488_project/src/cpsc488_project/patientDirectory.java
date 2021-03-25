@@ -38,6 +38,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import javax.swing.ImageIcon;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 
 
@@ -49,15 +51,14 @@ public class patientDirectory {
 	
 	private final JList<Object> nameList = new JList<Object>();
 	private JTextField searchField;
-	private final JLabel biometricsLabel = new JLabel("Left Click a Name to Edit Biometics*");
-	private final JLabel addFileLabel = new JLabel("Right Click a Name to add a file to patient*");
+	private final JLabel addFileLabel = new JLabel("Right Click a Name to Add a file or Edit biometrics *");
 	private final JScrollPane scrollPane = new JScrollPane();
 	public static String nameSelected="";
 	private final JLabel backgroundpic2 = new JLabel("");
 	
 	
-	private final JPopupMenu popupMenu = new JPopupMenu();
-	private JMenuItem menuItem=null;
+	private final JPopupMenu pop = new JPopupMenu();
+	String row="";
 	
 	public class CmdPatients {
 		public void patientName() throws Exception {
@@ -112,7 +113,7 @@ public class patientDirectory {
 		this.bindData();
 		///////////////////////////////////////////////////////////////
 		
-		
+		addPopup();
 		
 	
 		CmdPatients cmd = new CmdPatients();
@@ -138,6 +139,12 @@ public class patientDirectory {
 		scrollPane.setBounds(108, 158, 216, 303);
 		
 		frame.getContentPane().add(scrollPane);
+			nameList.addListSelectionListener(new ListSelectionListener() {
+				public void valueChanged(ListSelectionEvent e) {
+					
+					row = nameList.getSelectedValue().toString();
+				}
+			});
 			scrollPane.setViewportView(nameList);
 		
 			//When Name is clicked open update BIO-metrics
@@ -146,30 +153,20 @@ public class patientDirectory {
 				public void mouseClicked(MouseEvent e) {
 					
 					
-					
+		
 					nameSelected=nameList.getSelectedValue().toString();
 					
-					//If left click
-					if (SwingUtilities.isLeftMouseButton(e))
-					{
-						int mPosX = MouseInfo.getPointerInfo().getLocation().x;
-						int mPosY = MouseInfo.getPointerInfo().getLocation().y;
-						
-						popupMenu.show(menuItem, mPosX,mPosY);
-						
-						//System.out.println(nameSelected);
+					nameList.setSelectedIndex(nameList.locationToIndex(e.getPoint()));
 					
-						
-						
-						//updatePatientPage window = new updatePatientPage();
+					if (SwingUtilities.isRightMouseButton(e) && nameList.locationToIndex(e.getPoint())==nameList.getSelectedIndex())
+					{
+						if(! nameList.isSelectionEmpty()) {
+							pop.show(nameList,e.getX(),e.getY());
+						}
+						//addFilesPage window = new addFilesPage();
 						//window.frame.setVisible(true);
 					}
-					//If right click
-					else if (SwingUtilities.isRightMouseButton(e))
-					{
-						addFilesPage window = new addFilesPage();
-						window.frame.setVisible(true);
-					}
+				
 				}
 			});
 			nameList.setModel(DLM);
@@ -207,10 +204,7 @@ public class patientDirectory {
 		searchLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		searchLabel.setBounds(118, 130, 53, 14);
 		frame.getContentPane().add(searchLabel);
-		biometricsLabel.setBounds(108, 472, 249, 14);
-		
-		frame.getContentPane().add(biometricsLabel);
-		addFileLabel.setBounds(108, 488, 249, 14);
+		addFileLabel.setBounds(97, 463, 251, 14);
 		
 		//Image Source https://www.vecteezy.com/vector-art/1432251-light-blue-background-with-rectangles
 		frame.getContentPane().add(addFileLabel);
@@ -255,29 +249,39 @@ public class patientDirectory {
 	
 	
 	
-	private void popup(JFrame frame) {
+	private void addPopup() {
+		//Image Source https://icons8.com/icon/cFp23Lr2MzW0/upload-file
+		//new ImageIcon(LoginPage.class.getResource("/cpsc488_project/lock.png"))
+		JMenuItem add =new JMenuItem("Add File", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/upload.png")));
+		//Image Source https://icons8.com/icon/3553/edit-file
+		JMenuItem edit = new JMenuItem("Edit Biometrics", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/editpic.png")));
 		
 		
-		menuItem = new JMenuItem(
-				"Add File",
-				new ImageIcon("C:\\Users\\Christian\\Desktop\\image.png")
-				);
-		menuItem.getAccessibleContext().setAccessibleDescription("Add File");
+		pop.add(add);
+		pop.add(edit);
 		
-		menuItem.addActionListener(new ActionListener() { 
-			
+		
+		add.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				JOptionPane.showMessageDialog(frame, "You clicked it");
+				//JOptionPane.showMessageDialog(null, "Add " + row);
+				addFilesPage window = new addFilesPage();
+				window.frame.setVisible(true);
 			}
 			
 		});
 		
-		popupMenu.add(menuItem);
-		
-		
-		
+		edit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JOptionPane.showMessageDialog(null, "Edit " + row);
+			}
+			
+		});
 	}
 	
 	
