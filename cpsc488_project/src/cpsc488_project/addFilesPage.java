@@ -1,38 +1,36 @@
 package cpsc488_project;
 
-import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.plaf.FileChooserUI;
 
-import cpsc488_project.addPatientPage.Cmd;
 
 import java.awt.Font;
-import java.awt.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
-import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class addFilesPage {
 
 	JFrame frame = new JFrame();
 	private JTextField metadataField;
+	private String filename;
 
 	public class CmdFiles {
-		public void test2(String PATIENT_NAME, String filename, String address, String data) throws Exception {
+		public void uploadFile(String PATIENT_NAME, String filename, String address, String data) throws Exception {
 		
 		//Navigate into Client folder and run Python3 script to add patient
         ProcessBuilder builder = new ProcessBuilder(
@@ -73,6 +71,7 @@ public class addFilesPage {
 		
 		JButton fetchButton = new JButton("Fetch New Files");
 		fetchButton.setBounds(23, 110, 125, 23);
+		fetchButton.setFocusable(false);
 		frame.getContentPane().add(fetchButton);
 		
 		JLabel picLabel = new JLabel("");
@@ -101,38 +100,71 @@ public class addFilesPage {
 		filesPatientLabel.setText(patientDirectory.nameSelected);
 		
 		
-		JButton addSingleFileButton = new JButton("Add File");
-		addSingleFileButton.addActionListener(new ActionListener() {
+		
+		
+		JButton browseButton = new JButton("Browse");
+		browseButton.setFocusable(false);
+		browseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String filename;
-				String PATIENT_NAME = patientDirectory.nameSelected;
-				String address = "54.227.89.39";
-				String data = metadataLabel.getText();
-				//Scanner fileIn;
+				//String filename;
 				int response;
 				JFileChooser filechooser = new JFileChooser("//Documents");
 				
+				//Browse File Explorer for a file
 				filechooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				response = filechooser.showOpenDialog(null);
 				
 				if(response == JFileChooser.APPROVE_OPTION) {
-					filename = filechooser.getSelectedFile().getName();
-					fileNameLabel.setText(filename);  
-					CmdFiles cmd = new CmdFiles();
-					try {
-						cmd.test2(PATIENT_NAME,filename,address,data);
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
 					
-					JOptionPane.showMessageDialog(null, "File Added");
+					filename = filechooser.getSelectedFile().getName();
+					//Set Label 
+					fileNameLabel.setText(filename);
+					
 				}
+				
 			}
+			
 		});
 					
-		addSingleFileButton.setBounds(168, 141, 125, 63);
-		frame.getContentPane().add(addSingleFileButton);
+		browseButton.setBounds(168, 141, 125, 30);
+		frame.getContentPane().add(browseButton);
+		
+		JButton addFileButton = new JButton("Upload File");
+		addFileButton.setFocusable(false);
+		addFileButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String PATIENT_NAME = patientDirectory.nameSelected;
+				String address = "54.227.89.39";
+				String data = metadataLabel.getText();
+				
+				//No File
+				if(filename == null) {
+					JOptionPane.showMessageDialog(null, "Please Add a File before Uploading");
+				}
+				//Metadata Empty
+				if(data == null) {
+					JOptionPane.showMessageDialog(null, "Please Attach a note before Uploading");
+				}
+				else 
+				{
+				//Upload File
+			
+				CmdFiles cmd = new CmdFiles();
+				try {
+					cmd.uploadFile(PATIENT_NAME,filename,address,data);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				JOptionPane.showMessageDialog(null, "File Added");
+				}
+			
+			}
+		});
+		addFileButton.setBounds(168, 182, 125, 30);
+		frame.getContentPane().add(addFileButton);
 		
 		
 	}
