@@ -7,12 +7,15 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import cpsc488_project.addPatientPage.Cmd;
 import java.text.ParseException;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.MouseInfo;
+
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -21,6 +24,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -49,6 +54,10 @@ public class patientDirectory {
 	private final JScrollPane scrollPane = new JScrollPane();
 	public static String nameSelected="";
 	private final JLabel backgroundpic2 = new JLabel("");
+	
+	
+	private final JPopupMenu popupMenu = new JPopupMenu();
+	private JMenuItem menuItem=null;
 	
 	public class CmdPatients {
 		public void patientName() throws Exception {
@@ -143,9 +152,14 @@ public class patientDirectory {
 					//If left click
 					if (SwingUtilities.isLeftMouseButton(e))
 					{
+						int mPosX = MouseInfo.getPointerInfo().getLocation().x;
+						int mPosY = MouseInfo.getPointerInfo().getLocation().y;
 						
-						System.out.println(nameSelected);
+						popupMenu.show(menuItem, mPosX,mPosY);
+						
+						//System.out.println(nameSelected);
 					
+						
 						
 						//updatePatientPage window = new updatePatientPage();
 						//window.frame.setVisible(true);
@@ -241,14 +255,28 @@ public class patientDirectory {
 	
 	
 	
-	private void popup() {
+	private void popup(JFrame frame) {
 		
 		
-		JMenuItem add = new JMenuItem("Add File");
-		JMenuItem edit = new JMenuItem("Edit Patient");
+		menuItem = new JMenuItem(
+				"Add File",
+				new ImageIcon("C:\\Users\\Christian\\Desktop\\image.png")
+				);
+		menuItem.getAccessibleContext().setAccessibleDescription("Add File");
 		
-		//popupMenu.add(add);
-		//popupMenu.add(edit);
+		menuItem.addActionListener(new ActionListener() { 
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JOptionPane.showMessageDialog(frame, "You clicked it");
+			}
+			
+		});
+		
+		popupMenu.add(menuItem);
+		
+		
 		
 	}
 	

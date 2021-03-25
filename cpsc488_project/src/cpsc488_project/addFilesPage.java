@@ -136,29 +136,32 @@ public class addFilesPage {
 			public void mouseClicked(MouseEvent e) {
 				String PATIENT_NAME = patientDirectory.nameSelected;
 				String address = "54.227.89.39";
-				String data = metadataLabel.getText();
+				String data = metadataField.getText();
 				
 				//No File
 				if(filename == null) {
 					JOptionPane.showMessageDialog(null, "Please Add a File before Uploading");
+					
 				}
-				//Metadata Empty
-				if(data == null) {
+				if(metadataField.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Please Attach a note before Uploading");
 				}
-				else 
+				//Metadata Empty
+				
+				else
 				{
 				//Upload File
 			
 				CmdFiles cmd = new CmdFiles();
 				try {
 					cmd.uploadFile(PATIENT_NAME,filename,address,data);
+					JOptionPane.showMessageDialog(null, "File Added");
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
-				JOptionPane.showMessageDialog(null, "File Added");
+				
 				}
 			
 			}
