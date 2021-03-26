@@ -23,6 +23,9 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JTable;
 import javax.swing.JButton;
@@ -82,6 +85,13 @@ public class addPatientPage {
 		frame.setBounds(100, 100, 791, 343);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		
+	
+		
+		
+		
+		
 		
 		JLabel lblNewLabel = new JLabel("New Patient Registration Form");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
@@ -266,6 +276,13 @@ public class addPatientPage {
 		backgroundPic3.setIcon(new ImageIcon(addPatientPage.class.getResource("/cpsc488_project/bluebackground.jpg")));
 		backgroundPic3.setBounds(0, 0, 775, 304);
 		frame.getContentPane().add(backgroundPic3);
+		
+		
+		
+		Date date = new Date();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		dateCreatedField.setText(df.format(date));
+		dateModifiedField.setText(df.format(date));
 		
 		
 		btnSubmit.addActionListener(new ActionListener() { 
