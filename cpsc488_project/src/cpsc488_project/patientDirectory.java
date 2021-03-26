@@ -253,11 +253,13 @@ public class patientDirectory {
 		//Image Source https://icons8.com/icon/cFp23Lr2MzW0/upload-file
 		//new ImageIcon(LoginPage.class.getResource("/cpsc488_project/lock.png"))
 		JMenuItem add =new JMenuItem("Add File", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/upload.png")));
+		JMenuItem view =new JMenuItem("View Info", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/viewpic.png")));
 		//Image Source https://icons8.com/icon/3553/edit-file
 		JMenuItem edit = new JMenuItem("Edit Biometrics", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/editpic.png")));
 		
 		
 		pop.add(add);
+		pop.add(view);
 		pop.add(edit);
 		
 		
@@ -272,13 +274,22 @@ public class patientDirectory {
 			}
 			
 		});
+		view.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JOptionPane.showMessageDialog(null, "Viewing " + row);
+			}
+			
+		});
 		
 		edit.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				JOptionPane.showMessageDialog(null, "Edit " + row);
+				JOptionPane.showMessageDialog(null, "Editing " + row);
 			}
 			
 		});

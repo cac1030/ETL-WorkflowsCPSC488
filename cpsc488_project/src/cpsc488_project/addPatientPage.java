@@ -86,13 +86,6 @@ public class addPatientPage {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		
-	
-		
-		
-		
-		
-		
 		JLabel lblNewLabel = new JLabel("New Patient Registration Form");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblNewLabel.setBounds(205, 27, 475, 54);
