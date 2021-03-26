@@ -40,6 +40,7 @@ import java.io.InputStreamReader;
 import javax.swing.ImageIcon;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.SwingConstants;
 
 
 
@@ -51,7 +52,7 @@ public class patientDirectory {
 	
 	private final JList<Object> nameList = new JList<Object>();
 	private JTextField searchField;
-	private final JLabel addFileLabel = new JLabel("Right Click a Name to Add a file or Edit biometrics *");
+	private final JLabel addFileLabel = new JLabel("Select a Name by left clicking then");
 	private final JScrollPane scrollPane = new JScrollPane();
 	public static String nameSelected="";
 	private final JLabel backgroundpic2 = new JLabel("");
@@ -59,6 +60,7 @@ public class patientDirectory {
 	
 	private final JPopupMenu pop = new JPopupMenu();
 	String row="";
+	private final JLabel lblRightClickA = new JLabel("Right click the name to view options*");
 	
 	public class CmdPatients {
 		public void patientName() throws Exception {
@@ -136,6 +138,10 @@ public class patientDirectory {
 		frame.setBounds(100, 100, 460, 576);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		lblRightClickA.setVerticalAlignment(SwingConstants.TOP);
+		lblRightClickA.setBounds(108, 486, 278, 28);
+		
+		frame.getContentPane().add(lblRightClickA);
 		scrollPane.setBounds(108, 158, 216, 303);
 		
 		frame.getContentPane().add(scrollPane);
@@ -204,7 +210,8 @@ public class patientDirectory {
 		searchLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		searchLabel.setBounds(118, 130, 53, 14);
 		frame.getContentPane().add(searchLabel);
-		addFileLabel.setBounds(97, 463, 251, 14);
+		addFileLabel.setVerticalAlignment(SwingConstants.TOP);
+		addFileLabel.setBounds(108, 472, 196, 20);
 		
 		//Image Source https://www.vecteezy.com/vector-art/1432251-light-blue-background-with-rectangles
 		frame.getContentPane().add(addFileLabel);
@@ -294,6 +301,4 @@ public class patientDirectory {
 			
 		});
 	}
-	
-	
 }

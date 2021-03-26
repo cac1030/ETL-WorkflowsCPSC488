@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
+import javax.swing.JTextArea;
 
 import java.awt.Font;
 
@@ -18,15 +18,18 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 public class addFilesPage {
 
 	JFrame frame = new JFrame();
-	private JTextField metadataField;
+	private JTextArea metadataField;
 	private String filename;
 
 	public class CmdFiles {
@@ -80,10 +83,15 @@ public class addFilesPage {
 		picLabel.setBounds(20, 11, 80, 80);
 		frame.getContentPane().add(picLabel);
 		
-		metadataField = new JTextField();
+		metadataField = new JTextArea();
+		metadataField.setRows(10);
 		metadataField.setBounds(168, 240, 256, 214);
+		metadataField.setLineWrap(true);
+		metadataField.setWrapStyleWord(true);
+		Border border = BorderFactory.createLineBorder(Color.BLACK);
+	    metadataField.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 		frame.getContentPane().add(metadataField);
-		metadataField.setColumns(10);
 		
 		JLabel metadataLabel = new JLabel("Attach Notes:");
 		metadataLabel.setBounds(168, 225, 99, 14);
