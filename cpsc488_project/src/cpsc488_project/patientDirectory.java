@@ -122,7 +122,7 @@ public class patientDirectory {
 		try {
 			//Run Command Prompt
 			cmd.patientName();
-			 System.out.println();
+			 //System.out.println();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -169,8 +169,7 @@ public class patientDirectory {
 						if(! nameList.isSelectionEmpty()) {
 							pop.show(nameList,e.getX(),e.getY());
 						}
-						//addFilesPage window = new addFilesPage();
-						//window.frame.setVisible(true);
+						
 					}
 				
 				}
@@ -242,11 +241,11 @@ public class patientDirectory {
 
 		    name = (String) person.get("first_name");
 		    fName = name.substring(0, 1).toUpperCase() + name.substring(1);
-		    System.out.println(fName);
+	
 
 		    name = (String) person.get("last_name");
 		    lName = name.substring(0, 1).toUpperCase() + name.substring(1);
-		    System.out.println(lName);
+		   
 		    
 		    names.add(fName + " " + lName);
 		}
@@ -275,7 +274,6 @@ public class patientDirectory {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//JOptionPane.showMessageDialog(null, "Add " + row);
 				addFilesPage window = new addFilesPage();
 				window.frame.setVisible(true);
 			}

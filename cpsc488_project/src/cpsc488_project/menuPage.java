@@ -31,7 +31,7 @@ public class menuPage {
 		
 		JButton PatientDirectoryButton = new JButton("Patient Directory");
 		PatientDirectoryButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		PatientDirectoryButton.setBounds(337, 194, 163, 58);
+		PatientDirectoryButton.setBounds(337, 283, 163, 58);
 		PatientDirectoryButton.setFocusable(false);
 		PatientDirectoryButton.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
@@ -61,7 +61,7 @@ public class menuPage {
 				window.frame.setVisible(true);
 			}
 		});
-		btnAddPatient.setBounds(179, 194, 148, 58);
+		btnAddPatient.setBounds(179, 283, 148, 58);
 		btnAddPatient.setFocusable(false);
 		frame.getContentPane().add(btnAddPatient);
 		

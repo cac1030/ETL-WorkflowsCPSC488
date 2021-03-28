@@ -32,12 +32,12 @@ public class viewFilePage {
 		
 		JLabel genderLabelV = new JLabel("Gender:");
 		genderLabelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		genderLabelV.setBounds(10, 141, 104, 14);
+		genderLabelV.setBounds(10, 141, 64, 14);
 		panelInfo.add(genderLabelV);
 		
 		JLabel weightLablelV = new JLabel("Weight:");
 		weightLablelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		weightLablelV.setBounds(10, 98, 104, 28);
+		weightLablelV.setBounds(10, 98, 64, 28);
 		panelInfo.add(weightLablelV);
 		
 		JLabel dateCreatedLabelV = new JLabel("Patient Created:");
@@ -47,7 +47,7 @@ public class viewFilePage {
 		
 		JLabel heightLabelV = new JLabel("Height:");
 		heightLabelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		heightLabelV.setBounds(10, 117, 104, 26);
+		heightLabelV.setBounds(10, 117, 64, 26);
 		panelInfo.add(heightLabelV);
 		
 		JLabel dateModifiedLabelV = new JLabel("Patient Modfied:");
@@ -62,12 +62,12 @@ public class viewFilePage {
 		
 		JLabel sexLabelV = new JLabel("Sex:");
 		sexLabelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		sexLabelV.setBounds(10, 158, 104, 14);
+		sexLabelV.setBounds(10, 158, 64, 14);
 		panelInfo.add(sexLabelV);
 		
 		JLabel ethnicityLabelV = new JLabel("Ethnicity:");
 		ethnicityLabelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		ethnicityLabelV.setBounds(10, 170, 104, 26);
+		ethnicityLabelV.setBounds(10, 170, 64, 26);
 		panelInfo.add(ethnicityLabelV);
 		
 		Panel panelFiles = new Panel();
