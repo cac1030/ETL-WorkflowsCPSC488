@@ -286,7 +286,9 @@ public class patientDirectory {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				JOptionPane.showMessageDialog(null, "Viewing " + row);
+				viewFilePage window = new viewFilePage();
+				window.frame.setVisible(true);
+				
 			}
 			
 		});
