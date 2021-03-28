@@ -31,12 +31,44 @@ public class viewFilePage {
 		panelInfo.setLayout(null);
 		
 		JLabel genderLabelV = new JLabel("Gender:");
-		genderLabelV.setBounds(10, 11, 46, 14);
+		genderLabelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		genderLabelV.setBounds(10, 141, 104, 14);
 		panelInfo.add(genderLabelV);
 		
 		JLabel weightLablelV = new JLabel("Weight:");
-		weightLablelV.setBounds(10, 32, 46, 14);
+		weightLablelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		weightLablelV.setBounds(10, 98, 104, 28);
 		panelInfo.add(weightLablelV);
+		
+		JLabel dateCreatedLabelV = new JLabel("Patient Created:");
+		dateCreatedLabelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		dateCreatedLabelV.setBounds(10, 22, 119, 14);
+		panelInfo.add(dateCreatedLabelV);
+		
+		JLabel heightLabelV = new JLabel("Height:");
+		heightLabelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		heightLabelV.setBounds(10, 117, 104, 26);
+		panelInfo.add(heightLabelV);
+		
+		JLabel dateModifiedLabelV = new JLabel("Patient Modfied:");
+		dateModifiedLabelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		dateModifiedLabelV.setBounds(10, 48, 119, 14);
+		panelInfo.add(dateModifiedLabelV);
+		
+		JLabel dobLabelV = new JLabel("Date of Birth:");
+		dobLabelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		dobLabelV.setBounds(10, 73, 104, 14);
+		panelInfo.add(dobLabelV);
+		
+		JLabel sexLabelV = new JLabel("Sex:");
+		sexLabelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		sexLabelV.setBounds(10, 158, 104, 14);
+		panelInfo.add(sexLabelV);
+		
+		JLabel ethnicityLabelV = new JLabel("Ethnicity:");
+		ethnicityLabelV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		ethnicityLabelV.setBounds(10, 170, 104, 26);
+		panelInfo.add(ethnicityLabelV);
 		
 		Panel panelFiles = new Panel();
 		tabbedPane.addTab("Patient Files", null, panelFiles, null);
@@ -49,7 +81,7 @@ public class viewFilePage {
 		frame.getContentPane().add(view_patientn_label);
 		
 		JLabel patient_pic = new JLabel("");
-		patient_pic.setBounds(10, 11, 87, 80);
+		patient_pic.setBounds(10, 7, 87, 80);
 		frame.getContentPane().add(patient_pic);
 		patient_pic.setIcon(new ImageIcon(addFilesPage.class.getResource("/cpsc488_project/PatientPic.png")));
 		
