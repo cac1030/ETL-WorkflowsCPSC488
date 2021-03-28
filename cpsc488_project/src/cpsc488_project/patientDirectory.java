@@ -55,6 +55,13 @@ public class patientDirectory {
 	private final JLabel addFileLabel = new JLabel("Select a Name by left clicking then");
 	private final JScrollPane scrollPane = new JScrollPane();
 	public static String nameSelected="";
+	public static String sexSelected="";
+	public static String weightSelected="";
+	public static String heightSelected="" ;
+	public static String ethnicitySelected ="";
+	public static String dobSelected ="";
+	public static String dateCreatedSelected ="";
+	public static String dateModifiedSelected ="";
 	private final JLabel backgroundpic2 = new JLabel("");
 	
 	
@@ -239,15 +246,27 @@ public class patientDirectory {
 		for (Object o : a) {
 		    JSONObject person = (JSONObject) o;
 
+		    
+		    //Fill in Jlist with First name and Last name
 		    name = (String) person.get("first_name");
 		    fName = name.substring(0, 1).toUpperCase() + name.substring(1);
 	
-
+		    
 		    name = (String) person.get("last_name");
 		    lName = name.substring(0, 1).toUpperCase() + name.substring(1);
 		   
 		    
 		    names.add(fName + " " + lName);
+		    
+		    //Send Info to View Info Page
+		    dobSelected = (String) person.get("dob");
+		    dateCreatedSelected = (String) person.get("date_created");
+		    dateModifiedSelected = (String) person.get("date_modified");
+		    sexSelected = (String) person.get("sex");
+		    weightSelected = (String) person.get("weight");
+		    heightSelected = (String) person.get("height");
+		    ethnicitySelected = (String) person.get("ethnicity");
+		    
 		}
 		
 		return names;
