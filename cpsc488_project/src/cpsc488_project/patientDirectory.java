@@ -237,6 +237,7 @@ public class patientDirectory {
 		FileReader reader = new FileReader("../client/patient_data.json");
 		JSONParser parser = new JSONParser();
 		
+		
 		// json
 		
 		JSONArray a = (JSONArray) parser.parse(reader);
@@ -245,7 +246,6 @@ public class patientDirectory {
 		String name, fName, lName;
 		for (Object o : a) {
 		    JSONObject person = (JSONObject) o;
-
 		    
 		    //Fill in Jlist with First name and Last name
 		    name = (String) person.get("first_name");
@@ -266,6 +266,7 @@ public class patientDirectory {
 		    weightSelected = (String) person.get("weight");
 		    heightSelected = (String) person.get("height");
 		    ethnicitySelected = (String) person.get("ethnicity");
+		    
 		    
 		}
 		
@@ -315,7 +316,8 @@ public class patientDirectory {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				JOptionPane.showMessageDialog(null, "Editing " + row);
+				updatePatientPage window = new updatePatientPage();
+				window.frame.setVisible(true);
 			}
 			
 		});
