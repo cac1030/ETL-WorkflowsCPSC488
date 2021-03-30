@@ -5,6 +5,7 @@ import tqdm
 import os
 import subprocess
 import sys
+import time
 
 # setup and general handling of connections
 def setup_server():
@@ -93,7 +94,7 @@ def receive_file(args):
         filesize = int(filesize)
 
         # receive file
-        progress = tqdm.tqdm(range(filesize), f"Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
+        progress = tqdm.tqdm(range(filesize), f"[<] Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
         with open("client.zip", "wb") as f:
                 try:
                         while True:
@@ -194,7 +195,7 @@ def send_patients_info(args):
         client_socket = args[0]
         address = args[1]
 
-        data = []
+        patient_data = []
 
         # fetch patient dir names
         cmd = "ils /tempZone/home/public | awk -F '/' '/_/ {print $5}'"
@@ -203,15 +204,15 @@ def send_patients_info(args):
         # fetch patient dir metadata
         for dir_name in dir_names:
                 meta = {}
-                cmd = f"imeta ls -C /tempZone/home/public/{dir_name} | awk '/^[av]/ {{print}}' | cut -f2 -d ' '"
+                cmd = f"imeta ls -C /tempZone/home/public/{dir_name} | awk '/^[av]/' | cut -f2 -d ' '"
                 result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
                 for i in range(0, len(result), 2):
                         meta[result[i]] = result[i+1]
-                data.append(meta)
+                patient_data.append(meta)
 
         # send to client
         try:
-                client_socket.send(json.dumps(data).encode())
+                client_socket.send(json.dumps(patient_data).encode())
         except OSError as e:
                 print(f"[X] Error sending patient data: {e}")
                 sys.exit(1)
@@ -221,17 +222,44 @@ def send_patients_info(args):
         return f"[O] REQ_FETCH by {address} fulfilled"
 
 def send_patient_files(args):
-        YEAR = 31,536,000
+		now = time.time()
+        AGE_YEAR = now - 31,536,000
+		AGE_MONTH = now - 2,629,746
 
         client_socket = args[0]
         address = args[1]
         data = args[2]
 
+		file_data = []
         patient_name, search_terms = data.split(SEPARATOR)
         patient_dir = '/tempZone/home/public/' + patient_name
 
-        cmds = []
-        cmds.append('icd ' + patient_dir)
+        cmd = 'icd ' + patient_dir	# navigate to patient dir
+		subprocess.run(cmd, shell = True)
+
+		# TODO: set up protocol for search_terms
+		cmd = f"imeta qu -d date_create >= {AGE_YEAR} | awk /dataObj:/ {{print $2}}"
+		file_matches = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
+
+		# retreive file metadata and parse to json format in a dict
+		for match in file_matches:
+			meta = {}
+			cmd = f"imeta ls -d {match} | awk '/^[av]/' | cut -f2 -d ' '"
+			result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
+			for i in range(0, len(result), 2):
+					meta[result[i]] = result[i+1]
+			file_data.append(meta)
+
+		# send to client
+        try:
+                client_socket.send(json.dumps(file_data).encode())
+        except OSError as e:
+                print(f"[X] Error sending file data: {e}")
+                sys.exit(1)
+        else:
+                print(f"[>] File data sent successfully")
+
+        return f"[O] REQ_FILES by {address} fulfilled"
 
 
 def download_meta_default(addr, patient_name):
@@ -258,19 +286,17 @@ def put_to_irods(filename, patient_name):
                 with open("./temp/meta.txt") as f:
                         data = json.load(f)
         except IOError as e:
-                print(f"Error opening metadata file: {e}")
+                print(f"[X] Error opening metadata file: {e}")
                 sys.exit(1)
         except ValueError as e:
-                print(f"Error loading json: {e}")
+                print(f"[X] Error loading json: {e}")
                 sys.exit(1)
 
         # find any files matching the name exactly, as well as any names that match the format of a copy
         cmd = f"ils /tempZone/home/public/{patient_name} | awk '/^  example\(?[0-9]*?\)?.txt$/' | cut -d ' ' -f3"
         output = subprocess.run(cmd, shell = True, stdout=subprocess.PIPE).stdout.decode('utf-8')
         namelets = filename.split('.')
-        print("ils output: " + output)
         count = output.count(namelets[0])
-        print("ils count: " + str(count))
         if count > 0:   # if filename exists
                 copy_number = count
                 for x in range(1, count-1):
@@ -285,15 +311,14 @@ def put_to_irods(filename, patient_name):
 
         # build the string of the command that will iput the file with metadata attached
         cmd = f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{new_filename} --metadata=\"date_create;{data['date']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\""
-        os.system("echo " + cmd)
 
         try:
-                subprocess.run(cmd, shell = True, check = True)
+            	subprocess.run(cmd, shell = True, check = True)
         except subprocess.CalledProcessError as e:
-                print(f"Error executing iput: {e}")
+                print(f"[X] Error executing iput: {e}")
                 sys.exit(1)
         else:
-                print(f"{filename} successfully put to database")
+                print(f"[O] {filename} successfully put to database")
 
 #########################################################
 
