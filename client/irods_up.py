@@ -32,7 +32,7 @@ try:
 	s.connect((HOST, PORT))
 except Exception as e:
 	print(f"[X] Connection failed: {e}")
-    sys.exit(1)
+	sys.exit(1)
 else:
 	print("[+] Connected")
 
@@ -47,18 +47,18 @@ else:
 
 # send the file
 try:
-    progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
+	progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
 	with open('client.zip', "rb") as f:
-	    while True:
-	        bytes_read = f.read(BUFFER_SIZE)
-	        if not bytes_read:
-	            break
-	        s.sendall(bytes_read)
-	        progress.update(len(bytes_read))
+		while True:
+			bytes_read = f.read(BUFFER_SIZE)
+			if not bytes_read:
+				break
+			s.sendall(bytes_read)
+			progress.update(len(bytes_read))
 except Exception as e:
-    print(f"[X] Sending file failed: {e}")
-    sys.exit(1)
+	print(f"[X] Sending file failed: {e}")
+	sys.exit(1)
 else:
-    print(f"[>] File sent")
+	print(f"[>] File sent")
 finally:
 	s.close()

@@ -6,6 +6,7 @@ import os
 import subprocess
 import sys
 
+# setup and general handling of connections
 def setup_server():
 	global s
 	global SERVER_HOST
@@ -49,6 +50,38 @@ def handle_connection():
 
 	return (client_socket, address)
 
+def process_request(client_socket, address):
+	# receive request from client
+	try:
+		received = client_socket.recv(BUFFER_SIZE).decode()
+	except socket.error as e:
+		print(f"[X] Error receiving request: {e}")
+		sys.exit(1)
+	else:
+		print(f"[<] Received {received} from {address}")
+		request, data = received.split('!')
+
+	# execute function based on request
+	switcher = {
+		"REQ_UPLOAD_FILE": receive_file,
+		"REQ_PATIENT_ADD": add_patient,
+		"REQ_PATIENT_EDIT": edit_patient,
+		"REQ_FETCH": send_patients_info,
+		"REQ_FILES": send_patient_files
+		}
+
+	args = {
+		"REQ_UPLOAD_FILE": [client_socket, address, data],
+		"REQ_PATIENT_ADD": [data, address],
+		"REQ_PATIENT_EDIT": [data, address],
+		"REQ_FETCH": [client_socket, address],
+		"REQ_FILES": [client_socket, address, data]
+		}
+
+	message = switcher[request](args[request])
+	print(message)
+
+# corresponding functions for each client script
 def receive_file(args):
 	client_socket = args[0]
 	address = args[1]
@@ -157,7 +190,7 @@ def edit_patient(args):
 
 	return f"[O] REQ_PATIENT_EDIT by {address} fulfilled"
 
-def fetch_patient_data(args):
+def send_patients_info(args):
 	client_socket = args[0]
 	address = args[1]
 
@@ -187,34 +220,19 @@ def fetch_patient_data(args):
 
 	return f"[O] REQ_FETCH by {address} fulfilled"
 
-def process_request(client_socket, address):
-	# receive request from client
-	try:
-		received = client_socket.recv(BUFFER_SIZE).decode()
-	except socket.error as e:
-		print(f"[X] Error receiving request: {e}")
-		sys.exit(1)
-	else:
-		print(f"[<] Received {received} from {address}")
-		request, data = received.split('!')
+def send_patient_files(args):
+	YEAR = 31,536,000
 
-	# execute function based on request
-	switcher = {
-		"REQ_UPLOAD_FILE": receive_file,
-		"REQ_PATIENT_ADD": add_patient,
-		"REQ_PATIENT_EDIT": edit_patient,
-		"REQ_FETCH": fetch_patient_data
-		}
+	client_socket = args[0]
+	address = args[1]
+	data = args[2]
 
-	args = {
-		"REQ_UPLOAD_FILE": [client_socket, address, data],
-		"REQ_PATIENT_ADD": [data, address],
-		"REQ_PATIENT_EDIT": [data, address],
-		"REQ_FETCH": [client_socket, address]
-		}
+	patient_name, search_terms = data.split(SEPARATOR)
+	patient_dir = '/tempZone/home/public/' + patient_name
 
-	message = switcher[request](args[request])
-	print(message)
+	cmds = []
+	cmds.append('icd ' + patient_dir)
+
 
 def download_meta_default(addr, patient_name):
     # supplies metadata on the most recently accessed or uploaded patient files
@@ -223,6 +241,7 @@ def download_meta_default(addr, patient_name):
 	# imeta qu -d date_create_month 'n<=' 12 | awk '/dataObj:/ {print $2}'
 	print(cmdstr)
 
+# utility
 def unzip_file(path):
 	try:
 		with zipfile.ZipFile(path, 'r') as zip_ref:
@@ -245,8 +264,19 @@ def put_to_irods(filename, patient_name):
 		print(f"Error loading json: {e}")
 		sys.exit(1)
 
+	# find any files matching the name exactly, as well as any names that match the format of a copy
+	cmd = f"ils /tempZone/home/public/{patient_name} | awk '/^  example\(?[0-9]*?\)?.txt$/' | cut -d ' ' -f3"
+	count = subprocess.run(cmd, shell = True, capture_output = True).stdout.decode('utf-8').count(filename)
+	if count > 0:	# if filename exists
+		# build new filename using copy format
+		namelets = filename.split('.')
+		new_filename = f"{namelets[0]}({count}).{namelets[1]}"
+	else:
+		# use original filename
+		new_filename = filename
+
 	# build the string of the command that will iput the file with metadata attached
-	cmd = f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{filename} --metadata=\"date_create;{data['date']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\""
+	cmd = f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{new_filename} --metadata=\"date_create;{data['date']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\""
 	os.system("echo " + cmd)
 
 	try:
@@ -257,22 +287,12 @@ def put_to_irods(filename, patient_name):
 	else:
 		print(f"{filename} successfully put to database")
 
+#########################################################
+
 setup_server()
-#while True:
 client_socket, address = handle_connection()
-try:
-	process_request(client_socket, address)
-except Exception as e:
-	print(f"something went wrong: {e}")
-finally:
-	# close the server socket
-	s.close()
-
-
-
-#def update_client_meta:
-    # for each loop that goes through the client whitelist and sends each IP
-    # a JSON file with updated patient metadata
+process_request(client_socket, address)
+s.close()
 
 #def download_meta_default(addr, patient):
     # supplies metadata on the most recently accessed or uploaded patient files
