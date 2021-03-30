@@ -248,21 +248,19 @@ def send_patient_files(args):
                 meta = {}
                 cmd = f"imeta ls -d '{patient_dir}/{match}' | awk '/^[av]/' | cut -f2 -d ' '"
                 result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
-                print(match)
-                print(cmd)
-                print(result)
                 for i in range(0, len(result), 2):
                         meta[result[i]] = result[i+1]
                 file_data.append(meta)
 
         # send to client
         try:
-                client_socket.send(json.dumps(file_data).encode())
+				data_bytes = json.dumps(file_data).encode()
+                client_socket.send(data_bytes)
         except OSError as e:
                 print(f"[X] Error sending file data: {e}")
                 sys.exit(1)
         else:
-                print(f"[>] File data sent successfully")
+                print(f"[>] File data sent successfully | {len(data_bytes)} bytes")
 
         return f"[O] REQ_FILES by {address} fulfilled"
 
