@@ -246,8 +246,8 @@ def put_to_irods(filename, patient_name):
 		sys.exit(1)
 
 	# build the string of the command that will iput the file with metadata attached
-	cmdstr = f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{filename} --metadata=\"date_create;{data['date']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\""
-	os.system("echo " + cmdstr)
+	cmd = f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{filename} --metadata=\"date_create;{data['date']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\""
+	os.system("echo " + cmd)
 
 	try:
 		subprocess.run(cmd, shell = True, check = True)
