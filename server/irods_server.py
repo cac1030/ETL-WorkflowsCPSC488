@@ -223,8 +223,8 @@ def send_patients_info(args):
 
 def send_patient_files(args):
         now = time.time()
-        AGE_YEAR = now - 31,536,000
-        AGE_MONTH = now - 2,629,746
+        AGE_YEAR = now - 31536000
+        AGE_MONTH = now - 2629746
 
         client_socket = args[0]
         address = args[1]
@@ -246,12 +246,11 @@ def send_patient_files(args):
         # retreive file metadata and parse to json format in a dict
         for match in file_matches:
                 meta = {}
-                cmd = f"imeta ls -d '{match}' | awk '/^[av]/' | cut -f2 -d ' '"
-                try:
-                        result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
-                except subprocess.CalledProcessError as e:
-                        print(f"[X] Error retreiving file data: {e}")
-                        sys.exit(1)
+                cmd = f"imeta ls -d '{patient_dir}/{match}' | awk '/^[av]/' | cut -f2 -d ' '"
+                result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
+                print(match)
+                print(cmd)
+                print(result)
                 for i in range(0, len(result), 2):
                         meta[result[i]] = result[i+1]
                 file_data.append(meta)
