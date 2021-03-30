@@ -4,6 +4,7 @@ import sys
 import os
 
 REQUEST = "REQ_FILES"
+patient_name = sys.argv[1]
 
 # transfer config
 HOST = "54.227.89.39"
@@ -25,7 +26,7 @@ else:
 
 # send the request
 try:
-    s.send(f"{REQUEST}!DEFAULT".encode())
+    s.send(f"{REQUEST}!{patient_name}{SEPARATOR}YEAR".encode())
 except Exception as e:
     print(f"[X] Sending request failed: {e}")
     sys.exit(1)

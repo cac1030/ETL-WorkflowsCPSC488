@@ -238,7 +238,9 @@ def send_patient_files(args):
 		subprocess.run(cmd, shell = True)
 
 		# TODO: set up protocol for search_terms
-		cmd = f"imeta qu -d date_create >= {AGE_YEAR} | awk /dataObj:/ {{print $2}}"
+		if search_terms == 'YEAR':
+			cmd = f"imeta qu -d date_create >= {AGE_YEAR} | awk /dataObj:/ {{print $2}}"
+
 		file_matches = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
 
 		# retreive file metadata and parse to json format in a dict
