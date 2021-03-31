@@ -75,7 +75,7 @@ public class patientDirectory {
 	public class CmdPatients {
 		public void patientName() throws Exception {
 			
-		//Navigate into Client folder and run python script to fetch patients
+		//Navigate into Client folder and run Python3 script to fetch patients
         ProcessBuilder builder = new ProcessBuilder(
         		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient_fetch.py && dir && cd ");
       
@@ -169,15 +169,24 @@ public class patientDirectory {
 					
 					nameList.setSelectedIndex(nameList.locationToIndex(e.getPoint()));
 					
-					
+					//Index Number Selected
 					indicies = nameList.getSelectedIndex();
 					
-					System.out.println(indicies);
+					//Send Info Selected to View Info Page
+					JSONObject selected = (JSONObject) a.get(indicies);
+					dobSelected = (String) selected.get("dob");
+				    dateCreatedSelected = (String) selected.get("date_created");
+				    dateModifiedSelected = (String) selected.get("date_modified");
+				    sexSelected = (String) selected.get("sex");
+				    weightSelected = (String) selected.get("weight");
+				    heightSelected = (String) selected.get("height");
+				    ethnicitySelected = (String) selected.get("ethnicity");
 					
-					//System.out.println(a.get(1));
 					
-					//System.out.println(a.get(indicies));
 					
+					
+					
+					//Right click open popup
 					if (SwingUtilities.isRightMouseButton(e) && nameList.locationToIndex(e.getPoint())==nameList.getSelectedIndex())
 					{
 						if(! nameList.isSelectionEmpty()) {
@@ -246,17 +255,14 @@ public class patientDirectory {
 		FileReader reader = new FileReader("../client/patient_data.json");
 		JSONParser parser = new JSONParser();
 		
-		
-		// json
-		
-		JSONArray a = (JSONArray) parser.parse(reader);
+		a = (JSONArray) parser.parse(reader);
 		//System.out.println(a);
 		// https://stackoverflow.com/questions/10926353/how-to-read-json-file-into-java-with-simple-json-library
 		String name, fName, lName;
 		for (Object o : a) {
 		    JSONObject person = (JSONObject) o;
-		   
-		    //Fill in Jlist with First name and Last name
+		    
+		    //Fill in JList with First name and Last name
 		    name = (String) person.get("first_name");
 		    fName = name.substring(0, 1).toUpperCase() + name.substring(1);
 	
@@ -268,19 +274,6 @@ public class patientDirectory {
 		    names.add(fName + " " + lName);
 		    
 		    
-		    
-		    //Send Info to View Info Page
-		    dobSelected = (String) person.get("dob");
-		    dateCreatedSelected = (String) person.get("date_created");
-		    dateModifiedSelected = (String) person.get("date_modified");
-		    sexSelected = (String) person.get("sex");
-		    weightSelected = (String) person.get("weight");
-		    heightSelected = (String) person.get("height");
-		    ethnicitySelected = (String) person.get("ethnicity");
-		    
-		    
-		    //System.out.println(a.get(1));
-		    //System.out.println(a.get(indicies));
 		}
 		
 		

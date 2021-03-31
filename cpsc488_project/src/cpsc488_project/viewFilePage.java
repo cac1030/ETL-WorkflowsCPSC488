@@ -67,22 +67,22 @@ public class viewFilePage {
 		
 		JLabel sexLabelAns = new JLabel("");
 		sexLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		sexLabelAns.setBounds(83, 147, 64, 14);
+		sexLabelAns.setBounds(83, 147, 95, 14);
 		panelInfo.add(sexLabelAns);
 		
 		JLabel ethnicityLabelAns = new JLabel("");
 		ethnicityLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		ethnicityLabelAns.setBounds(84, 165, 64, 14);
+		ethnicityLabelAns.setBounds(84, 165, 95, 14);
 		panelInfo.add(ethnicityLabelAns);
 		
 		JLabel heightLabelAns = new JLabel("");
 		heightLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		heightLabelAns.setBounds(84, 128, 64, 14);
+		heightLabelAns.setBounds(84, 128, 94, 14);
 		panelInfo.add(heightLabelAns);
 		
 		JLabel weightLabelAns = new JLabel("");
 		weightLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		weightLabelAns.setBounds(84, 107, 64, 14);
+		weightLabelAns.setBounds(84, 107, 94, 14);
 		panelInfo.add(weightLabelAns);
 		
 		Panel panelFiles = new Panel();
@@ -103,17 +103,17 @@ public class viewFilePage {
 		
 		JLabel createdLabelAns = new JLabel("");
 		createdLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		createdLabelAns.setBounds(135, 22, 64, 14);
+		createdLabelAns.setBounds(135, 22, 137, 14);
 		panelInfo.add(createdLabelAns);
 		
 		JLabel modifiedLabelAns = new JLabel("");
 		modifiedLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		modifiedLabelAns.setBounds(135, 48, 64, 14);
+		modifiedLabelAns.setBounds(135, 48, 137, 14);
 		panelInfo.add(modifiedLabelAns);
 		
 		JLabel dobLabelAns = new JLabel("");
 		dobLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		dobLabelAns.setBounds(135, 73, 64, 14);
+		dobLabelAns.setBounds(135, 73, 137, 14);
 		panelInfo.add(dobLabelAns);
 		
 		
