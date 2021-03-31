@@ -47,57 +47,57 @@ public class viewFilePage {
 		panelInfo.setLayout(null);
 		
 		JLabel weightLablelV = new JLabel("Weight:");
-		weightLablelV.setFont(new Font("Tahoma", Font.BOLD, 15));
+		weightLablelV.setFont(new Font("Rockwell", Font.BOLD, 15));
 		weightLablelV.setBounds(10, 135, 64, 28);
 		panelInfo.add(weightLablelV);
 		
 		JLabel dateCreatedLabelV = new JLabel("Patient Created:");
-		dateCreatedLabelV.setFont(new Font("Tahoma", Font.BOLD, 15));
+		dateCreatedLabelV.setFont(new Font("Rockwell", Font.BOLD, 15));
 		dateCreatedLabelV.setBounds(10, 22, 137, 14);
 		panelInfo.add(dateCreatedLabelV);
 		
 		JLabel heightLabelV = new JLabel("Height:");
-		heightLabelV.setFont(new Font("Tahoma", Font.BOLD, 15));
+		heightLabelV.setFont(new Font("Rockwell", Font.BOLD, 15));
 		heightLabelV.setBounds(10, 156, 64, 26);
 		panelInfo.add(heightLabelV);
 		
 		JLabel dateModifiedLabelV = new JLabel("Patient Modfied:");
-		dateModifiedLabelV.setFont(new Font("Tahoma", Font.BOLD, 15));
+		dateModifiedLabelV.setFont(new Font("Rockwell", Font.BOLD, 15));
 		dateModifiedLabelV.setBounds(10, 48, 137, 14);
 		panelInfo.add(dateModifiedLabelV);
 		
 		JLabel dobLabelV = new JLabel("Date of Birth:");
-		dobLabelV.setFont(new Font("Tahoma", Font.BOLD, 15));
+		dobLabelV.setFont(new Font("Rockwell", Font.BOLD, 15));
 		dobLabelV.setBounds(10, 73, 104, 14);
 		panelInfo.add(dobLabelV);
 		
 		JLabel sexLabelV = new JLabel("Sex:");
-		sexLabelV.setFont(new Font("Tahoma", Font.BOLD, 15));
+		sexLabelV.setFont(new Font("Rockwell", Font.BOLD, 15));
 		sexLabelV.setBounds(10, 182, 64, 14);
 		panelInfo.add(sexLabelV);
 		
 		JLabel ethnicityLabelV = new JLabel("Ethnicity:");
-		ethnicityLabelV.setFont(new Font("Tahoma", Font.BOLD, 15));
+		ethnicityLabelV.setFont(new Font("Rockwell", Font.BOLD, 15));
 		ethnicityLabelV.setBounds(10, 115, 71, 26);
 		panelInfo.add(ethnicityLabelV);
 		
 		JLabel sexLabelAns = new JLabel("");
-		sexLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		sexLabelAns.setFont(new Font("Rockwell", Font.PLAIN, 15));
 		sexLabelAns.setBounds(84, 183, 95, 14);
 		panelInfo.add(sexLabelAns);
 		
 		JLabel ethnicityLabelAns = new JLabel("");
-		ethnicityLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		ethnicityLabelAns.setFont(new Font("Rockwell", Font.PLAIN, 15));
 		ethnicityLabelAns.setBounds(84, 122, 95, 14);
 		panelInfo.add(ethnicityLabelAns);
 		
 		JLabel heightLabelAns = new JLabel("");
-		heightLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		heightLabelAns.setFont(new Font("Rockwell", Font.PLAIN, 15));
 		heightLabelAns.setBounds(85, 163, 94, 14);
 		panelInfo.add(heightLabelAns);
 		
 		JLabel weightLabelAns = new JLabel("");
-		weightLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		weightLabelAns.setFont(new Font("Rockwell", Font.PLAIN, 15));
 		weightLabelAns.setBounds(84, 143, 94, 14);
 		panelInfo.add(weightLabelAns);
 		
@@ -118,6 +118,7 @@ public class viewFilePage {
 		panel.add(fileLabel);
 		
 		searchFilesField = new JTextField();
+		searchFilesField.setForeground(Color.LIGHT_GRAY);
 		searchFilesField.setText("Search...");
 		searchFilesField.setBounds(65, 14, 131, 20);
 		panel.add(searchFilesField);
@@ -155,17 +156,17 @@ public class viewFilePage {
 		
 		
 		JLabel createdLabelAns = new JLabel("");
-		createdLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		createdLabelAns.setFont(new Font("Rockwell", Font.PLAIN, 15));
 		createdLabelAns.setBounds(135, 22, 137, 14);
 		panelInfo.add(createdLabelAns);
 		
 		JLabel modifiedLabelAns = new JLabel("");
-		modifiedLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		modifiedLabelAns.setFont(new Font("Rockwell", Font.PLAIN, 15));
 		modifiedLabelAns.setBounds(135, 48, 137, 14);
 		panelInfo.add(modifiedLabelAns);
 		
 		JLabel dobLabelAns = new JLabel("");
-		dobLabelAns.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		dobLabelAns.setFont(new Font("Rockwell", Font.PLAIN, 15));
 		dobLabelAns.setBounds(135, 73, 137, 14);
 		panelInfo.add(dobLabelAns);
 		
