@@ -18,7 +18,7 @@ print(f"[...] Connecting to {HOST}:{PORT}")
 try:
 	s.connect((HOST, PORT))
 except Exception as e:
-	print(f"[X] Connection failed: {e}")
+    print(f"[X] Connection failed: {e}")
     sys.exit(1)
 else:
 	print("[+] Connected")

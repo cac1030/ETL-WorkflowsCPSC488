@@ -254,7 +254,7 @@ def send_patient_files(args):
 
         # send to client
         try:
-				data_bytes = json.dumps(file_data).encode()
+                data_bytes = json.dumps(file_data).encode()
                 client_socket.send(data_bytes)
         except OSError as e:
                 print(f"[X] Error sending file data: {e}")
