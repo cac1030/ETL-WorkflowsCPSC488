@@ -64,6 +64,9 @@ public class patientDirectory {
 	public static String dateModifiedSelected ="";
 	private final JLabel backgroundpic2 = new JLabel("");
 	
+	public JSONArray a;
+	public int indicies;
+	
 	
 	private final JPopupMenu pop = new JPopupMenu();
 	String row="";
@@ -152,15 +155,10 @@ public class patientDirectory {
 		scrollPane.setBounds(108, 158, 216, 303);
 		
 		frame.getContentPane().add(scrollPane);
-			nameList.addListSelectionListener(new ListSelectionListener() {
-				public void valueChanged(ListSelectionEvent e) {
-					
-					row = nameList.getSelectedValue().toString();
-				}
-			});
+			
 			scrollPane.setViewportView(nameList);
 		
-			//When Name is clicked open update BIO-metrics
+			//When Name is clicked open options
 			nameList.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -171,10 +169,21 @@ public class patientDirectory {
 					
 					nameList.setSelectedIndex(nameList.locationToIndex(e.getPoint()));
 					
+					
+					indicies = nameList.getSelectedIndex();
+					
+					System.out.println(indicies);
+					
+					//System.out.println(a.get(1));
+					
+					//System.out.println(a.get(indicies));
+					
 					if (SwingUtilities.isRightMouseButton(e) && nameList.locationToIndex(e.getPoint())==nameList.getSelectedIndex())
 					{
 						if(! nameList.isSelectionEmpty()) {
+							
 							pop.show(nameList,e.getX(),e.getY());
+							
 						}
 						
 					}
@@ -241,12 +250,12 @@ public class patientDirectory {
 		// json
 		
 		JSONArray a = (JSONArray) parser.parse(reader);
-		System.out.println(a);
+		//System.out.println(a);
 		// https://stackoverflow.com/questions/10926353/how-to-read-json-file-into-java-with-simple-json-library
 		String name, fName, lName;
 		for (Object o : a) {
 		    JSONObject person = (JSONObject) o;
-		    
+		   
 		    //Fill in Jlist with First name and Last name
 		    name = (String) person.get("first_name");
 		    fName = name.substring(0, 1).toUpperCase() + name.substring(1);
@@ -258,6 +267,8 @@ public class patientDirectory {
 		    
 		    names.add(fName + " " + lName);
 		    
+		    
+		    
 		    //Send Info to View Info Page
 		    dobSelected = (String) person.get("dob");
 		    dateCreatedSelected = (String) person.get("date_created");
@@ -268,7 +279,10 @@ public class patientDirectory {
 		    ethnicitySelected = (String) person.get("ethnicity");
 		    
 		    
+		    //System.out.println(a.get(1));
+		    //System.out.println(a.get(indicies));
 		}
+		
 		
 		return names;
 	}

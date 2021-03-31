@@ -3,8 +3,8 @@ import tqdm
 import sys
 
 REQUEST = "REQ_PATIENT_EDIT"
-DATA = "{\"first_name\":\"james\",\"middle_name\":\"joe\",\"last_name\":\"jamison\",\"date_created\":\"01/02/2019\",\"date_modified\":\"03/16/2021\",\"height\":\"75\",\"weight\":\"230\",\"dob\":\"05/19/2000\",\"sex\":\"male\",\"ethnicity\":\"white\"}"
-# DATA = sys.argv[1]
+#DATA = "{\"first_name\":\"james\",\"middle_name\":\"joe\",\"last_name\":\"jamison\",\"date_created\":\"01/02/2019\",\"date_modified\":\"03/16/2021\",\"height\":\"75\",\"weight\":\"230\",\"dob\":\"05/19/2000\",\"sex\":\"male\",\"ethnicity\":\"white\"}"
+DATA = sys.argv[1]
 
 # transfer config
 HOST = "54.227.89.39"

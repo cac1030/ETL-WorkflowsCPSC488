@@ -348,7 +348,7 @@ public class updatePatientPage {
 					}
 					
 					//JOptionPane.showMessageDialog(null, patientJson);
-					JOptionPane.showMessageDialog(null, "Patient Added");
+					JOptionPane.showMessageDialog(null, "Patient Updated");
 				}
 			}
 		});
