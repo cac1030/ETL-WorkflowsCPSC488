@@ -54,9 +54,9 @@ public class updatePatientPage {
 	public class Cmd {
 		public void test(String DATA) throws Exception {
 			
-		//Navigate into Client folder and run python script to add patient
+		//Navigate into Client folder and run Python3 script to Edit patient
         ProcessBuilder builder = new ProcessBuilder(
-        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient_edit.py " + DATA);
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient.py " + "-e" + DATA);
         builder.redirectErrorStream(true);
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));

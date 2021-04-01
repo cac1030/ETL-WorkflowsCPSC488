@@ -15,7 +15,14 @@ import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
 import javax.swing.BorderFactory;
@@ -26,15 +33,18 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
+
 public class addFilesPage {
 
 	JFrame frame = new JFrame();
-	private JTextArea metadataField;
+	private JTextArea metadataNotesField;
 	private String filename;
 	private JLabel backgroundpic;
+	private JTextField metadataTitleField;
+	private JTextField metadataPhysicianField;
 
 	public class CmdFiles {
-		public void uploadFile(String PATIENT_NAME, String filename, String address, String data) throws Exception {
+		public void uploadFile(String PATIENT_NAME, String filename) throws Exception {
 		
 		//Navigate into Client folder and run Python3 script to add patient
         ProcessBuilder builder = new ProcessBuilder(
@@ -58,6 +68,31 @@ public class addFilesPage {
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.getContentPane().setLayout(null);
 		
+		Border border = BorderFactory.createLineBorder(Color.BLACK);
+		metadataPhysicianField = new JTextField();
+		metadataPhysicianField.setColumns(10);
+		metadataPhysicianField.setBounds(200, 263, 169, 20);
+		metadataPhysicianField.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(1, 1, 1, 1)));
+		frame.getContentPane().add(metadataPhysicianField);
+		
+		metadataTitleField = new JTextField();
+		metadataTitleField.setBounds(10, 263, 169, 20);
+		frame.getContentPane().add(metadataTitleField);
+		metadataTitleField.setBorder(BorderFactory.createCompoundBorder(border,
+	            BorderFactory.createEmptyBorder(1, 1, 1, 1)));
+		
+		
+		JLabel physicianlabel = new JLabel("Overseeing Physician:");
+		physicianlabel.setBounds(202, 249, 116, 14);
+		frame.getContentPane().add(physicianlabel);
+		
+		
+		
+		JLabel titleLabel = new JLabel("Title:");
+		titleLabel.setBounds(10, 249, 99, 14);
+		frame.getContentPane().add(titleLabel);
+		
 		JLabel fileTitleLabel = new JLabel("Attach Files to Patient");
 		fileTitleLabel.setFont(new Font("Rockwell", Font.BOLD, 24));
 		fileTitleLabel.setBounds(100, 11, 269, 50);
@@ -65,7 +100,7 @@ public class addFilesPage {
 		
 		JLabel filesPatientLabel = new JLabel("");
 		filesPatientLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		filesPatientLabel.setBounds(110, 53, 234, 20);
+		filesPatientLabel.setBounds(100, 53, 234, 20);
 		frame.getContentPane().add(filesPatientLabel);
 		
 		JLabel picLabel = new JLabel("");
@@ -74,18 +109,17 @@ public class addFilesPage {
 		picLabel.setBounds(10, 11, 80, 80);
 		frame.getContentPane().add(picLabel);
 		
-		metadataField = new JTextArea();
-		metadataField.setRows(10);
-		metadataField.setBounds(10, 240, 369, 214);
-		metadataField.setLineWrap(true);
-		metadataField.setWrapStyleWord(true);
-		Border border = BorderFactory.createLineBorder(Color.BLACK);
-	    metadataField.setBorder(BorderFactory.createCompoundBorder(border,
+		metadataNotesField = new JTextArea();
+		metadataNotesField.setRows(10);
+		metadataNotesField.setBounds(10, 307, 369, 147);
+		metadataNotesField.setLineWrap(true);
+		metadataNotesField.setWrapStyleWord(true);
+	    metadataNotesField.setBorder(BorderFactory.createCompoundBorder(border,
 	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-		frame.getContentPane().add(metadataField);
+		frame.getContentPane().add(metadataNotesField);
 		
 		JLabel metadataLabel = new JLabel("Attach Notes:");
-		metadataLabel.setBounds(10, 224, 99, 14);
+		metadataLabel.setBounds(10, 292, 99, 14);
 		frame.getContentPane().add(metadataLabel);
 		
 		JLabel fileNameLabel = new JLabel("");
@@ -134,26 +168,62 @@ public class addFilesPage {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				String PATIENT_NAME = patientDirectory.nameSelected;
-				String address = "54.227.89.39";
-				String data = metadataField.getText();
+				//String address = "54.227.89.39";
+				
+				
+				
+				
+				
 				
 				//No File
 				if(filename == null) {
 					JOptionPane.showMessageDialog(null, "Please Add a File before Uploading");
 					
 				}
-				if(metadataField.getText().equals("")) {
-					JOptionPane.showMessageDialog(null, "Please Attach a note before Uploading");
+				if(metadataNotesField.getText().equals("") || metadataPhysicianField.getText().equals("") ||  metadataNotesField.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Please Attach all Metadata before Uploading");
 				}
 				//Metadata Empty
 				
 				else
 				{
 				//Upload File
-			
+					//Write data to File Meta.txt
+					//For Date Created/Modified
+					Date date = new Date();
+					DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
+					
+					String dateCreated= (df2.format(date));
+					String dateModified = (df2.format(date));
+					
+					//To JSON format
+					String metadata = "{\n" +  "\""+ "title" + "\"" + ":" + "\"" + metadataTitleField.getText() + "\"" + ",\n" 
+							+ "\"" + "date_created" + "\"" + ":" + "\"" + dateCreated  + "\"" + ",\n" 
+							+ "\"" + "date_modified" + "\"" + ":" + "\"" + dateModified  + "\"" + ",\n" 
+							+ "\"" + "overseeing" + "\"" + ":" + "\"" + metadataPhysicianField.getText()  + "\"" + ",\n" 
+							+ "\"" + "notes"  + "\"" + ":" + "\"" + metadataNotesField.getText() + "\"" + "\n" + "}";
+					
+					//Write
+					File dir = new File("../client/");
+					String file = "meta.txt";
+					FileWriter fw;
+					PrintWriter pw =null;
+					try {
+						fw = new FileWriter(new File(dir, file));
+						pw = new PrintWriter(fw);
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					pw.println(metadata);
+					pw.flush();
+					
+					
+					
+				//Run Python3	
 				CmdFiles cmd = new CmdFiles();
 				try {
-					cmd.uploadFile(PATIENT_NAME,filename,address,data);
+					cmd.uploadFile(PATIENT_NAME,filename);
 					JOptionPane.showMessageDialog(null, "File Added");
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block

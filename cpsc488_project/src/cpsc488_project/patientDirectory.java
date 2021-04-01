@@ -77,7 +77,7 @@ public class patientDirectory {
 			
 		//Navigate into Client folder and run Python3 script to fetch patients
         ProcessBuilder builder = new ProcessBuilder(
-        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient_fetch.py && dir && cd ");
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient_fetch.py " + "-f");
       
         builder.redirectErrorStream(true);
         Process p = builder.start();
@@ -122,12 +122,7 @@ public class patientDirectory {
 	
 	public patientDirectory() throws org.json.simple.parser.ParseException, IOException {
 		
-		this.bindData();
-		///////////////////////////////////////////////////////////////
 		
-		addPopup();
-		
-	
 		CmdPatients cmd = new CmdPatients();
 		try {
 			//Run Command Prompt
@@ -138,8 +133,10 @@ public class patientDirectory {
 			e.printStackTrace();
 		}
 		///////////////////////////////////////////
+		this.bindData();
+		///////////////////////////////////////////////////////////////
 		
-		
+		addPopup();
 		
 		
 		

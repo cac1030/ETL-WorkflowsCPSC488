@@ -63,7 +63,7 @@ public class addPatientPage {
 			
 		//Navigate into Client folder and run python script to add patient
         ProcessBuilder builder = new ProcessBuilder(
-        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient_add.py " + DATA);
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient.py " + "-a " + DATA);
         builder.redirectErrorStream(true);
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
