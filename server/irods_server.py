@@ -271,7 +271,9 @@ def retreive_matching_file_list(patient_dir, file_age, search_terms):
     all_files = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
     for file in all_files:
         cmd = f"imeta ls -d '{file}' date_create | awk '/value/ {{print $2}}'"
-        output = int(subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8'))
+        output = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
+        print(output)
+        output = int(output)
         if output >= age:
             file_matches.append(file)
 
