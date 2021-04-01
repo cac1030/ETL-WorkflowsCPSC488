@@ -272,20 +272,18 @@ def retreive_matching_file_list(patient_dir, file_age, search_terms):
     cmd = f"ils {patient_dir} | fgrep . | cut -f3 -d ' '"
     all_files = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
 
-    # select files that match the target age
+    # select files that match the target age and search terms (if any)
     for file in all_files:
         cmd = f"imeta ls -d '{patient_dir}/{file}' date_create | awk '/value/ {{print $2}}'"
-        output = int(subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8'))
-        if output >= age:
-            file_matches.append(file)
-
-    # remove any files that don't match the search terms
-    if search_terms != 'None':
-        for i, file in enumerate(file_matches):
-            cmd = f"imeta ls -d '{patient_dir}/{file}' title | awk '/value/ {{print $2}}'"
-            output = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
-            if output.find(search_terms) == -1:
-                file_matches.pop(i)
+        date_create = int(subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8'))
+        cmd = f"imeta ls -d '{patient_dir}/{file}' title | awk '/value/ {{print $2}}'"
+        title = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
+        if date_create >= age:
+            if search_terms != 'None':
+                if title.find(search_terms) != -1:
+                    file_matches.append(file)
+            else:
+                file_matches.append(file)
 
     return file_matches
 
