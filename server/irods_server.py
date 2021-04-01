@@ -233,7 +233,7 @@ def send_patient_files(args):
 
         # retreive file metadata and parse to json format in a dict
         file_matches = retreive_matching_file_list(patient_dir, file_age, search_terms)
-        file_data = parse_file_data(patient_dir, file_matches)
+        file_data = parse_file_metadata(patient_dir, file_matches)
 
         # send to client
         try:
@@ -249,6 +249,7 @@ def send_patient_files(args):
 
 # utility
 def retreive_matching_file_list(patient_dir, file_age, search_terms):
+    # change the target file age based on client message
     now = time.time()
     MONTH_IN_SEC = 2629746
     AGE_MONTH = now - MONTH_IN_SEC
@@ -266,18 +267,29 @@ def retreive_matching_file_list(patient_dir, file_age, search_terms):
     else:
             age = 0
 
+    # load a list with all patient files
     file_matches = []
     cmd = f"ils {patient_dir} | fgrep . | cut -f3 -d ' '"
     all_files = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
+
+    # select files that match the target age
     for file in all_files:
         cmd = f"imeta ls -d '{patient_dir}/{file}' date_create | awk '/value/ {{print $2}}'"
         output = int(subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8'))
         if output >= age:
             file_matches.append(file)
 
+    # remove any files that don't match the search terms
+    if search_terms != 'None':
+        for i, file in enumerate(file_matches):
+            cmd = f"imeta ls -d '{patient_dir}/{file}' title | awk '/value/ {{print $2}}'"
+            output = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
+            if output.find(search_terms) == -1:
+                file_matches.pop(i)
+
     return file_matches
 
-def parse_file_data(patient_dir, file_matches):
+def parse_file_metadata(patient_dir, file_matches):
     file_data = []
     for match in file_matches:
             meta = {}
