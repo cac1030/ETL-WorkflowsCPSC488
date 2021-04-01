@@ -269,7 +269,9 @@ def retreive_matching_file_list(patient_dir, file_age, search_terms):
     file_matches = []
     cmd = f"ils {patient_dir} | fgrep . | cut -f3 -d ' '"
     all_files = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
+    print(all_files)
     for file in all_files:
+        print(file)
         cmd = f"imeta ls -d '{file}' date_create | awk '/value/ {{print $2}}'"
         output = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
         print(output)
