@@ -222,39 +222,22 @@ def send_patients_info(args):
         return f"[O] REQ_FETCH by {address} fulfilled"
 
 def send_patient_files(args):
-        now = time.time()
-        AGE_YEAR = now - 31536000
-        AGE_MONTH = now - 2629746
-
         client_socket = args[0]
         address = args[1]
         data = args[2]
 
-        file_data = []
-        patient_name, search_terms = data.split(SEPARATOR)
+        patient_name, file_age, search_terms = data.split(SEPARATOR)
         patient_dir = '/tempZone/home/public/' + patient_name
-
         cmd = 'icd ' + patient_dir      # navigate to patient dir
-        subprocess.run(cmd, shell = True)
-
-        # TODO: set up protocol for search_terms
-        if search_terms == 'YEAR':
-                cmd = f"imeta qu -d date_create '>=' {AGE_YEAR} | awk '/dataObj:/ {{print $2}}'"
-
-        file_matches = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
+        subprocess.run(cmd, shell=True)
 
         # retreive file metadata and parse to json format in a dict
-        for match in file_matches:
-                meta = {}
-                cmd = f"imeta ls -d '{patient_dir}/{match}' | awk '/^[av]/' | cut -f2 -d ' '"
-                result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
-                for i in range(0, len(result), 2):
-                        meta[result[i]] = result[i+1]
-                file_data.append(meta)
+        file_matches = retreive_matching_file_list(patient_dir, file_age, search_terms)
+        file_data = parse_file_data(patient_dir, file_matches)
 
         # send to client
         try:
-				data_bytes = json.dumps(file_data).encode()
+                data_bytes = json.dumps(file_data).encode()
                 client_socket.send(data_bytes)
         except OSError as e:
                 print(f"[X] Error sending file data: {e}")
@@ -265,6 +248,46 @@ def send_patient_files(args):
         return f"[O] REQ_FILES by {address} fulfilled"
 
 # utility
+def retreive_matching_file_list(patient_dir, file_age, search_terms):
+    now = time.time()
+    MONTH_IN_SEC = 2629746
+    AGE_MONTH = now - MONTH_IN_SEC
+    AGE_6_MONTH = now - MONTH_IN_SEC * 6
+    AGE_YEAR = now - MONTH_IN_SEC * 12
+    AGE_5_YEAR = now - MONTH_IN_SEC * 60
+    if file_age == 4:
+            age = AGE_MONTH
+    elif file_age == 3:
+            age = AGE_6_MONTH
+    elif file_age == 2:
+            age = AGE_YEAR
+    elif file_age == 1:
+            age = AGE_5_YEAR
+    else:
+            age = 0
+
+    file_matches = []
+    cmd = f"ils {patient_dir} | fgrep . | cut -f3 -d ' '"
+    all_files = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
+    for file in all_files:
+        cmd = f"imeta ls -d {file} date_create | awk '/value/ {{print $2}}'"
+        output = int(subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8'))
+        if output >= age:
+            file_matches.append(file)
+
+    return file_matches
+
+def parse_file_data(patient_dir, file_matches):
+    file_data = []
+    for match in file_matches:
+            meta = {}
+            cmd = f"imeta ls -d '{patient_dir}/{match}' | awk '/^[av]/' | cut -f2 -d ' '"
+            result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
+            for i in range(0, len(result), 2):
+                    meta[result[i]] = result[i+1]
+            file_data.append(meta)
+    return file_data
+
 def unzip_file(path):
         try:
                 with zipfile.ZipFile(path, 'r') as zip_ref:
@@ -288,11 +311,13 @@ def put_to_irods(filename, patient_name):
                 sys.exit(1)
 
         # find any files matching the name exactly, as well as any names that match the format of a copy
-        cmd = f"ils /tempZone/home/public/{patient_name} | awk '/^  example\(?[0-9]*?\)?.txt$/' | cut -d ' ' -f3"
-        output = subprocess.run(cmd, shell = True, stdout=subprocess.PIPE).stdout.decode('utf-8')
         namelets = filename.split('.')
+        cmd = f"ils /tempZone/home/public/{patient_name} | awk '/^  {namelets[0]}\(?[0-9]*?\)?.{namelets[1]}$/' | cut -d ' ' -f3"
+        output = subprocess.run(cmd, shell = True, stdout=subprocess.PIPE).stdout.decode('utf-8')
         count = output.count(namelets[0])
-        if count > 0:   # if filename exists
+
+		# modify destination file name based on how many copies of that name exist
+        if count > 0:
                 copy_number = count
                 for x in range(1, count-1):
                         if output.find(f"{namelets[0]}({x}).{namelets[1]}") == -1:
@@ -304,9 +329,10 @@ def put_to_irods(filename, patient_name):
                 # use original filename
                 new_filename = filename
 
-        # build the string of the command that will iput the file with metadata attached
+        # build the command
         cmd = f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{new_filename} --metadata=\"date_create;{data['date']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\""
 
+		# execute
         try:
                 subprocess.run(cmd, shell = True, check = True)
         except subprocess.CalledProcessError as e:
