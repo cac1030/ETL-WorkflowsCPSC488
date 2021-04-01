@@ -255,13 +255,13 @@ def retreive_matching_file_list(patient_dir, file_age, search_terms):
     AGE_6_MONTH = now - MONTH_IN_SEC * 6
     AGE_YEAR = now - MONTH_IN_SEC * 12
     AGE_5_YEAR = now - MONTH_IN_SEC * 60
-    if file_age == 4:
+    if file_age == '4':
             age = AGE_MONTH
-    elif file_age == 3:
+    elif file_age == '3':
             age = AGE_6_MONTH
-    elif file_age == 2:
+    elif file_age == '2':
             age = AGE_YEAR
-    elif file_age == 1:
+    elif file_age == '1':
             age = AGE_5_YEAR
     else:
             age = 0
