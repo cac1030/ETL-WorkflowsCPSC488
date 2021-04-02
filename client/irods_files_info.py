@@ -1,54 +1,39 @@
 import socket
+import argparse
 import tqdm
 import sys
 import os
+import transaction
 
-REQUEST = "REQ_FILES"
-patient_name = sys.argv[1]
+parser = argparse.ArgumentParser()
+parser.add_argument("patient_name",
+                    help="the patient files are being fetched for")
+parser.add_argument("-s", "--search_terms",
+                    help="the search terms to be sent to server")
+parser.add_argument("-a", "--age", choices=['0','1','2','3','4'], default='2',
+                    help="the maximum age of files to be fetched " +
+                    "(0: all, 1: 5 years, 2: 1 year, 3: 6 months, 4: 1 month)")
+args = parser.parse_args()
 
-# transfer config
-HOST = "54.227.89.39"
-# HOST = "localhost"
-PORT = 5001
+# build outgoing data string
 SEPARATOR = "[-]"
-BUFFER_SIZE = 4096
-s = socket.socket()
+data = args.patient_name + SEPARATOR + str(args.age) + SEPARATOR + str(args.search_terms)
 
-# connect to the server
-print(f"[...] Connecting to {HOST}:{PORT}")
-try:
-	s.connect((HOST, PORT))
-except Exception as e:
-    print(f"[X] Connection failed: {e}")
-    sys.exit(1)
-else:
-    print("[+] Connected")
-
-# send the request
-try:
-    s.send(f"{REQUEST}!{patient_name}{SEPARATOR}YEAR".encode())
-except Exception as e:
-    print(f"[X] Sending request failed: {e}")
-    sys.exit(1)
-else:
-    print(f"[>] {REQUEST} sent")
+# connect and send
+trans = transaction.Request()
+trans.connect()
+trans.send_req("REQ_FILES", data)
 
 # receive and write
 try:
     with open("file_data.json", "wb") as f:
-        while True:
-            bytes_read = s.recv(BUFFER_SIZE)
-            if not bytes_read:
-            	break
-            f.write(bytes_read)
-except Exception as e:
-    print(f"[X] Receiving file failed: {e}")
+        f.write(trans.recv_response())
+except OSError as e:
+    print(f"[X] Writing to file failed: {e}")
     sys.exit(1)
 else:
-	size = os.path.getsize("file_data.json")
-	if size <= 2:
-		print(f"[!<] Received empty file")
-	else:
-		print(f"[<] Received data from server | {size} bytes")
-finally:
-    s.close()
+    size = os.path.getsize("file_data.json")
+    if size <= 2:
+        print(f"[!<] Received empty file")
+    else:
+        print(f"[<] Received data from server | {size} bytes")

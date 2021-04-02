@@ -308,8 +308,18 @@ public class patientDirectory {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				viewFilePage window = new viewFilePage();
-				window.frame.setVisible(true);
+				viewFilePage window;
+				try {
+					window = new viewFilePage();
+					window.frame.setVisible(true);
+				} catch (org.json.simple.parser.ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				
 			}
 			

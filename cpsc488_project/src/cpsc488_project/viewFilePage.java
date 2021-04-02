@@ -2,26 +2,113 @@ package cpsc488_project;
 
 import java.awt.EventQueue;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JTabbedPane;
 import java.awt.Panel;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import cpsc488_project.patientDirectory.CmdPatients;
+
 import javax.swing.JButton;
 import javax.swing.JList;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class viewFilePage {
 
 	JFrame frame = new JFrame();
 	private JTextField searchFilesField;
-
+	public JSONArray b;
+	DefaultListModel<Object> DLMFiles = new DefaultListModel<Object>();
+	private final JList<Object> listFiles = new JList<Object>();
 	
 	
-	public viewFilePage() {
+	public class CmdFiles {
+		public void fileNames() throws Exception {
+			
+		//Navigate into Client folder and run Python3 script to fetch patients
+        ProcessBuilder builder = new ProcessBuilder(
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_files_info.py " + "-a "+ "0" + patientDirectory.nameSelected ); 
+      
+        builder.redirectErrorStream(true);
+        Process p = builder.start();
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        while (true) {
+            line = r.readLine();
+            if (line == null) { break; }
+            System.out.println(line);
+        	}
+		}
+	}
+	
+	private void bindData() throws IOException, org.json.simple.parser.ParseException {
+		getNames().stream().forEach((name) -> {
+			DLMFiles.addElement(name);
+		});
+		
+	}
+	
+	//Search Box to filter through strings
+		private void searchFilterFiles(String searchTerm) throws IOException, org.json.simple.parser.ParseException
+		{
+			DefaultListModel<Object> filterItems = new DefaultListModel<Object>();
+			ArrayList<String> names=getNames();
+			
+			names.stream().forEach((name) -> {
+				String filteredName=name.toString().toLowerCase();
+				if (filteredName.contains(searchTerm.toLowerCase())) {
+					filterItems.addElement(name);
+				}
+			});
+			DLMFiles=filterItems;
+			listFiles.setModel(DLMFiles);
+			
+		}
+	
+	
+	public viewFilePage() throws org.json.simple.parser.ParseException, IOException {
+		
+		
+		CmdFiles cmd = new CmdFiles();
+		try {
+			//Run Command Prompt
+			cmd.fileNames();
+			 //System.out.println();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		///////////////////////////////////////////
+		this.bindData();
+		///////////////////////////////////////////////////////////////
+		
+		
+		
+		
+		
+		
+		
+		
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.getContentPane().setLayout(null);
@@ -118,8 +205,19 @@ public class viewFilePage {
 		panel.add(fileLabel);
 		
 		searchFilesField = new JTextField();
-		searchFilesField.setForeground(Color.LIGHT_GRAY);
-		searchFilesField.setText("Search...");
+		searchFilesField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				try {
+					searchFilterFiles(searchFilesField.getText());
+				} catch (IOException | org.json.simple.parser.ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		searchFilesField.setForeground(Color.DARK_GRAY);
 		searchFilesField.setBounds(65, 14, 131, 20);
 		panel.add(searchFilesField);
 		searchFilesField.setColumns(10);
@@ -144,10 +242,12 @@ public class viewFilePage {
 		monthButton2.setBackground(Color.LIGHT_GRAY);
 		monthButton2.setBounds(332, 13, 90, 23);
 		panel.add(monthButton2);
+		listFiles.setFont(new Font("Rockwell", Font.PLAIN, 18));
 		
-		JList list = new JList();
-		list.setBounds(0, 46, 424, 389);
-		panelFiles.add(list);
+		
+		listFiles.setBounds(0, 46, 424, 389);
+		listFiles.setModel(DLMFiles);
+		panelFiles.add(listFiles);
 		
 		JLabel patient_pic = new JLabel("");
 		patient_pic.setBounds(10, 7, 87, 80);
@@ -171,11 +271,11 @@ public class viewFilePage {
 		panelInfo.add(dobLabelAns);
 		
 		
-		//Fill in text
-				sexLabelAns.setText(patientDirectory.sexSelected);
+		//Fill in metadata
+				sexLabelAns.setText(patientDirectory.sexSelected.toUpperCase());
 				weightLabelAns.setText(patientDirectory.weightSelected);
 				heightLabelAns.setText(patientDirectory.heightSelected);
-				ethnicityLabelAns.setText(patientDirectory.ethnicitySelected);
+				ethnicityLabelAns.setText(patientDirectory.ethnicitySelected.toUpperCase());
 				dobLabelAns.setText(patientDirectory.dobSelected);
 				modifiedLabelAns.setText(patientDirectory.dateModifiedSelected);
 				createdLabelAns.setText(patientDirectory.dateCreatedSelected);
@@ -188,4 +288,32 @@ public class viewFilePage {
 		frame.setBounds(100, 100, 445, 586);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+	
+	private ArrayList<String> getNames() throws IOException, org.json.simple.parser.ParseException
+	{
+		ArrayList<String> names =new ArrayList<String>();
+		FileReader reader = new FileReader("../client/file_data.json");
+		JSONParser parser = new JSONParser();
+		
+		b = (JSONArray) parser.parse(reader);
+		//System.out.println(a);
+		// https://stackoverflow.com/questions/10926353/how-to-read-json-file-into-java-with-simple-json-library
+		String name, fileName;
+		for (Object o : b) {
+		    JSONObject person = (JSONObject) o;
+		    
+		    //Fill in JList with First name and Last name
+		    name = (String) person.get("title");
+		    fileName = name.substring(0, 1).toUpperCase() + name.substring(1);
+	
+		    names.add(fileName);
+		    
+		    
+		    //names.add(name);
+		}
+		
+		
+		return names;
+	}
+	
 }
