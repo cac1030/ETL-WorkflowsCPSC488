@@ -47,7 +47,7 @@ public class viewFilePage {
 			
 		//Navigate into Client folder and run Python3 script to fetch patients
         ProcessBuilder builder = new ProcessBuilder(
-        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_files_info.py " + "-a "+ "0 " + patientDirectory.fname + "_" + patientDirectory.lname); 
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_files_info.py " + "-a "+ "0 " + patientDirectory.firstName.toUpperCase() + "_" + patientDirectory.lastName.toUpperCase()); 
       
         builder.redirectErrorStream(true);
         Process p = builder.start();
@@ -101,12 +101,6 @@ public class viewFilePage {
 		///////////////////////////////////////////
 		this.bindData();
 		///////////////////////////////////////////////////////////////
-		
-		
-		
-		
-		
-		
 		
 		
 		frame = new JFrame();

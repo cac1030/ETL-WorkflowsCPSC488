@@ -56,8 +56,8 @@ public class patientDirectory {
 	private final JScrollPane scrollPane = new JScrollPane();
 	public static String nameSelected="";
 	public static String sexSelected="";
-	public static String fname="";
-	public static String lname="";
+	public static String firstName="";
+	public static String lastName="";
 	public static String weightSelected="";
 	public static String heightSelected="" ;
 	public static String ethnicitySelected ="";
@@ -172,7 +172,10 @@ public class patientDirectory {
 					indicies = nameList.getSelectedIndex();
 					
 					//Send Info Selected to View Info Page
+					
 					JSONObject selected = (JSONObject) a.get(indicies);
+					firstName = (String) selected.get("first_name");
+				    lastName = (String) selected.get("last_name");
 					dobSelected = (String) selected.get("dob");
 				    dateCreatedSelected = (String) selected.get("date_created");
 				    dateModifiedSelected = (String) selected.get("date_modified");
@@ -257,7 +260,7 @@ public class patientDirectory {
 		a = (JSONArray) parser.parse(reader);
 		//System.out.println(a);
 		// https://stackoverflow.com/questions/10926353/how-to-read-json-file-into-java-with-simple-json-library
-		String name;
+		String name,fname,lname;
 		for (Object o : a) {
 		    JSONObject person = (JSONObject) o;
 		    
