@@ -47,7 +47,7 @@ public class viewFilePage {
 			
 		//Navigate into Client folder and run Python3 script to fetch patients
         ProcessBuilder builder = new ProcessBuilder(
-        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_files_info.py " + "-a "+ "0" + patientDirectory.nameSelected ); 
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_files_info.py " + "-a "+ "0 " + patientDirectory.fname + "_" + patientDirectory.lname); 
       
         builder.redirectErrorStream(true);
         Process p = builder.start();
@@ -247,6 +247,7 @@ public class viewFilePage {
 		
 		listFiles.setBounds(0, 46, 424, 389);
 		listFiles.setModel(DLMFiles);
+		listFiles.setSelectionBackground(Color.lightGray);
 		panelFiles.add(listFiles);
 		
 		JLabel patient_pic = new JLabel("");
