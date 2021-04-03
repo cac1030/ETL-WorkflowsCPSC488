@@ -227,6 +227,7 @@ def dir_exists(dir):
     output = run_cmd("ils " + dir)
     print(output)
     if output.find("does not exist") != -1:
+        print(str(output.find("does not exist")))
         return True
     else:
         return False
