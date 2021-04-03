@@ -360,5 +360,4 @@ def put_to_irods(filename, patient_name):
 setup_server()
 while True:
     client_socket, address = handle_connection()
-    # Thread(target=process_request, args=(client_socket, address)).start()
-    process_request(client_socket, address)
+    Thread(target=process_request, args=(client_socket, address)).start()
