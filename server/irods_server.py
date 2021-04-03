@@ -28,9 +28,9 @@ def setup_server():
         s.bind((SERVER_HOST, SERVER_PORT))
     except socket.error as e:
         print(f"[X] Error creating and binding socket: {e}")
-        sys.exit(1)
         s.shutdown(socket.SHUT_RDWR)
         s.close()
+        sys.exit(1)
     else:
         print(f"[...] Socket created and bound successfully")
 
@@ -43,13 +43,14 @@ def handle_connection():
         client_socket, address = s.accept()
     except socket.error as e:
         print(f"[X] Error establishing connection: {e}")
-        sys.exit(1)
         s.shutdown(socket.SHUT_RDWR)
         s.close()
+        sys.exit(1)
     except KeyboardInterrupt:
         print(f"[---] Server safely closed")
         s.shutdown(socket.SHUT_RDWR)
         s.close()
+        sys.exit(1)
     else:
         print(f"[+] {address} is connected.")
 
@@ -61,9 +62,9 @@ def process_request(client_socket, address):
         received = client_socket.recv(BUFFER_SIZE).decode()
     except socket.error as e:
         print(f"[X] Error receiving request: {e}")
-        sys.exit(1)
         s.shutdown(socket.SHUT_RDWR)
         s.close()
+        sys.exit(1)
     else:
         print(f"[<] Received {received} from {address}")
         request, data = received.split('!')
@@ -86,6 +87,7 @@ def process_request(client_socket, address):
         }
 
     message = switcher[request](args[request])
+    client_socket.close()
     print(message)
 
 # corresponding functions for each client script
@@ -111,14 +113,14 @@ def receive_file(args):
                 progress.update(len(bytes_read))
         except socket.error as e:
             print(f"[X] Error receiving file: {e}")
-            sys.exit(1)
             s.shutdown(socket.SHUT_RDWR)
             s.close()
+            sys.exit(1)
         except IOError as e:
             print(f"[X] Error writing file: {e}")
-            sys.exit(1)
             s.shutdown(socket.SHUT_RDWR)
             s.close()
+            sys.exit(1)
         else:
             print(f"[<] {filename} received from {address}")
 
@@ -133,9 +135,9 @@ def add_patient(args):
         patient_data = json.loads(args[0])
     except ValueError as e:
         print(f"Error loading json: {e}")
-        sys.exit(1)
         s.shutdown(socket.SHUT_RDWR)
         s.close()
+        sys.exit(1)
 
     # check if patient exists
     dir_path = f"/tempZone/home/public/{patient_data['last_name'].upper()}_{patient_data['first_name'].upper()}"
@@ -163,9 +165,9 @@ def edit_patient(args):
         patient_data = json.loads(args[0])
     except ValueError as e:
         print(f"[X] Error loading json: {e}")
-        sys.exit(1)
         s.shutdown(socket.SHUT_RDWR)
         s.close()
+        sys.exit(1)
 
     # set dir metadata to new values
     dir_path = f"/tempZone/home/public/{patient_data['last_name'].upper()}_{patient_data['first_name'].upper()}"
@@ -204,9 +206,9 @@ def send_patients_info(args):
         client_socket.send(json.dumps(patient_data).encode())
     except OSError as e:
         print(f"[X] Error sending patient data: {e}")
-        sys.exit(1)
         s.shutdown(socket.SHUT_RDWR)
         s.close()
+        sys.exit(1)
     else:
         print(f"[>] Patient data sent successfully")
 
@@ -231,9 +233,9 @@ def send_patient_files(args):
         client_socket.send(data_bytes)
     except OSError as e:
         print(f"[X] Error sending file data: {e}")
-        sys.exit(1)
         s.shutdown(socket.SHUT_RDWR)
         s.close()
+        sys.exit(1)
     else:
         print(f"[>] File data sent successfully | {len(data_bytes)} bytes")
 
@@ -252,9 +254,9 @@ def run_cmd(cmd):
         output = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
     except subprocess.CalledProcessError as e:
         print(f"[X] Error executing cmd: \"{cmd}:\"\n\t{e}")
-        sys.exit(1)
         s.shutdown(socket.SHUT_RDWR)
         s.close()
+        sys.exit(1)
     else:
         print(f"[O] Executed cmd: \"{cmd}\"")
         return output
@@ -311,9 +313,9 @@ def unzip_file(path):
             zip_ref.extractall("./temp")
     except Exception as e:
         print(f"Error unzipping file: {e}")
-        sys.exit(1)
         s.shutdown(socket.SHUT_RDWR)
         s.close()
+        sys.exit(1)
     else:
         os.system("rm client.zip")
 
@@ -324,14 +326,14 @@ def put_to_irods(filename, patient_name):
             data = json.load(f)
     except IOError as e:
         print(f"[X] Error opening metadata file: {e}")
-        sys.exit(1)
         s.shutdown(socket.SHUT_RDWR)
         s.close()
+        sys.exit(1)
     except ValueError as e:
         print(f"[X] Error loading json: {e}")
-        sys.exit(1)
         s.shutdown(socket.SHUT_RDWR)
         s.close()
+        sys.exit(1)
 
     # find any files matching the name exactly, as well as any names that match the format of a copy
     namelets = filename.split('.')
