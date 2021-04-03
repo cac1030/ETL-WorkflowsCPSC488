@@ -125,8 +125,12 @@ def add_patient(args):
         print(f"Error loading json: {e}")
         sys.exit(1)
 
-    # create new patient dir and insert metadata
+    # check if patient exists
     dir_path = f"/tempZone/home/public/{patient_data['last_name'].upper()}_{patient_data['first_name'].upper()}"
+    if dir_exists(dir_path):
+        return f"[X] Could not fulfill REQ_PATIENT_ADD by {address}: patient already exists"
+
+    # create new patient dir and insert metadata
     run_cmd(f"imkdir {dir_path}")
     run_cmd(f"imeta add -C {dir_path} first_name {patient_data['first_name']}")
     run_cmd(f"imeta add -C {dir_path} middle_name {patient_data['middle_name']}")
@@ -218,6 +222,14 @@ def send_patient_files(args):
     return f"[O] REQ_FILES by {address} fulfilled"
 
 # utility
+def dir_exists(dir):
+    print("Checking dir")
+    output = run_cmd("ils " + dir)
+    if output.find("does not exist") != -1:
+        return true
+    else:
+        return false
+
 def run_cmd(cmd):
     try:
         output = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
