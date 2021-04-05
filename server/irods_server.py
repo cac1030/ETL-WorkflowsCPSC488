@@ -243,9 +243,7 @@ def send_patient_files(args):
 
 # utility
 def dir_exists(dir):
-    output = run_cmd("ils " + dir)
-    print(output.find("does not exist"))
-    print(output)
+    output = subprocess.run(['ils', dir], stderr=subprocess.PIPE).stderr.decode('utf-8')
     if output.find("does not exist") == -1:
         return True
     else:
