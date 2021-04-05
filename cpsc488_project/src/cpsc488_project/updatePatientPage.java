@@ -275,6 +275,19 @@ public class updatePatientPage {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		dateModifiedField.setText(df.format(date));
 		
+		fnameField.setText(patientDirectory.firstName.toUpperCase());
+		lnameField.setText(patientDirectory.lastName.toUpperCase());
+		mnameField.setText(patientDirectory.middleName.toUpperCase());
+		sexField.setText(patientDirectory.sexSelected.toUpperCase());
+		weightField.setText(patientDirectory.weightSelected);
+		heightField.setText(patientDirectory.heightSelected);
+		ethnicityField.setText(patientDirectory.ethnicitySelected.toUpperCase());
+		dobField.setText(patientDirectory.dobSelected);
+		
+		dateCreatedField.setText(patientDirectory.dateCreatedSelected);
+		
+		
+		
 		
 		btnSubmit.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {

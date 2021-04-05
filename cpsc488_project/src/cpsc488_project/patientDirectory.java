@@ -60,6 +60,7 @@ public class patientDirectory {
 	public static String lastName="";
 	public static String weightSelected="";
 	public static String heightSelected="" ;
+	public static String middleName="" ;
 	public static String ethnicitySelected ="";
 	public static String dobSelected ="";
 	public static String dateCreatedSelected ="";
@@ -177,6 +178,7 @@ public class patientDirectory {
 					firstName = (String) selected.get("first_name");
 				    lastName = (String) selected.get("last_name");
 					dobSelected = (String) selected.get("dob");
+					middleName = (String) selected.get("middle_name");
 				    dateCreatedSelected = (String) selected.get("date_created");
 				    dateModifiedSelected = (String) selected.get("date_modified");
 				    sexSelected = (String) selected.get("sex");
