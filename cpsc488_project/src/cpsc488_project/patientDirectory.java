@@ -21,12 +21,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Date;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
@@ -152,7 +156,7 @@ public class patientDirectory {
 				public void mouseClicked(MouseEvent e) {
 					
 					
-		
+					
 					nameSelected=nameList.getSelectedValue().toString();
 					
 					nameList.setSelectedIndex(nameList.locationToIndex(e.getPoint()));
@@ -169,6 +173,17 @@ public class patientDirectory {
 					middleName = (String) selected.get("middle_name");
 				    dateCreatedSelected = (String) selected.get("date_created");
 				    dateModifiedSelected = (String) selected.get("date_modified");
+				    
+				    
+					
+					Date formated = new Date(Long.parseLong(dateCreatedSelected) * 1000);
+					Date formated2 = new Date(Long.parseLong(dateModifiedSelected) * 1000);
+					
+					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				    
+				    dateCreatedSelected = (df.format(formated));
+				    dateModifiedSelected = (df.format(formated2));
+				   
 				    sexSelected = (String) selected.get("sex");
 				    weightSelected = (String) selected.get("weight");
 				    heightSelected = (String) selected.get("height");
@@ -176,7 +191,7 @@ public class patientDirectory {
 					
 					
 					
-					
+			
 					
 					//Right click open popup
 					if (SwingUtilities.isRightMouseButton(e) && nameList.locationToIndex(e.getPoint())==nameList.getSelectedIndex())

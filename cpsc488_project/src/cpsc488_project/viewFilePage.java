@@ -11,7 +11,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JPanel;
@@ -267,8 +271,18 @@ public class viewFilePage {
 				JSONObject selected = (JSONObject) b.get(indicies);
 				
 				title = (String) selected.get("title");
+				
 				dateCreated = (String) selected.get("date_created");
 				dateModified = (String) selected.get("date_modified");
+				
+				Date formated = new Date(Long.parseLong(dateCreated) * 1000);
+				Date formated2 = new Date(Long.parseLong(dateModified) * 1000);
+				
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				
+				 dateCreated = (df.format(formated));
+				 dateModified = (df.format(formated2));
+				
 				overseeing = (String) selected.get("overseeing");
 				notes = (String) selected.get("notes");
 				
