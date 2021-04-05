@@ -254,7 +254,7 @@ def retreive_matching_file_list(patient_dir, file_age, search_terms):
     # select files that match the target age and search terms (if any)
     for file in all_files:
         date_create = int(run_cmd(f"imeta ls -d '{patient_dir}/{file}' date_create | awk '/value/ {{print $2}}'"))
-        title = rum_cmd(f"imeta ls -d '{patient_dir}/{file}' title | awk '/value/ {{print $2}}'")
+        title = run_cmd(f"imeta ls -d '{patient_dir}/{file}' title | awk '/value/ {{print $2}}'")
         if date_create >= age:
             if search_terms != 'None':
                 if title.find(search_terms) != -1:
@@ -268,7 +268,7 @@ def parse_file_metadata(patient_dir, file_matches):
     file_data = []
     for match in file_matches:
         meta = {}
-        result = rum_cmd(f"imeta ls -d '{patient_dir}/{match}' | awk '/^[av]/' | cut -f2 -d ' '").splitlines()
+        result = run_cmd(f"imeta ls -d '{patient_dir}/{match}' | awk '/^[av]/' | cut -f2 -d ' '").splitlines()
         for i in range(0, len(result), 2):
             meta[result[i]] = result[i+1]
         file_data.append(meta)

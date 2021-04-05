@@ -47,6 +47,7 @@ public class viewFilePage {
 			
 		//Navigate into Client folder and run Python3 script to fetch patients
         ProcessBuilder builder = new ProcessBuilder(
+        		//Shows All Files
         		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_files_info.py " + "-a "+ "0 " + patientDirectory.lastName.toUpperCase() + "_" + patientDirectory.firstName.toUpperCase()); 
       
         builder.redirectErrorStream(true);
@@ -93,10 +94,10 @@ public class viewFilePage {
 		try {
 			//Run Command Prompt
 			cmd.fileNames();
-			 //System.out.println();
+			 System.out.println();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+		e.printStackTrace();
 		}
 		///////////////////////////////////////////
 		this.bindData();
@@ -120,7 +121,7 @@ public class viewFilePage {
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBackground(Color.WHITE);
-		tabbedPane.setBounds(0, 90, 429, 463);
+		tabbedPane.setBounds(0, 90, 457, 463);
 		frame.getContentPane().add(tabbedPane);
 		
 		Panel panelInfo = new Panel();
@@ -188,7 +189,7 @@ public class viewFilePage {
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.GRAY);
-		panel.setBounds(0, 0, 424, 47);
+		panel.setBounds(0, 0, 452, 47);
 		panelFiles.add(panel);
 		panel.setLayout(null);
 		
@@ -220,26 +221,40 @@ public class viewFilePage {
 		allButton.setForeground(Color.WHITE);
 		allButton.setFont(new Font("Tahoma", Font.BOLD, 10));
 		allButton.setBackground(Color.LIGHT_GRAY);
-		allButton.setBounds(197, 13, 48, 23);
+		allButton.setBounds(202, 13, 48, 23);
 		panel.add(allButton);
 		
-		JButton monthButton1 = new JButton("6 MONTH");
+		JButton monthButton1 = new JButton("5 YEARS");
 		monthButton1.setForeground(Color.WHITE);
 		monthButton1.setFont(new Font("Tahoma", Font.BOLD, 10));
 		monthButton1.setBackground(Color.LIGHT_GRAY);
-		monthButton1.setBounds(245, 13, 87, 23);
+		monthButton1.setBounds(255, 0, 84, 23);
 		panel.add(monthButton1);
 		
-		JButton monthButton2 = new JButton("1 MONTH");
+		JButton monthButton2 = new JButton("1 YEAR");
 		monthButton2.setForeground(Color.WHITE);
 		monthButton2.setFont(new Font("Tahoma", Font.BOLD, 10));
 		monthButton2.setBackground(Color.LIGHT_GRAY);
-		monthButton2.setBounds(332, 13, 90, 23);
+		monthButton2.setBounds(255, 24, 84, 23);
 		panel.add(monthButton2);
+		
+		JButton btnMonths = new JButton("6 MONTHS");
+		btnMonths.setForeground(Color.WHITE);
+		btnMonths.setFont(new Font("Tahoma", Font.BOLD, 10));
+		btnMonths.setBackground(Color.LIGHT_GRAY);
+		btnMonths.setBounds(347, 0, 94, 23);
+		panel.add(btnMonths);
+		
+		JButton monthButton2_1_1 = new JButton("1 MONTH");
+		monthButton2_1_1.setForeground(Color.WHITE);
+		monthButton2_1_1.setFont(new Font("Tahoma", Font.BOLD, 10));
+		monthButton2_1_1.setBackground(Color.LIGHT_GRAY);
+		monthButton2_1_1.setBounds(347, 24, 94, 23);
+		panel.add(monthButton2_1_1);
 		listFiles.setFont(new Font("Rockwell", Font.PLAIN, 18));
 		
 		
-		listFiles.setBounds(0, 46, 424, 389);
+		listFiles.setBounds(0, 46, 446, 389);
 		listFiles.setModel(DLMFiles);
 		listFiles.setSelectionBackground(Color.lightGray);
 		panelFiles.add(listFiles);
@@ -277,10 +292,10 @@ public class viewFilePage {
 				
 				JLabel backgroundLabel = new JLabel("");
 				backgroundLabel.setIcon(new ImageIcon(viewFilePage.class.getResource("/cpsc488_project/bluebackground.jpg")));
-				backgroundLabel.setBounds(0, 0, 429, 131);
+				backgroundLabel.setBounds(0, 0, 449, 131);
 				frame.getContentPane().add(backgroundLabel);
 		
-		frame.setBounds(100, 100, 445, 586);
+		frame.setBounds(100, 100, 465, 586);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
@@ -310,5 +325,4 @@ public class viewFilePage {
 		
 		return names;
 	}
-	
 }

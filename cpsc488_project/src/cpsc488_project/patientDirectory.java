@@ -79,7 +79,7 @@ public class patientDirectory {
 			
 		//Navigate into Client folder and run Python3 script to fetch patients
         ProcessBuilder builder = new ProcessBuilder(
-        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient_fetch.py " + "-f");
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient.py " + "-f");
       
         builder.redirectErrorStream(true);
         Process p = builder.start();

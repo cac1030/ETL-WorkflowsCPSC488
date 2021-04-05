@@ -61,7 +61,7 @@ public class addPatientPage {
 	public class Cmd {
 		public void test(String DATA) throws Exception {
 			
-		//Navigate into Client folder and run python script to add patient
+		//Navigate into Client folder and run python3 script to add patient
         ProcessBuilder builder = new ProcessBuilder(
         		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient.py " + "-a " + DATA);
         builder.redirectErrorStream(true);
