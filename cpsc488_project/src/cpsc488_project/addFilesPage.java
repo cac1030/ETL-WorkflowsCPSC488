@@ -82,7 +82,7 @@ public class addFilesPage {
 		
 		
 		JLabel physicianlabel = new JLabel("Overseeing Physician:");
-		physicianlabel.setBounds(202, 249, 116, 14);
+		physicianlabel.setBounds(202, 249, 167, 14);
 		frame.getContentPane().add(physicianlabel);
 		
 		
@@ -188,16 +188,14 @@ public class addFilesPage {
 				//Upload File
 					//Write data to File Meta.txt
 					//For Date Created/Modified
-					Date date = new Date();
-					DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
 					
-					String dateCreated= (df2.format(date));
-					String dateModified = (df2.format(date));
+					int secs = (int) ((new Date().getTime())/1000);
+					
 					
 					//To JSON format
 					String metadata = "{\n" +  "\""+ "title" + "\"" + ":" + "\"" + metadataTitleField.getText() + "\"" + ",\n" 
-							+ "\"" + "date_created" + "\"" + ":" + "\"" + dateCreated  + "\"" + ",\n" 
-							+ "\"" + "date_modified" + "\"" + ":" + "\"" + dateModified  + "\"" + ",\n" 
+							+ "\"" + "date_created" + "\"" + ":" + "\"" + secs  + "\"" + ",\n" 
+							+ "\"" + "date_modified" + "\"" + ":" + "\"" + secs  + "\"" + ",\n" 
 							+ "\"" + "overseeing" + "\"" + ":" + "\"" + metadataPhysicianField.getText()  + "\"" + ",\n" 
 							+ "\"" + "notes"  + "\"" + ":" + "\"" + metadataNotesField.getText() + "\"" + "\n" + "}";
 					

@@ -262,7 +262,6 @@ public class viewFilePage {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				
 				indicies = listFiles.getSelectedIndex();
 				
 				JSONObject selected = (JSONObject) b.get(indicies);
@@ -273,7 +272,7 @@ public class viewFilePage {
 				overseeing = (String) selected.get("overseeing");
 				notes = (String) selected.get("notes");
 				
-				//Right click open popup
+				//Right click open pop up
 				if (SwingUtilities.isRightMouseButton(e) && listFiles.locationToIndex(e.getPoint())==listFiles.getSelectedIndex())
 				{
 					if(! listFiles.isSelectionEmpty()) {

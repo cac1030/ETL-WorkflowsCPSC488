@@ -25,10 +25,10 @@ public class updatePatientPage {
 
 	//TextFields
 	private JTextField fnameField;
-	private JTextField dateCreatedField;
+	private JLabel dateCreatedField;
 	private JTextField weightField;
 	private JTextField lnameField;
-	private JTextField dateModifiedField;
+	private JLabel dateModifiedField;
 	private JTextField heightField;
 	private JTextField dobField;
 	private JTextField sexField;
@@ -99,8 +99,7 @@ public class updatePatientPage {
 		frame.getContentPane().add(fnameField);
 		fnameField.setColumns(10);
 		
-		dateCreatedField = new JTextField();
-		dateCreatedField.setColumns(10);
+		dateCreatedField = new JLabel();
 		dateCreatedField.setBounds(188, 150, 152, 20);
 		frame.getContentPane().add(dateCreatedField);
 		
@@ -129,8 +128,7 @@ public class updatePatientPage {
 		lnameField.setBounds(430, 119, 152, 20);
 		frame.getContentPane().add(lnameField);
 		
-		dateModifiedField = new JTextField();
-		dateModifiedField.setColumns(10);
+		dateModifiedField = new JLabel();
 		dateModifiedField.setBounds(500, 150, 203, 20);
 		frame.getContentPane().add(dateModifiedField);
 		
@@ -326,11 +324,12 @@ public class updatePatientPage {
 				else {
 					//All Fields are filled in
 					
-					//Parse Data into Json format
+					int secs = (int) ((new Date().getTime())/1000);
+					//Parse Data into JSON format
 					String DATA = "\""+ "{\\\"\"first_name\\\"" + ":" + "\\\"" + fnameField.getText() + "\\\"" + ","
 							+ "\\\"last_name\\\"" + ":" + "\\\"" + lnameField.getText() + "\\\"" + ","
 							+"\\\"date_created\\\"" + ":" + "\\\"" + dateCreatedField.getText() + "\\\"" + ","
-							+"\\\"date_modified\\\"" + ":" + "\\\"" + dateModifiedField.getText() + "\\\"" + ","
+							+"\\\"date_modified\\\"" + ":" + "\\\"" + secs + "\\\"" + ","
 							+"\\\"height\\\"" + ":" + "\\\"" + heightField.getText() + "\\\"" + ","
 							+"\\\"weight\\\"" + ":" + "\\\"" + weightField.getText() + "\\\"" + ","
 							+"\\\"dob\\\"" + ":" + "\\\"" + dobField.getText() + "\\\"" + ","
