@@ -353,7 +353,7 @@ def put_to_irods(filename, patient_name):
         # use original filename
         new_filename = filename
 
-    run_cmd(f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{new_filename} --metadata=\"date_create;{data['date']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\"")
+    run_cmd(f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{new_filename} --metadata=\"date_created;{data['date_created']};;date_modified;{data['date_modified']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\"")
 
 #########################################################
 
