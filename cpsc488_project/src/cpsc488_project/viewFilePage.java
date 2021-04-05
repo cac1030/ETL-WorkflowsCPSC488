@@ -42,8 +42,8 @@ public class viewFilePage {
 	private final JPopupMenu pop = new JPopupMenu();
 	public int indicies;
 	public static String title = "";
-	public static String dateCreated = "";
-	public static String dateModified = "";
+	public static String dateCreated ;
+	public static String dateModified;
 	public static String overseeing = "";
 	public static String notes = "";
 	
@@ -267,8 +267,8 @@ public class viewFilePage {
 				JSONObject selected = (JSONObject) b.get(indicies);
 				
 				title = (String) selected.get("title");
-				dateCreated = (String) selected.get("date_create");
-				dateModified = (String) selected.get("date_Modified");
+				dateCreated = (String) selected.get("date_created");
+				dateModified = (String) selected.get("date_modified");
 				overseeing = (String) selected.get("overseeing");
 				notes = (String) selected.get("notes");
 				

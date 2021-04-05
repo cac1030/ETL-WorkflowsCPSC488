@@ -328,7 +328,7 @@ public class updatePatientPage {
 					//Parse Data into JSON format
 					String DATA = "\""+ "{\\\"\"first_name\\\"" + ":" + "\\\"" + fnameField.getText() + "\\\"" + ","
 							+ "\\\"last_name\\\"" + ":" + "\\\"" + lnameField.getText() + "\\\"" + ","
-							+"\\\"date_created\\\"" + ":" + "\\\"" + dateCreatedField.getText() + "\\\"" + ","
+							+"\\\"date_created\\\"" + ":" + "\\\"" + secs + "\\\"" + "," //Needs Fixed
 							+"\\\"date_modified\\\"" + ":" + "\\\"" + secs + "\\\"" + ","
 							+"\\\"height\\\"" + ":" + "\\\"" + heightField.getText() + "\\\"" + ","
 							+"\\\"weight\\\"" + ":" + "\\\"" + weightField.getText() + "\\\"" + ","
