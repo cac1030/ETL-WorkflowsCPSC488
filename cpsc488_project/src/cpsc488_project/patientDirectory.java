@@ -134,7 +134,7 @@ public class patientDirectory {
 		////////////////////////////////////////////////////////
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 460, 576);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		lblRightClickA.setVerticalAlignment(SwingConstants.TOP);
 		lblRightClickA.setBounds(108, 486, 278, 28);

@@ -42,11 +42,11 @@ public class addFilesPage {
 	private JTextField metadataPhysicianField;
 
 	public class CmdFiles {
-		public void uploadFile(String PATIENT_NAME, String filename) throws Exception {
+		public void uploadFile(String filename) throws Exception {
 		
 		//Navigate into Client folder and run Python3 script to add patient
         ProcessBuilder builder = new ProcessBuilder(
-        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_up.py " + PATIENT_NAME + " " + filename);
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_up.py " + patientDirectory.lastName.toUpperCase() + "_" + patientDirectory.firstName.toUpperCase() + " " + filename);
         builder.redirectErrorStream(true);
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -125,7 +125,7 @@ public class addFilesPage {
 		fileNameLabel.setBounds(145, 142, 161, 14);
 		frame.getContentPane().add(fileNameLabel);
 		frame.setBounds(100, 100, 405, 504);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
 		filesPatientLabel.setText(patientDirectory.nameSelected);
@@ -221,7 +221,7 @@ public class addFilesPage {
 				//Run Python3	
 				CmdFiles cmd = new CmdFiles();
 				try {
-					cmd.uploadFile(PATIENT_NAME,filename);
+					cmd.uploadFile(filename);
 					JOptionPane.showMessageDialog(null, "File Added");
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block

@@ -336,7 +336,7 @@ public class viewFilePage {
 				frame.getContentPane().add(backgroundLabel);
 		
 		frame.setBounds(100, 100, 465, 586);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	private ArrayList<String> getNames() throws IOException, org.json.simple.parser.ParseException
