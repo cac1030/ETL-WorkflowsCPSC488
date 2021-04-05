@@ -1,12 +1,9 @@
 package cpsc488_project;
 
-import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
-import javax.swing.JTextField;
-
 import org.json.simple.parser.ParseException;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Font;

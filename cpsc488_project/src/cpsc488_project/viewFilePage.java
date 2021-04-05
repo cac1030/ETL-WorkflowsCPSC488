@@ -1,6 +1,5 @@
 package cpsc488_project;
 
-import java.awt.EventQueue;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -13,21 +12,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
-
+import javax.swing.SwingUtilities;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
-import cpsc488_project.patientDirectory.CmdPatients;
-
 import javax.swing.JButton;
 import javax.swing.JList;
-
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -40,6 +39,14 @@ public class viewFilePage {
 	public JSONArray b;
 	DefaultListModel<Object> DLMFiles = new DefaultListModel<Object>();
 	private final JList<Object> listFiles = new JList<Object>();
+	private final JPopupMenu pop = new JPopupMenu();
+	public int indicies;
+	public static String title = "";
+	public static String dateCreated = "";
+	public static String dateModified = "";
+	public static String overseeing = "";
+	public static String notes = "";
+	
 	
 	
 	public class CmdFiles {
@@ -102,7 +109,7 @@ public class viewFilePage {
 		///////////////////////////////////////////
 		this.bindData();
 		///////////////////////////////////////////////////////////////
-		
+		addPopup();
 		
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
@@ -251,6 +258,35 @@ public class viewFilePage {
 		monthButton2_1_1.setBackground(Color.LIGHT_GRAY);
 		monthButton2_1_1.setBounds(347, 24, 94, 23);
 		panel.add(monthButton2_1_1);
+		listFiles.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				
+				indicies = listFiles.getSelectedIndex();
+				
+				JSONObject selected = (JSONObject) b.get(indicies);
+				
+				title = (String) selected.get("title");
+				dateCreated = (String) selected.get("date_create");
+				dateModified = (String) selected.get("date_Modified");
+				overseeing = (String) selected.get("overseeing");
+				notes = (String) selected.get("notes");
+				
+				//Right click open popup
+				if (SwingUtilities.isRightMouseButton(e) && listFiles.locationToIndex(e.getPoint())==listFiles.getSelectedIndex())
+				{
+					if(! listFiles.isSelectionEmpty()) {
+						
+						pop.show(listFiles,e.getX(),e.getY());
+						
+					}
+					
+				}
+			
+				
+			}
+		});
 		listFiles.setFont(new Font("Rockwell", Font.PLAIN, 18));
 		
 		
@@ -290,6 +326,10 @@ public class viewFilePage {
 				modifiedLabelAns.setText(patientDirectory.dateModifiedSelected);
 				createdLabelAns.setText(patientDirectory.dateCreatedSelected);
 				
+				
+				
+				
+				
 				JLabel backgroundLabel = new JLabel("");
 				backgroundLabel.setIcon(new ImageIcon(viewFilePage.class.getResource("/cpsc488_project/bluebackground.jpg")));
 				backgroundLabel.setBounds(0, 0, 449, 131);
@@ -324,5 +364,51 @@ public class viewFilePage {
 		
 		
 		return names;
+	}
+	
+	
+	private void addPopup() {
+		
+		//Image Sources
+		//https://iconscout.com/icon/open-folder-2120181
+		//https://www.iconfinder.com/icons/115801/settings_icon
+		JMenuItem Open =new JMenuItem("Open File", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/open.png")));
+		JMenuItem Properties =new JMenuItem("Properties", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/properties.png")));
+		
+		
+		
+		
+		pop.add(Open);
+		pop.add(Properties);
+		
+		
+		
+		Open.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		Properties.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JFrame f;
+				f= new JFrame();
+				
+				JOptionPane.showMessageDialog(f,"Title: " + title +"\n" +"Date Created: " + dateCreated + "\n" + "Date Modified: "+dateModified + "\n" + "Overseeing: " +overseeing + "\n" + "Notes: " + notes);
+				
+			}
+			
+		});
+	
+	
+	
+	
+	
 	}
 }
