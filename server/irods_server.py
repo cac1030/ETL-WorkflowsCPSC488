@@ -244,6 +244,8 @@ def send_patient_files(args):
 # utility
 def dir_exists(dir):
     output = run_cmd("ils " + dir)
+    print(output.find("does not exist"))
+    print(output)
     if output.find("does not exist") == -1:
         return True
     else:
