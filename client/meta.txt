@@ -1,7 +1,6 @@
 {
-"title":"X-Ray",
-"date_created":"1617651854",
-"date_modified":"1617651854",
-"overseeing":"Dr.Carr",
-"notes":"Ooooooooof"
+"title":"mri",
+"date":"1585870677",
+"overseeing":"klaus",
+"notes":"insert technical medical jargon here"
 }

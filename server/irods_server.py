@@ -243,9 +243,7 @@ def send_patient_files(args):
 
 # utility
 def dir_exists(dir):
-    output = run_cmd("ils " + dir)
-    print(output.find("does not exist"))
-    print(output)
+    output = subprocess.run(['ils', dir], stderr=subprocess.PIPE).stderr.decode('utf-8')
     if output.find("does not exist") == -1:
         return True
     else:
@@ -288,7 +286,7 @@ def retreive_matching_file_list(patient_dir, file_age, search_terms):
 
     # select files that match the target age and search terms (if any)
     for file in all_files:
-        date_create = int(run_cmd(f"imeta ls -d '{patient_dir}/{file}' date_create | awk '/value/ {{print $2}}'"))
+        date_create = int(run_cmd(f"imeta ls -d '{patient_dir}/{file}' date_created | awk '/value/ {{print $2}}'"))
         title = run_cmd(f"imeta ls -d '{patient_dir}/{file}' title | awk '/value/ {{print $2}}'")
         if date_create >= age:
             if search_terms != 'None':
@@ -355,7 +353,7 @@ def put_to_irods(filename, patient_name):
         # use original filename
         new_filename = filename
 
-    run_cmd(f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{new_filename} --metadata=\"date_create;{data['date']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\"")
+    run_cmd(f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{new_filename} --metadata=\"date_created;{data['date_created']};;date_modified;{data['date_modified']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\"")
 
 #########################################################
 
