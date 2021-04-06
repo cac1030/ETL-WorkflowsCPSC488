@@ -90,10 +90,10 @@ public class LoginPage implements ActionListener{
 		ImageLabel.setBounds(23, 128, 91, 90);
 		frame.getContentPane().add(ImageLabel);
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(LoginPage.class.getResource("/cpsc488_project/bluebackground.jpg")));
-		lblNewLabel.setBounds(0, 0, 554, 356);
-		frame.getContentPane().add(lblNewLabel);
+		JLabel backgroundpic = new JLabel("");
+		backgroundpic.setIcon(new ImageIcon(LoginPage.class.getResource("/cpsc488_project/bluebackground.jpg")));
+		backgroundpic.setBounds(0, 0, 554, 356);
+		frame.getContentPane().add(backgroundpic);
 		//Visible
 		frame.setVisible(true);
 	}
