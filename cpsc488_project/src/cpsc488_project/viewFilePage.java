@@ -339,6 +339,13 @@ public class viewFilePage {
 				modifiedLabelAns.setText(patientDirectory.dateModifiedSelected);
 				createdLabelAns.setText(patientDirectory.dateCreatedSelected);
 				
+				JLabel picLabel = new JLabel("");
+				//Source Image
+				//https://www.istockphoto.com/illustrations/persons-with-disabilities
+				picLabel.setIcon(new ImageIcon(viewFilePage.class.getResource("/cpsc488_project/viewbackground.jpg")));
+				picLabel.setBounds(0, 227, 442, 197);
+				panelInfo.add(picLabel);
+				
 				
 				
 				

@@ -40,8 +40,8 @@ public class LoginPage implements ActionListener{
 		userIDLabel.setBounds(137,150,75,25);
 		userPasswordLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		userPasswordLabel.setBounds(137,193,75,25);
-		titleLabel.setBounds(185,69,200,50);
-		titleLabel.setFont(new Font("Georgia", Font.BOLD, 35));
+		titleLabel.setBounds(185,69,229,50);
+		titleLabel.setFont(new Font("Rockwell", Font.BOLD, 40));
 		
 		//Add Labels to Frame
 		frame.getContentPane().add(userIDLabel);
@@ -89,6 +89,11 @@ public class LoginPage implements ActionListener{
 		ImageLabel.setIcon(new ImageIcon(LoginPage.class.getResource("/cpsc488_project/lock.png")));
 		ImageLabel.setBounds(23, 128, 91, 90);
 		frame.getContentPane().add(ImageLabel);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(LoginPage.class.getResource("/cpsc488_project/bluebackground.jpg")));
+		lblNewLabel.setBounds(0, 0, 554, 356);
+		frame.getContentPane().add(lblNewLabel);
 		//Visible
 		frame.setVisible(true);
 	}
