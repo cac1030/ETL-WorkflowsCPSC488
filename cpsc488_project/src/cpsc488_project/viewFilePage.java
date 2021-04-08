@@ -50,7 +50,7 @@ public class viewFilePage {
 	public static String dateModified;
 	public static String overseeing = "";
 	public static String notes = "";
-	
+	public int filterNum=0;
 	
 	
 	public class CmdFiles {
@@ -59,7 +59,8 @@ public class viewFilePage {
 		//Navigate into Client folder and run Python3 script to fetch patients
         ProcessBuilder builder = new ProcessBuilder(
         		//Shows All Files
-        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_files_info.py " + "-a "+ "0 " + patientDirectory.lastName.toUpperCase() + "_" + patientDirectory.firstName.toUpperCase()); 
+        		//Change Filter number to access different dates
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_files_info.py " + "-a "+ filterNum +" " + patientDirectory.lastName.toUpperCase() + "_" + patientDirectory.firstName.toUpperCase()); 
       
         builder.redirectErrorStream(true);
         Process p = builder.start();
@@ -100,7 +101,7 @@ public class viewFilePage {
 	
 	public viewFilePage() throws org.json.simple.parser.ParseException, IOException {
 		
-		
+		//Run Script
 		CmdFiles cmd = new CmdFiles();
 		try {
 			//Run Command Prompt
@@ -111,8 +112,10 @@ public class viewFilePage {
 		e.printStackTrace();
 		}
 		///////////////////////////////////////////
+		//Bind the new data to the jlist
 		this.bindData();
 		///////////////////////////////////////////////////////////////
+		//Run popup function
 		addPopup();
 		
 		frame = new JFrame();
@@ -214,6 +217,7 @@ public class viewFilePage {
 		searchFilesField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				//Run Search filter to search through files
 				try {
 					searchFilterFiles(searchFilesField.getText());
 				} catch (IOException | org.json.simple.parser.ParseException e1) {
@@ -233,13 +237,16 @@ public class viewFilePage {
 		allButton.setFont(new Font("Tahoma", Font.BOLD, 10));
 		allButton.setBackground(Color.LIGHT_GRAY);
 		allButton.setBounds(202, 13, 48, 23);
+		allButton.setFocusable(false);
 		panel.add(allButton);
 		
 		JButton monthButton1 = new JButton("5 YEARS");
+		
 		monthButton1.setForeground(Color.WHITE);
 		monthButton1.setFont(new Font("Tahoma", Font.BOLD, 10));
 		monthButton1.setBackground(Color.LIGHT_GRAY);
 		monthButton1.setBounds(255, 0, 84, 23);
+		monthButton1.setFocusable(false);
 		panel.add(monthButton1);
 		
 		JButton monthButton2 = new JButton("1 YEAR");
@@ -247,27 +254,32 @@ public class viewFilePage {
 		monthButton2.setFont(new Font("Tahoma", Font.BOLD, 10));
 		monthButton2.setBackground(Color.LIGHT_GRAY);
 		monthButton2.setBounds(255, 24, 84, 23);
+		monthButton2.setFocusable(false);
 		panel.add(monthButton2);
 		
-		JButton btnMonths = new JButton("6 MONTHS");
-		btnMonths.setForeground(Color.WHITE);
-		btnMonths.setFont(new Font("Tahoma", Font.BOLD, 10));
-		btnMonths.setBackground(Color.LIGHT_GRAY);
-		btnMonths.setBounds(347, 0, 94, 23);
-		panel.add(btnMonths);
+		JButton monthButton3 = new JButton("6 MONTHS");
+		monthButton3.setForeground(Color.WHITE);
+		monthButton3.setFont(new Font("Tahoma", Font.BOLD, 10));
+		monthButton3.setBackground(Color.LIGHT_GRAY);
+		monthButton3.setBounds(347, 0, 94, 23);
+		monthButton3.setFocusable(false);
+		panel.add(monthButton3);
 		
-		JButton monthButton2_1_1 = new JButton("1 MONTH");
-		monthButton2_1_1.setForeground(Color.WHITE);
-		monthButton2_1_1.setFont(new Font("Tahoma", Font.BOLD, 10));
-		monthButton2_1_1.setBackground(Color.LIGHT_GRAY);
-		monthButton2_1_1.setBounds(347, 24, 94, 23);
-		panel.add(monthButton2_1_1);
+		JButton monthButton4 = new JButton("1 MONTH");
+		monthButton4.setForeground(Color.WHITE);
+		monthButton4.setFont(new Font("Tahoma", Font.BOLD, 10));
+		monthButton4.setBackground(Color.LIGHT_GRAY);
+		monthButton4.setBounds(347, 24, 94, 23);
+		monthButton4.setFocusable(false);
+		panel.add(monthButton4);
 		listFiles.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
+				//Selected item in jlist returns index number
 				indicies = listFiles.getSelectedIndex();
 				
+				//Search through array with index number selected
 				JSONObject selected = (JSONObject) b.get(indicies);
 				
 				title = (String) selected.get("title");
@@ -275,6 +287,7 @@ public class viewFilePage {
 				dateCreated = (String) selected.get("date_created");
 				dateModified = (String) selected.get("date_modified");
 				
+				//Format date properly since it's a long number
 				Date formated = new Date(Long.parseLong(dateCreated) * 1000);
 				Date formated2 = new Date(Long.parseLong(dateModified) * 1000);
 				
@@ -330,7 +343,7 @@ public class viewFilePage {
 		panelInfo.add(dobLabelAns);
 		
 		
-		//Fill in metadata
+		//Fill in metadata for view info page
 				sexLabelAns.setText(patientDirectory.sexSelected.toUpperCase());
 				weightLabelAns.setText(patientDirectory.weightSelected);
 				heightLabelAns.setText(patientDirectory.heightSelected);
@@ -339,6 +352,7 @@ public class viewFilePage {
 				modifiedLabelAns.setText(patientDirectory.dateModifiedSelected);
 				createdLabelAns.setText(patientDirectory.dateCreatedSelected);
 				
+				//Background image
 				JLabel picLabel = new JLabel("");
 				//Source Image
 				//https://www.istockphoto.com/illustrations/persons-with-disabilities
@@ -355,6 +369,108 @@ public class viewFilePage {
 				backgroundLabel.setBounds(0, 0, 449, 131);
 				frame.getContentPane().add(backgroundLabel);
 		
+				
+				//When clicked filter by date's by simply changing filter number and rerunning the script
+				allButton.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						filterNum = 0;
+						
+						CmdFiles cmd = new CmdFiles();
+						try {
+							//Run Command Prompt
+							cmd.fileNames();
+							bindData();
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+						e1.printStackTrace();
+						}
+						///////////////////////////////////////////
+						
+					}
+				});
+				
+				monthButton1.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						filterNum = 1;
+						
+						CmdFiles cmd = new CmdFiles();
+						try {
+							//Run Command Prompt
+							cmd.fileNames();
+							bindData();
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+						e1.printStackTrace();
+						}
+						///////////////////////////////////////////
+						
+					}
+				});
+				
+				monthButton2.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						filterNum = 2;
+						
+						CmdFiles cmd = new CmdFiles();
+						try {
+							//Run Command Prompt
+							cmd.fileNames();
+							bindData();
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+						e1.printStackTrace();
+						}
+						///////////////////////////////////////////
+						
+					}
+					
+				});
+				
+				monthButton3.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						filterNum = 3;
+						
+						CmdFiles cmd = new CmdFiles();
+						try {
+							//Run Command Prompt
+							cmd.fileNames();
+							bindData();
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+						e1.printStackTrace();
+						}
+						///////////////////////////////////////////
+						
+					}
+				});
+				
+				monthButton4.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						filterNum = 4;
+						
+						CmdFiles cmd = new CmdFiles();
+						try {
+							//Run Command Prompt
+							cmd.fileNames();
+							bindData();
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+						e1.printStackTrace();
+						}
+						///////////////////////////////////////////
+						
+					}
+				});
+			
+				
+				
+				
+				
 		frame.setBounds(100, 100, 465, 586);
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -362,6 +478,7 @@ public class viewFilePage {
 	private ArrayList<String> getNames() throws IOException, org.json.simple.parser.ParseException
 	{
 		ArrayList<String> names =new ArrayList<String>();
+		//Search through file_data.json
 		FileReader reader = new FileReader("../client/file_data.json");
 		JSONParser parser = new JSONParser();
 		
@@ -372,7 +489,7 @@ public class viewFilePage {
 		for (Object o : b) {
 		    JSONObject person = (JSONObject) o;
 		    
-		    //Fill in JList with First name and Last name
+		    //Fill in Jlist with Title's of Files
 		    name = (String) person.get("title");
 		    fileName = name.substring(0, 1).toUpperCase() + name.substring(1);
 	
@@ -397,7 +514,7 @@ public class viewFilePage {
 		
 		
 		
-		
+		//Pop up options
 		pop.add(Open);
 		pop.add(Properties);
 		
@@ -408,7 +525,7 @@ public class viewFilePage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				//Open File
 			}
 			
 		});
@@ -417,9 +534,11 @@ public class viewFilePage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				//Create New Popup Frame
 				JFrame f;
 				f= new JFrame();
 				
+				//Popup with Properties
 				JOptionPane.showMessageDialog(f,"Title: " + title +"\n" +"Date Created: " + dateCreated + "\n" + "Date Modified: "+dateModified + "\n" + "Overseeing: " +overseeing + "\n" + "Notes: " + notes);
 				
 			}

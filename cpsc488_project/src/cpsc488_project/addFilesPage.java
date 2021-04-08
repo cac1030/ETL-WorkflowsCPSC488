@@ -44,7 +44,7 @@ public class addFilesPage {
 	public class CmdFiles {
 		public void uploadFile(String filename) throws Exception {
 		
-		//Navigate into Client folder and run Python3 script to add patient
+		//Navigate into Client folder and run Python3 script to add files
         ProcessBuilder builder = new ProcessBuilder(
         		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_up.py " + patientDirectory.lastName.toUpperCase() + "_" + patientDirectory.firstName.toUpperCase() + " " + filename);
         builder.redirectErrorStream(true);
