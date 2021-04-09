@@ -24,6 +24,7 @@ public class menuPage {
 		frame.setBounds(100, 100, 683, 391);
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.setResizable(false);
 		
 		
 		JButton PatientDirectoryButton = new JButton("Patient Directory");

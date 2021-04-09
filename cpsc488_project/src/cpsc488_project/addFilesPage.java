@@ -65,6 +65,7 @@ public class addFilesPage {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.getContentPane().setLayout(null);
+		frame.setResizable(false);
 		
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
 		metadataPhysicianField = new JTextField();
@@ -139,7 +140,7 @@ public class addFilesPage {
 			public void actionPerformed(ActionEvent e) {
 				//String filename;
 				int response;
-				JFileChooser filechooser = new JFileChooser("//Documents");
+				JFileChooser filechooser = new JFileChooser("../client");
 				
 				//Browse File Explorer for a file
 				filechooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);

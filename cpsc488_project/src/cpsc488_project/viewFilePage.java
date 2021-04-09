@@ -121,6 +121,7 @@ public class viewFilePage {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.getContentPane().setLayout(null);
+		frame.setResizable(false);
 		
 		JLabel view_patient_title = new JLabel("Patient:");
 		view_patient_title.setFont(new Font("Rockwell", Font.BOLD | Font.ITALIC, 30));
@@ -380,7 +381,7 @@ public class viewFilePage {
 						try {
 							//Run Command Prompt
 							cmd.fileNames();
-							bindData();
+							//bindData();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -399,7 +400,7 @@ public class viewFilePage {
 						try {
 							//Run Command Prompt
 							cmd.fileNames();
-							bindData();
+							//bindData();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -418,7 +419,7 @@ public class viewFilePage {
 						try {
 							//Run Command Prompt
 							cmd.fileNames();
-							bindData();
+							//bindData();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -438,7 +439,7 @@ public class viewFilePage {
 						try {
 							//Run Command Prompt
 							cmd.fileNames();
-							bindData();
+							//bindData();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -457,7 +458,7 @@ public class viewFilePage {
 						try {
 							//Run Command Prompt
 							cmd.fileNames();
-							bindData();
+							//bindData();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 						e1.printStackTrace();

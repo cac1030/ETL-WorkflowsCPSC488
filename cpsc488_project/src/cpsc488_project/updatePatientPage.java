@@ -65,7 +65,8 @@ public class updatePatientPage {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 791, 343);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel nameLabel = new JLabel("New label");

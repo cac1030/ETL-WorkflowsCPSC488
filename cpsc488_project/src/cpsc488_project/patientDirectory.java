@@ -140,6 +140,7 @@ public class patientDirectory {
 		frame.setBounds(100, 100, 460, 576);
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.setResizable(false);
 		lblRightClickA.setVerticalAlignment(SwingConstants.TOP);
 		lblRightClickA.setBounds(108, 486, 278, 28);
 		

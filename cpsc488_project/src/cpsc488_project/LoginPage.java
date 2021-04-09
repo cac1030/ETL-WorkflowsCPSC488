@@ -35,6 +35,7 @@ public class LoginPage implements ActionListener{
 		
 		logininfo = loginInfoOriginal;
 		userIDLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		frame.setResizable(false);
 		
 		//x 50 y 100 75 long 25 height 
 		userIDLabel.setBounds(137,150,75,25);
