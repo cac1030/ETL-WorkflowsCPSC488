@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -381,7 +382,8 @@ public class viewFilePage {
 						try {
 							//Run Command Prompt
 							cmd.fileNames();
-							//bindData();
+							DLMFiles.clear();
+							bindData();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -400,7 +402,8 @@ public class viewFilePage {
 						try {
 							//Run Command Prompt
 							cmd.fileNames();
-							//bindData();
+							DLMFiles.clear();
+							bindData();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -419,7 +422,8 @@ public class viewFilePage {
 						try {
 							//Run Command Prompt
 							cmd.fileNames();
-							//bindData();
+							DLMFiles.clear();
+							bindData();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -438,8 +442,10 @@ public class viewFilePage {
 						CmdFiles cmd = new CmdFiles();
 						try {
 							//Run Command Prompt
+							
 							cmd.fileNames();
-							//bindData();
+							DLMFiles.clear();
+							bindData();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -458,7 +464,8 @@ public class viewFilePage {
 						try {
 							//Run Command Prompt
 							cmd.fileNames();
-							//bindData();
+							DLMFiles.clear();
+							bindData();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 						e1.printStackTrace();
