@@ -40,7 +40,7 @@ import javax.swing.SwingConstants;
 public class patientDirectory {
 
 	JFrame frame = new JFrame();
-	DefaultListModel<Object> DLM = new DefaultListModel<Object>();
+	public static DefaultListModel<Object> DLM = new DefaultListModel<Object>();
 	
 	private final JList<Object> nameList = new JList<Object>();
 	private JTextField searchField;
@@ -59,7 +59,7 @@ public class patientDirectory {
 	public static String dateModifiedSelected ="";
 	private final JLabel backgroundpic2 = new JLabel("");
 	
-	public JSONArray a;
+	public static JSONArray a;
 	public int indicies;
 	
 	
@@ -90,7 +90,7 @@ public class patientDirectory {
 	
 	
 	
-	private void bindData() throws IOException, org.json.simple.parser.ParseException {
+	public static void bindData() throws IOException, org.json.simple.parser.ParseException {
 		getNames().stream().forEach((name) -> {
 			DLM.addElement(name);
 		});
@@ -150,6 +150,7 @@ public class patientDirectory {
 		frame.getContentPane().add(scrollPane);
 			
 			scrollPane.setViewportView(nameList);
+			
 		
 			//When Name is clicked open options
 			nameList.addMouseListener(new MouseAdapter() {
@@ -210,7 +211,7 @@ public class patientDirectory {
 			nameList.setModel(DLM);
 			nameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			nameList.setBackground(Color.WHITE);
-		
+			
 		
 		
 		
@@ -257,7 +258,7 @@ public class patientDirectory {
 	
 	
 	
-	private ArrayList<String> getNames() throws IOException, org.json.simple.parser.ParseException
+	private static ArrayList<String> getNames() throws IOException, org.json.simple.parser.ParseException
 	{
 		ArrayList<String> names =new ArrayList<String>();
 		FileReader reader = new FileReader("../client/patient_data.json");

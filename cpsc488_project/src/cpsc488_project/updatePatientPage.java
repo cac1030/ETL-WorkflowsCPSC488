@@ -6,6 +6,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import cpsc488_project.patientDirectory.CmdPatients;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -39,6 +42,7 @@ public class updatePatientPage {
 	
 	DefaultTableModel model;
 	
+	//Run Edit Script
 	//Resource https://stackoverflow.com/questions/15464111/run-cmd-commands-through-java
 	public class Cmd {
 		public void test(String DATA) throws Exception {
@@ -58,6 +62,25 @@ public class updatePatientPage {
 		}
 	}
 	
+	//Update Patient Directory
+	public class CmdPatients {
+		public void patientName() throws Exception {
+			
+		//Navigate into Client folder and run Python3 script to fetch patients
+        ProcessBuilder builder = new ProcessBuilder(
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_patient.py " + "-f");
+      
+        builder.redirectErrorStream(true);
+        Process p = builder.start();
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        while (true) {
+            line = r.readLine();
+            if (line == null) { break; }
+            System.out.println(line);
+        	}
+		}
+	}
 	
 	
 	updatePatientPage() {
@@ -340,7 +363,7 @@ public class updatePatientPage {
 							"}"+ "\"";
 							
 					
-					//Run Script through CMD
+					//Run Update Script
 					Cmd cmd = new Cmd();
 					try {
 						cmd.test(DATA);
@@ -351,6 +374,21 @@ public class updatePatientPage {
 					
 					//JOptionPane.showMessageDialog(null, patientJson);
 					JOptionPane.showMessageDialog(null, "Patient Updated");
+					
+					//Rerun patient Directory script to update
+					CmdPatients cmd2 = new CmdPatients();
+					try {
+						//Run Command Prompt
+						cmd2.patientName();
+						patientDirectory.DLM.clear();
+						patientDirectory.bindData();
+						
+						
+						 //System.out.println();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		});

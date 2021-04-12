@@ -259,7 +259,7 @@ public class addPatientPage {
 		dateModifiedField.setText(df.format(date));
 		
 		int secs = (int) ((new Date().getTime())/1000);
-		System.out.println(secs);
+		
 		
 		btnSubmit.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
