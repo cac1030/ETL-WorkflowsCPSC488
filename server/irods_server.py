@@ -75,7 +75,7 @@ def process_request(client_socket, address):
         "REQ_PATIENT_ADD": add_patient,
         "REQ_PATIENT_EDIT": edit_patient,
         "REQ_PATIENT_FETCH": send_patients_info,
-        "REQ_FILES": send_patient_files
+        "REQ_FILES": send_files_info
         }
 
     args = {
@@ -214,7 +214,7 @@ def send_patients_info(args):
 
     return f"[O] REQ_FETCH by {address} fulfilled"
 
-def send_patient_files(args):
+def send_files_info(args):
     client_socket = args[0]
     address = args[1]
     data = args[2]
@@ -240,6 +240,15 @@ def send_patient_files(args):
         print(f"[>] File data sent successfully | {len(data_bytes)} bytes")
 
     return f"[O] REQ_FILES by {address} fulfilled"
+
+def send_file(args):
+    client_socket = args[0]
+    address = args[1]
+    data = args[2]
+
+    patient_name, filename = data.split(SEPARATOR)
+    file_path = f"/tempZone/home/public/{patient_name}/{filename}"
+
 
 # utility
 def dir_exists(dir):
