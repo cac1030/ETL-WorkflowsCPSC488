@@ -288,6 +288,8 @@ def retreive_matching_file_list(patient_dir, file_age, search_terms):
     for file in all_files:
         date_create = int(run_cmd(f"imeta ls -d '{patient_dir}/{file}' date_created | awk '/value/ {{print $2}}'"))
         title = run_cmd(f"imeta ls -d '{patient_dir}/{file}' title | awk '/value/ {{print $2}}'")
+        print(date_create)
+        print(title)
         if date_create >= age:
             if search_terms != 'None':
                 if title.find(search_terms) != -1:
