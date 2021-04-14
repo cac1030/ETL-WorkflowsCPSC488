@@ -18,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.Font;
 import java.awt.Color;
 
@@ -32,11 +34,11 @@ public class updatePatientPage {
 	private JTextField weightField;
 	private JTextField lnameField;
 	private JLabel dateModifiedField;
-	private JTextField heightField;
 	private JTextField dobField;
 	private JTextField sexField;
 	private JTextField mnameField;
 	private JTextField ethnicityField;
+	private JComboBox<String> comboBoxHeight;
 	
 	
 	
@@ -156,11 +158,6 @@ public class updatePatientPage {
 		dateModifiedField.setBounds(500, 150, 203, 20);
 		frame.getContentPane().add(dateModifiedField);
 		
-		heightField = new JTextField();
-		heightField.setColumns(10);
-		heightField.setBounds(126, 183, 87, 20);
-		frame.getContentPane().add(heightField);
-		
 		JLabel dobLabel = new JLabel("DOB:");
 		dobLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		dobLabel.setBounds(510, 181, 51, 22);
@@ -190,6 +187,39 @@ public class updatePatientPage {
 		ethnicityField.setColumns(10);
 		ethnicityField.setBounds(370, 217, 120, 20);
 		frame.getContentPane().add(ethnicityField);
+		
+		
+		comboBoxHeight = new JComboBox<String>();
+		comboBoxHeight.setForeground(Color.BLACK);
+		comboBoxHeight.setBackground(Color.WHITE);
+		comboBoxHeight.setBounds(132, 183, 77, 23);
+		comboBoxHeight.addItem("");
+		comboBoxHeight.addItem("5'11");
+		comboBoxHeight.addItem("5'11");
+		comboBoxHeight.addItem("5'10");
+		comboBoxHeight.addItem("5'9");
+		comboBoxHeight.addItem("5'8");
+		comboBoxHeight.addItem("5'7");
+		comboBoxHeight.addItem("5'6");
+		comboBoxHeight.addItem("5'5");
+		comboBoxHeight.addItem("5'4");
+		comboBoxHeight.addItem("5'3");
+		comboBoxHeight.addItem("5'2");
+		comboBoxHeight.addItem("5'1");
+		comboBoxHeight.addItem("5");
+		comboBoxHeight.addItem("4'11");
+		comboBoxHeight.addItem("4'10");
+		comboBoxHeight.addItem("4'9");
+		comboBoxHeight.addItem("4'8");
+		comboBoxHeight.addItem("4'7");
+		comboBoxHeight.addItem("4'6");
+		comboBoxHeight.addItem("4'5");
+		comboBoxHeight.addItem("4'4");
+		comboBoxHeight.addItem("4'3");
+		comboBoxHeight.addItem("4'2");
+		comboBoxHeight.addItem("4'1");
+		comboBoxHeight.addItem("4");
+		frame.getContentPane().add(comboBoxHeight);
 		
 		
 		JLabel errorLabelBottom = new JLabel("");
@@ -277,7 +307,7 @@ public class updatePatientPage {
 		
 		JLabel backgroundPic3 = new JLabel("");
 		backgroundPic3.setIcon(new ImageIcon(addPatientPage.class.getResource("/cpsc488_project/bluebackground.jpg")));
-		backgroundPic3.setBounds(0, 0, 775, 304);
+		backgroundPic3.setBounds(0, 0, 785, 314);
 		frame.getContentPane().add(backgroundPic3);
 		
 		
@@ -290,8 +320,8 @@ public class updatePatientPage {
 		lnameField.setText(patientDirectory.lastName.toUpperCase());
 		mnameField.setText(patientDirectory.middleName.toUpperCase());
 		sexField.setText(patientDirectory.sexSelected.toUpperCase());
+		//IMPLEMENT HEIGHT FIELD SET COMBOBOX
 		weightField.setText(patientDirectory.weightSelected);
-		heightField.setText(patientDirectory.heightSelected);
 		ethnicityField.setText(patientDirectory.ethnicitySelected.toUpperCase());
 		dobField.setText(patientDirectory.dobSelected);
 		
@@ -324,10 +354,13 @@ public class updatePatientPage {
 					errorLabelBottom.setText("Some Fields are still Missing");
 					errorLabeldateM.setText("*");
 				}
-				if(heightField.getText().trim().isEmpty()){
-					errorLabelBottom.setText("Some Fields are still Missing");
-					errorLabelHeight.setText("*");
-				}
+				
+				//NEEDS CHANGED TO COMBOBOX
+				//if(heightField.getText().trim().isEmpty()){
+				//	errorLabelBottom.setText("Some Fields are still Missing");
+				//	errorLabelHeight.setText("*");
+				//}
+				
 				if(weightField.getText().trim().isEmpty()){
 					errorLabelBottom.setText("Some Fields are still Missing");
 					errorLabelWeight.setText("*");
@@ -354,7 +387,7 @@ public class updatePatientPage {
 							+ "\\\"last_name\\\"" + ":" + "\\\"" + lnameField.getText() + "\\\"" + ","
 							+"\\\"date_created\\\"" + ":" + "\\\"" + secs + "\\\"" + "," //Needs Fixed
 							+"\\\"date_modified\\\"" + ":" + "\\\"" + secs + "\\\"" + ","
-							+"\\\"height\\\"" + ":" + "\\\"" + heightField.getText() + "\\\"" + ","
+							+"\\\"height\\\"" + ":" + "\\\"" + comboBoxHeight.getSelectedItem() + "\\\"" + ","
 							+"\\\"weight\\\"" + ":" + "\\\"" + weightField.getText() + "\\\"" + ","
 							+"\\\"dob\\\"" + ":" + "\\\"" + dobField.getText() + "\\\"" + ","
 							+"\\\"sex\\\"" + ":" + "\\\"" + sexField.getText() + "\\\"" + ","
@@ -403,7 +436,7 @@ public class updatePatientPage {
 				mnameField.setText("");
 				dateCreatedField.setText("");
 				dateModifiedField.setText("");
-				heightField.setText("");
+				//heightField.setText("");
 				weightField.setText("");
 				dobField.setText("");
 				sexField.setText("");
