@@ -1,7 +1,7 @@
 import subprocess
 
 cmd = "ils | cut -f4 -d ' '"
-all_patients = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
+all_patients = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
 print(all_patients)
 
 for patient in all_patients:
