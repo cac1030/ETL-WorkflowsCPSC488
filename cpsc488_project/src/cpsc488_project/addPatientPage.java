@@ -18,6 +18,8 @@ import java.awt.Color;
 import java.io.*;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 
 public class addPatientPage {
@@ -31,7 +33,6 @@ public class addPatientPage {
 	private JTextField lnameField;
 	private JLabel dateModifiedField;
 	private JTextField dobField;
-	private JTextField sexField;
 	private JTextField mnameField;
 	private JTextField ethnicityField;
 	private JComboBox<String> comboBoxHeight;
@@ -100,6 +101,16 @@ public class addPatientPage {
 		comboBoxHeight.addItem("4'2");
 		comboBoxHeight.addItem("4'1");
 		comboBoxHeight.addItem("4");
+		
+		JComboBox<String> comboBoxSex = new JComboBox<String>();
+		comboBoxSex.setForeground(Color.BLACK);
+		comboBoxSex.setBackground(Color.WHITE);
+		comboBoxSex.setBounds(108, 216, 97, 23);
+		comboBoxSex.addItem("");
+		comboBoxSex.addItem("MALE");
+		comboBoxSex.addItem("FEMALE");
+		comboBoxSex.addItem("OTHER");
+		frame.getContentPane().add(comboBoxSex);
 		frame.getContentPane().add(comboBoxHeight);
 		
 		JLabel lblNewLabel = new JLabel("New Patient Registration Form");
@@ -123,6 +134,19 @@ public class addPatientPage {
 		frame.getContentPane().add(weightLabel);
 		
 		fnameField = new JTextField();
+		fnameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				
+				if(Character.isLetter(c) || Character.isISOControl(c)) {
+					fnameField.setEditable(true);
+				}
+				else {
+					fnameField.setEditable(false);
+				}
+			}
+		});
 		fnameField.setBounds(163, 119, 142, 20);
 		frame.getContentPane().add(fnameField);
 		fnameField.setColumns(10);
@@ -132,6 +156,21 @@ public class addPatientPage {
 		frame.getContentPane().add(dateCreatedField);
 		
 		weightField = new JTextField();
+		weightField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+				char c = e.getKeyChar();
+				
+				if(Character.isDigit(c) || Character.isISOControl(c)) {
+					weightField.setEditable(true);
+				}
+				else {
+					weightField.setEditable(false);
+				}
+			
+			}
+		});
 		weightField.setColumns(10);
 		weightField.setBounds(338, 183, 97, 20);
 		frame.getContentPane().add(weightField);
@@ -152,6 +191,21 @@ public class addPatientPage {
 		frame.getContentPane().add(heightLabel);
 		
 		lnameField = new JTextField();
+		lnameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+				char c = e.getKeyChar();
+				
+				if(Character.isLetter(c) || Character.isISOControl(c)) {
+					lnameField.setEditable(true);
+				}
+				else {
+					lnameField.setEditable(false);
+				}
+			}
+				
+		});
 		lnameField.setColumns(10);
 		lnameField.setBounds(430, 119, 152, 20);
 		frame.getContentPane().add(lnameField);
@@ -175,17 +229,26 @@ public class addPatientPage {
 		sexLabel.setBounds(68, 214, 43, 22);
 		frame.getContentPane().add(sexLabel);
 		
-		sexField = new JTextField();
-		sexField.setColumns(10);
-		sexField.setBounds(106, 217, 151, 20);
-		frame.getContentPane().add(sexField);
-		
 		JLabel ethnicityLabel = new JLabel("Ethnicity:");
 		ethnicityLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		ethnicityLabel.setBounds(293, 214, 77, 22);
 		frame.getContentPane().add(ethnicityLabel);
 		
 		ethnicityField = new JTextField();
+		ethnicityField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				
+				if(Character.isLetter(c) || Character.isISOControl(c)) {
+					ethnicityField.setEditable(true);
+				}
+				else {
+					ethnicityField.setEditable(false);
+				}
+			
+			}
+		});
 		ethnicityField.setColumns(10);
 		ethnicityField.setBounds(370, 217, 120, 20);
 		frame.getContentPane().add(ethnicityField);
@@ -234,7 +297,7 @@ public class addPatientPage {
 		
 		JLabel errorLabelSex = new JLabel("");
 		errorLabelSex.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		errorLabelSex.setBounds(259, 215, 30, 21);
+		errorLabelSex.setBounds(215, 216, 30, 21);
 		frame.getContentPane().add(errorLabelSex);
 		
 		JLabel errorLabelEthnicity = new JLabel("");
@@ -265,6 +328,22 @@ public class addPatientPage {
 		frame.getContentPane().add(mnameLabel);
 		
 		mnameField = new JTextField();
+		mnameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+				char c = e.getKeyChar();
+				
+				if(Character.isLetter(c) || Character.isISOControl(c)) {
+					mnameField.setEditable(true);
+				}
+				else {
+					mnameField.setEditable(false);
+				}
+			}
+			
+			
+		});
 		mnameField.setColumns(10);
 		mnameField.setBounds(687, 119, 36, 20);
 		frame.getContentPane().add(mnameField);
@@ -328,10 +407,10 @@ public class addPatientPage {
 					errorLabelBottom.setText("Some Fields are still Missing");
 					errorLabeldob.setText("*");
 				}
-				if(sexField.getText().trim().isEmpty()){
-					errorLabelBottom.setText("Some Fields are still Missing");
-					errorLabelSex.setText("*");
-				}
+				//if(sexField.getText().trim().isEmpty()){
+				//	errorLabelBottom.setText("Some Fields are still Missing");
+				//	errorLabelSex.setText("*");
+				//}
 				if(ethnicityField.getText().trim().isEmpty()){
 					errorLabelBottom.setText("Some Fields are still Missing");
 					errorLabelEthnicity.setText("*");
@@ -360,7 +439,7 @@ public class addPatientPage {
 							+"\\\"height\\\"" + ":" + "\\\"" + height + "\\\"" + ","
 							+"\\\"weight\\\"" + ":" + "\\\"" + weightField.getText() + "\\\"" + ","
 							+"\\\"dob\\\"" + ":" + "\\\"" + dobField.getText() + "\\\"" + ","
-							+"\\\"sex\\\"" + ":" + "\\\"" + sexField.getText() + "\\\"" + ","
+							+"\\\"sex\\\"" + ":" + "\\\"" + comboBoxSex.getSelectedItem() + "\\\"" + ","
 							+"\\\"middle_name\\\"" + ":" + "\\\"" + mnameField.getText() + "\\\"" + ","
 							+"\\\"ethnicity\\\"" + ":" + "\\\"" + ethnicityField.getText() + "\\\"" +
 							"}"+ "\"";
@@ -389,12 +468,11 @@ public class addPatientPage {
 				fnameField.setText("");
 				lnameField.setText("");
 				mnameField.setText("");
-				dateCreatedField.setText("");
-				dateModifiedField.setText("");
 				comboBoxHeight.setSelectedItem("");
 				weightField.setText("");
 				dobField.setText("");
-				sexField.setText("");
+				comboBoxSex.setSelectedItem("");
+				//sexField.setText("");
 				ethnicityField.setText("");
 				errorLabelBottom.setText("");
 				errorLabelfName.setText("");
@@ -403,7 +481,6 @@ public class addPatientPage {
 				errorLabeldateM.setText("");
 				errorLabelHeight.setText("");
 				errorLabelWeight.setText("");
-				errorLabeldob.setText("");
 				errorLabelSex.setText("");
 				errorLabelmName.setText("");
 				errorLabelEthnicity.setText("");

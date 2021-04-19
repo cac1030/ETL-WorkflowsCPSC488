@@ -22,6 +22,8 @@ import javax.swing.JComboBox;
 
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 
 public class updatePatientPage {
@@ -35,7 +37,6 @@ public class updatePatientPage {
 	private JTextField lnameField;
 	private JLabel dateModifiedField;
 	private JTextField dobField;
-	private JTextField sexField;
 	private JTextField mnameField;
 	private JTextField ethnicityField;
 	private JComboBox<String> comboBoxHeight;
@@ -94,6 +95,16 @@ public class updatePatientPage {
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		JComboBox<String> comboBoxSex = new JComboBox<String>();
+		comboBoxSex.setForeground(Color.BLACK);
+		comboBoxSex.setBackground(Color.WHITE);
+		comboBoxSex.setBounds(108, 216, 97, 23);
+		comboBoxSex.addItem("");
+		comboBoxSex.addItem("MALE");
+		comboBoxSex.addItem("FEMALE");
+		comboBoxSex.addItem("OTHER");
+		frame.getContentPane().add(comboBoxSex);
+		
 		JLabel nameLabel = new JLabel("New label");
 		nameLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
 		nameLabel.setBounds(380, 35, 274, 41);
@@ -130,6 +141,20 @@ public class updatePatientPage {
 		frame.getContentPane().add(dateCreatedField);
 		
 		weightField = new JTextField();
+		weightField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				
+				if(Character.isDigit(c) || Character.isISOControl(c)) {
+					weightField.setEditable(true);
+				}
+				else {
+					weightField.setEditable(false);
+				}
+			
+			}
+		});
 		weightField.setColumns(10);
 		weightField.setBounds(338, 183, 97, 20);
 		frame.getContentPane().add(weightField);
@@ -173,17 +198,26 @@ public class updatePatientPage {
 		sexLabel.setBounds(68, 214, 43, 22);
 		frame.getContentPane().add(sexLabel);
 		
-		sexField = new JTextField();
-		sexField.setColumns(10);
-		sexField.setBounds(106, 217, 151, 20);
-		frame.getContentPane().add(sexField);
-		
 		JLabel ethnicityLabel = new JLabel("Ethnicity:");
 		ethnicityLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		ethnicityLabel.setBounds(293, 214, 77, 22);
 		frame.getContentPane().add(ethnicityLabel);
 		
 		ethnicityField = new JTextField();
+		ethnicityField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				
+				if(Character.isLetter(c) || Character.isISOControl(c)) {
+					ethnicityField.setEditable(true);
+				}
+				else {
+					ethnicityField.setEditable(false);
+				}
+			
+			}
+		});
 		ethnicityField.setColumns(10);
 		ethnicityField.setBounds(370, 217, 120, 20);
 		frame.getContentPane().add(ethnicityField);
@@ -265,7 +299,7 @@ public class updatePatientPage {
 		
 		JLabel errorLabelSex = new JLabel("");
 		errorLabelSex.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		errorLabelSex.setBounds(259, 215, 30, 21);
+		errorLabelSex.setBounds(215, 216, 30, 21);
 		frame.getContentPane().add(errorLabelSex);
 		
 		JLabel errorLabelEthnicity = new JLabel("");
@@ -319,13 +353,12 @@ public class updatePatientPage {
 		fnameField.setText(patientDirectory.firstName.toUpperCase());
 		lnameField.setText(patientDirectory.lastName.toUpperCase());
 		mnameField.setText(patientDirectory.middleName.toUpperCase());
-		sexField.setText(patientDirectory.sexSelected.toUpperCase());
 		//IMPLEMENT HEIGHT FIELD SET COMBOBOX
 		
 		
 		comboBoxHeight.setSelectedItem(patientDirectory.newHieght);
 		
-				
+		comboBoxSex.setSelectedItem(patientDirectory.sexSelected.toUpperCase());
 				
 		
 		weightField.setText(patientDirectory.weightSelected);
@@ -376,10 +409,10 @@ public class updatePatientPage {
 					errorLabelBottom.setText("Some Fields are still Missing");
 					errorLabeldob.setText("*");
 				}
-				if(sexField.getText().trim().isEmpty()){
-					errorLabelBottom.setText("Some Fields are still Missing");
-					errorLabelSex.setText("*");
-				}
+				//if(sexField.getText().trim().isEmpty()){
+				//	errorLabelBottom.setText("Some Fields are still Missing");
+				//	errorLabelSex.setText("*");
+				//}
 				if(ethnicityField.getText().trim().isEmpty()){
 					errorLabelBottom.setText("Some Fields are still Missing");
 					errorLabelEthnicity.setText("*");
@@ -406,7 +439,7 @@ public class updatePatientPage {
 							+"\\\"height\\\"" + ":" + "\\\"" + height + "\\\"" + ","
 							+"\\\"weight\\\"" + ":" + "\\\"" + weightField.getText() + "\\\"" + ","
 							+"\\\"dob\\\"" + ":" + "\\\"" + dobField.getText() + "\\\"" + ","
-							+"\\\"sex\\\"" + ":" + "\\\"" + sexField.getText() + "\\\"" + ","
+							+"\\\"sex\\\"" + ":" + "\\\"" + comboBoxSex.getSelectedItem() + "\\\"" + ","
 							+"\\\"middle_name\\\"" + ":" + "\\\"" + mnameField.getText() + "\\\"" + ","
 							+"\\\"ethnicity\\\"" + ":" + "\\\"" + ethnicityField.getText() + "\\\"" +
 							"}"+ "\"";
@@ -450,13 +483,10 @@ public class updatePatientPage {
 				fnameField.setText("");
 				lnameField.setText("");
 				mnameField.setText("");
-				dateCreatedField.setText("");
-				dateModifiedField.setText("");
-				//heightField.setText("");
 				comboBoxHeight.setSelectedItem("");
 				weightField.setText("");
 				dobField.setText("");
-				sexField.setText("");
+				comboBoxSex.setSelectedItem("");
 				ethnicityField.setText("");
 				errorLabelBottom.setText("");
 				errorLabelfName.setText("");
