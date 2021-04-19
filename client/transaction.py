@@ -1,5 +1,6 @@
 import socket
 import sys
+import tqdm
 
 class Request:
     def __init__(self):
@@ -27,6 +28,24 @@ class Request:
             sys.exit(1)
         else:
             print(f"[>] {request} sent")
+
+    def send_file(self, filename, filesize):
+        try:
+        	progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
+        	with open('client.zip', "rb") as f:
+        		while True:
+        			bytes_read = f.read(self.BUFFER_SIZE)
+        			if not bytes_read:
+        				break
+        			self.SOCKET.sendall(bytes_read)
+        			progress.update(len(bytes_read))
+        except Exception as e:
+        	print(f"[X] Sending file failed: {e}")
+        	sys.exit(1)
+        else:
+        	print(f"[>] File sent")
+        finally:
+        	self.SOCKET.close()
 
     def recv_response(self):
         try:
