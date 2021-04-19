@@ -348,7 +348,8 @@ public class viewFilePage {
 		//Fill in metadata for view info page
 				sexLabelAns.setText(patientDirectory.sexSelected.toUpperCase());
 				weightLabelAns.setText(patientDirectory.weightSelected);
-				heightLabelAns.setText(patientDirectory.heightSelected);
+				//heightLabelAns.setText(patientDirectory.heightSelected);
+				heightLabelAns.setText(patientDirectory.newHieght);
 				ethnicityLabelAns.setText(patientDirectory.ethnicitySelected.toUpperCase());
 				dobLabelAns.setText(patientDirectory.dobSelected);
 				modifiedLabelAns.setText(patientDirectory.dateModifiedSelected);

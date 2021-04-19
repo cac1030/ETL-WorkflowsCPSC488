@@ -35,6 +35,7 @@ public class addPatientPage {
 	private JTextField mnameField;
 	private JTextField ethnicityField;
 	private JComboBox<String> comboBoxHeight;
+	private int height;
 	
 	
 	DefaultTableModel model;
@@ -70,6 +71,7 @@ public class addPatientPage {
 		frame.setResizable(false);
 		
 		comboBoxHeight = new JComboBox<String>();
+		
 		comboBoxHeight.setForeground(Color.BLACK);
 		comboBoxHeight.setBackground(Color.WHITE);
 		comboBoxHeight.setBounds(128, 183, 77, 23);
@@ -338,12 +340,24 @@ public class addPatientPage {
 				else {
 					//All Fields are filled in
 					
+					//Convert Height String to Inches
+					String selectedInch= (String) comboBoxHeight.getSelectedItem();
+					
+					char feet = selectedInch.charAt(0);
+					char inches = selectedInch.charAt(2);
+					height = Character.getNumericValue(feet);
+					int b = Character.getNumericValue(inches);
+					height= height*12 + b;
+					
+					//JOptionPane.showMessageDialog(null, height);
+					
+					
 					//Parse Data into JSON format
 					String DATA = "\""+ "{\\\"\"first_name\\\"" + ":" + "\\\"" + fnameField.getText() + "\\\"" + ","
 							+ "\\\"last_name\\\"" + ":" + "\\\"" + lnameField.getText() + "\\\"" + ","
 							+"\\\"date_created\\\"" + ":" + "\\\"" + secs + "\\\"" + ","
 							+"\\\"date_modified\\\"" + ":" + "\\\"" + secs + "\\\"" + ","
-							+"\\\"height\\\"" + ":" + "\\\"" + comboBoxHeight.getSelectedItem() + "\\\"" + ","
+							+"\\\"height\\\"" + ":" + "\\\"" + height + "\\\"" + ","
 							+"\\\"weight\\\"" + ":" + "\\\"" + weightField.getText() + "\\\"" + ","
 							+"\\\"dob\\\"" + ":" + "\\\"" + dobField.getText() + "\\\"" + ","
 							+"\\\"sex\\\"" + ":" + "\\\"" + sexField.getText() + "\\\"" + ","
@@ -377,7 +391,7 @@ public class addPatientPage {
 				mnameField.setText("");
 				dateCreatedField.setText("");
 				dateModifiedField.setText("");
-				//heightField.setText("");
+				comboBoxHeight.setSelectedItem("");
 				weightField.setText("");
 				dobField.setText("");
 				sexField.setText("");

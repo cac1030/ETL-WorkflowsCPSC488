@@ -321,6 +321,13 @@ public class updatePatientPage {
 		mnameField.setText(patientDirectory.middleName.toUpperCase());
 		sexField.setText(patientDirectory.sexSelected.toUpperCase());
 		//IMPLEMENT HEIGHT FIELD SET COMBOBOX
+		
+		
+		comboBoxHeight.setSelectedItem(patientDirectory.newHieght);
+		
+				
+				
+		
 		weightField.setText(patientDirectory.weightSelected);
 		ethnicityField.setText(patientDirectory.ethnicitySelected.toUpperCase());
 		dobField.setText(patientDirectory.dobSelected);
@@ -382,12 +389,21 @@ public class updatePatientPage {
 					//All Fields are filled in
 					
 					int secs = (int) ((new Date().getTime())/1000);
+					
+					String selectedInch= (String) comboBoxHeight.getSelectedItem();
+					
+					char feet = selectedInch.charAt(0);
+					char inches = selectedInch.charAt(2);
+					int height = Character.getNumericValue(feet);
+					int b = Character.getNumericValue(inches);
+					height= height*12 + b;
+					
 					//Parse Data into JSON format
 					String DATA = "\""+ "{\\\"\"first_name\\\"" + ":" + "\\\"" + fnameField.getText() + "\\\"" + ","
 							+ "\\\"last_name\\\"" + ":" + "\\\"" + lnameField.getText() + "\\\"" + ","
 							+"\\\"date_created\\\"" + ":" + "\\\"" + secs + "\\\"" + "," //Needs Fixed
 							+"\\\"date_modified\\\"" + ":" + "\\\"" + secs + "\\\"" + ","
-							+"\\\"height\\\"" + ":" + "\\\"" + comboBoxHeight.getSelectedItem() + "\\\"" + ","
+							+"\\\"height\\\"" + ":" + "\\\"" + height + "\\\"" + ","
 							+"\\\"weight\\\"" + ":" + "\\\"" + weightField.getText() + "\\\"" + ","
 							+"\\\"dob\\\"" + ":" + "\\\"" + dobField.getText() + "\\\"" + ","
 							+"\\\"sex\\\"" + ":" + "\\\"" + sexField.getText() + "\\\"" + ","
@@ -437,6 +453,7 @@ public class updatePatientPage {
 				dateCreatedField.setText("");
 				dateModifiedField.setText("");
 				//heightField.setText("");
+				comboBoxHeight.setSelectedItem("");
 				weightField.setText("");
 				dobField.setText("");
 				sexField.setText("");

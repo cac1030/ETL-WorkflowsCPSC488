@@ -59,6 +59,13 @@ public class patientDirectory {
 	public static String dateModifiedSelected ="";
 	private final JLabel backgroundpic2 = new JLabel("");
 	
+	
+	
+	public static String newHieght ="";
+	
+	
+	
+	
 	public static JSONArray a;
 	public int indicies;
 	
@@ -177,18 +184,28 @@ public class patientDirectory {
 				    dateModifiedSelected = (String) selected.get("date_modified");
 				    
 				    
-					
 					Date formated = new Date(Long.parseLong(dateCreatedSelected) * 1000);
 					Date formated2 = new Date(Long.parseLong(dateModifiedSelected) * 1000);
-					
 					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 				    
 				    dateCreatedSelected = (df.format(formated));
 				    dateModifiedSelected = (df.format(formated2));
-				   
 				    sexSelected = (String) selected.get("sex");
 				    weightSelected = (String) selected.get("weight");
+				    
+				    
+				    
+				    
 				    heightSelected = (String) selected.get("height");
+				    //Change Server inches into 5'11 format
+				    int heightInt = Integer.parseInt(heightSelected);
+				    
+				    int height = heightInt/12;
+				    int leftover = heightInt %12; 
+				   
+				    newHieght = height + "'" + leftover;
+				    
+				    
 				    ethnicitySelected = (String) selected.get("ethnicity");
 					
 					
