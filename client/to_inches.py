@@ -1,6 +1,6 @@
 import subprocess
 
-cmd = "ils | cut -f4 -d ' '"
+cmd = "ils /tempZone/home/public | cut -f4 -d ' '"
 all_patients = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
 print(all_patients)
 
