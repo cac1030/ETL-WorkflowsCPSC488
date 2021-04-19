@@ -271,16 +271,6 @@ public class updatePatientPage {
 		errorLabelfName.setBounds(310, 116, 30, 21);
 		frame.getContentPane().add(errorLabelfName);
 		
-		JLabel errorLabelDateC = new JLabel("");
-		errorLabelDateC.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		errorLabelDateC.setBounds(350, 149, 30, 21);
-		frame.getContentPane().add(errorLabelDateC);
-		
-		JLabel errorLabeldateM = new JLabel("");
-		errorLabeldateM.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		errorLabeldateM.setBounds(708, 148, 30, 21);
-		frame.getContentPane().add(errorLabeldateM);
-		
 		JLabel errorLabelHeight = new JLabel("");
 		errorLabelHeight.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		errorLabelHeight.setBounds(235, 183, 30, 21);
@@ -294,7 +284,7 @@ public class updatePatientPage {
 		
 		JLabel errorLabeldob = new JLabel("");
 		errorLabeldob.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		errorLabeldob.setBounds(708, 182, 30, 21);
+		errorLabeldob.setBounds(733, 182, 30, 21);
 		frame.getContentPane().add(errorLabeldob);
 		
 		JLabel errorLabelSex = new JLabel("");
@@ -373,6 +363,7 @@ public class updatePatientPage {
 		btnSubmit.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
 				//If user didn't fill out all fields
+				//If user didn't fill out all fields
 				if(fnameField.getText().trim().isEmpty()) {
 					errorLabelBottom.setText("Some Fields are still Missing");
 					//* is placed near corresponding text field
@@ -386,21 +377,11 @@ public class updatePatientPage {
 					errorLabelBottom.setText("Some Fields are still Missing");
 					errorLabelmName.setText("*");
 				}
-				if(dateCreatedField.getText().trim().isEmpty()){
-					errorLabelBottom.setText("Some Fields are still Missing");
-					errorLabelDateC.setText("*");
-				}
-				if(dateModifiedField.getText().trim().isEmpty()){
-					errorLabelBottom.setText("Some Fields are still Missing");
-					errorLabeldateM.setText("*");
-				}
 				
-				//NEEDS CHANGED TO COMBOBOX
-				//if(heightField.getText().trim().isEmpty()){
-				//	errorLabelBottom.setText("Some Fields are still Missing");
-				//	errorLabelHeight.setText("*");
-				//}
-				
+				if(comboBoxHeight.getSelectedIndex() == 0){
+					errorLabelBottom.setText("Some Fields are still Missing");
+					errorLabelHeight.setText("*");
+				}
 				if(weightField.getText().trim().isEmpty()){
 					errorLabelBottom.setText("Some Fields are still Missing");
 					errorLabelWeight.setText("*");
@@ -409,10 +390,10 @@ public class updatePatientPage {
 					errorLabelBottom.setText("Some Fields are still Missing");
 					errorLabeldob.setText("*");
 				}
-				//if(sexField.getText().trim().isEmpty()){
-				//	errorLabelBottom.setText("Some Fields are still Missing");
-				//	errorLabelSex.setText("*");
-				//}
+				if(comboBoxSex.getSelectedIndex() == 0){
+					errorLabelBottom.setText("Some Fields are still Missing");
+					errorLabelSex.setText("*");
+				}
 				if(ethnicityField.getText().trim().isEmpty()){
 					errorLabelBottom.setText("Some Fields are still Missing");
 					errorLabelEthnicity.setText("*");
@@ -491,8 +472,6 @@ public class updatePatientPage {
 				errorLabelBottom.setText("");
 				errorLabelfName.setText("");
 				errorLabellName.setText("");
-				errorLabelDateC.setText("");
-				errorLabeldateM.setText("");
 				errorLabelHeight.setText("");
 				errorLabelWeight.setText("");
 				errorLabeldob.setText("");
