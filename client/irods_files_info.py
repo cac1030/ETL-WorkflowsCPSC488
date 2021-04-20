@@ -22,7 +22,7 @@ data = args.patient_name + SEPARATOR + str(args.age) + SEPARATOR + str(args.sear
 # connect and send
 trans = transaction.Request()
 trans.connect()
-trans.send_req("REQ_FILES", data)
+trans.send_req("REQ_FILE_LIST", data)
 
 # receive and write
 try:
