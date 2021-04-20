@@ -248,7 +248,35 @@ def send_file(args):
 
     patient_name, filename = data.split(SEPARATOR)
     file_path = f"/tempZone/home/public/{patient_name}/{filename}"
+    dest_file = f"./temp/{patient_name}-{filename}"
 
+    # compile metadata into a txt
+    metadata = {}
+    result = run_cmd(f"imeta ls -d {file_path} | awk '/^[av]/' | cut -f2 -d ' '").splitlines()
+    for i in range(0, len(result), 2):
+        metadata[result[i]] = result[i+1]
+    with open(filename + "_meta.txt", 'wb') as f:
+        f.write(json.dumps(metadata))
+
+    # fetch, zip, and send the file and metadata
+    run_cmd(f"iget {file_path} {dest_file}")
+    zip_file(file_path)
+    try:
+        progress = tqdm.tqdm(range(filesize), f"Sending to_client.zip", unit="B", unit_scale=True, unit_divisor=1024)
+        with open('to_client.zip', "rb") as f:
+            while True:
+                bytes_read = f.read(BUFFER_SIZE)
+                if not bytes_read:
+                    break
+                s.sendall(bytes_read)
+                progress.update(len(bytes_read))
+    except Exception as e:
+        print(f"[X] Sending file failed: {e}")
+        s.shutdown(socket.SHUT_RDWR)
+        s.close()
+        sys.exit(1)
+    else:
+        print(f"[>] File sent")
 
 # utility
 def dir_exists(dir):
@@ -327,6 +355,13 @@ def unzip_file(path):
         sys.exit(1)
     else:
         os.system("rm client.zip")
+
+def zip_file(file_path):
+    filename = os.path.basename(file_path)
+	with zipfile.ZipFile('to_client.zip', 'w') as zip:
+		zip.write(file_path)
+		zip.write(filename + "_meta.txt")
+	return os.path.getsize('to_client.zip')
 
 def put_to_irods(filename, patient_name):
     # read data from file
