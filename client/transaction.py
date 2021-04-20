@@ -16,6 +16,8 @@ class Request:
         	self.SOCKET.connect((self.SERVER_HOST, self.SERVER_PORT))
         except OSError as e:
             print(f"[X] Connection failed: {e}")
+            s.shutdown(socket.SHUT_RDWR)
+            s.close()
             sys.exit(1)
         else:
             print("[+] Connected")
@@ -25,6 +27,8 @@ class Request:
             self.SOCKET.send(f"{request}!{data}".encode())
         except OSError as e:
             print(f"[X] Sending request failed: {e}")
+            s.shutdown(socket.SHUT_RDWR)
+            s.close()
             sys.exit(1)
         else:
             print(f"[>] {request} sent")
@@ -41,7 +45,9 @@ class Request:
         			progress.update(len(bytes_read))
         except Exception as e:
         	print(f"[X] Sending file failed: {e}")
-        	sys.exit(1)
+            s.shutdown(socket.SHUT_RDWR)
+            s.close()
+            sys.exit(1)
         else:
         	print(f"[>] File sent")
         finally:
@@ -57,6 +63,8 @@ class Request:
                 message = message + bytes_read
         except OSError as e:
             print(f"[X] Receiving data failed: {e}")
+            s.shutdown(socket.SHUT_RDWR)
+            s.close()
             sys.exit(1)
         else:
             return message

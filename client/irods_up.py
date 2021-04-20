@@ -1,9 +1,16 @@
-import socket
-import tqdm
+import argparse
 import os
-import sys
-import zipfile
+import socket
 import transaction
+import zipfile
+
+# parse arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("patient_name",
+                    help="the patient whose record is the destination")
+parser.add_argument("filename",
+                    help="the name of the file being uploaded")
+args = parser.parse_args()
 
 def zip_file(filename):
 	with zipfile.ZipFile('client.zip', 'w') as zip:
@@ -13,10 +20,8 @@ def zip_file(filename):
 
 # build outgoing data string
 SEPARATOR = "[-]"
-patient_name = sys.argv[1]
-filename = sys.argv[2]
-filesize = zip_file(filename)
-data = f"{patient_name}{SEPARATOR}{filename}{SEPARATOR}{filesize}"
+filesize = zip_file(args.filename)
+data = f"{args.patient_name}{SEPARATOR}{args.filename}{SEPARATOR}{filesize}"
 
 # connect and send
 trans = transaction.Request()
