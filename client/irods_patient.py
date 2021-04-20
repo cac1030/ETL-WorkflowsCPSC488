@@ -19,7 +19,7 @@ if args.add:
 elif args.edit:
     trans.send_req("REQ_PATIENT_EDIT", args.edit)
 elif args.fetch:
-    trans.send_req("REQ_PATIENT_FETCH", "null")
+    trans.send_req("REQ_PATIENT_LIST", "null")
 
     # receive and write
     try:
