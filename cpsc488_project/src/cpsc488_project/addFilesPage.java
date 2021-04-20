@@ -30,6 +30,8 @@ import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.border.Border;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 
 public class addFilesPage {
@@ -69,6 +71,20 @@ public class addFilesPage {
 		
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
 		metadataPhysicianField = new JTextField();
+		metadataPhysicianField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				
+				if(Character.isLetter(c) || Character.isISOControl(c)) {
+					metadataPhysicianField.setEditable(true);
+				}
+				else {
+					metadataPhysicianField.setEditable(false);
+				}
+			
+			}
+		});
 		metadataPhysicianField.setColumns(10);
 		metadataPhysicianField.setBounds(200, 263, 169, 20);
 		metadataPhysicianField.setBorder(BorderFactory.createCompoundBorder(border,
@@ -76,6 +92,20 @@ public class addFilesPage {
 		frame.getContentPane().add(metadataPhysicianField);
 		
 		metadataTitleField = new JTextField();
+		metadataTitleField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				
+				if(Character.isLetter(c) || Character.isISOControl(c)) {
+					metadataTitleField.setEditable(true);
+				}
+				else {
+					metadataTitleField.setEditable(false);
+				}
+			
+			}
+		});
 		metadataTitleField.setBounds(10, 263, 169, 20);
 		frame.getContentPane().add(metadataTitleField);
 		metadataTitleField.setBorder(BorderFactory.createCompoundBorder(border,

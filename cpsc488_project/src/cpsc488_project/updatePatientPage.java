@@ -132,6 +132,19 @@ public class updatePatientPage {
 		frame.getContentPane().add(weightLabel);
 		
 		fnameField = new JTextField();
+		fnameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				
+				if(Character.isLetter(c) || Character.isISOControl(c)) {
+					fnameField.setEditable(true);
+				}
+				else {
+					fnameField.setEditable(false);
+				}
+			}
+		});
 		fnameField.setBounds(163, 119, 142, 20);
 		frame.getContentPane().add(fnameField);
 		fnameField.setColumns(10);
@@ -175,6 +188,20 @@ public class updatePatientPage {
 		frame.getContentPane().add(heightLabel);
 		
 		lnameField = new JTextField();
+		lnameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				
+				if(Character.isLetter(c) || Character.isISOControl(c)) {
+					lnameField.setEditable(true);
+				}
+				else {
+					lnameField.setEditable(false);
+				}
+			
+			}
+		});
 		lnameField.setColumns(10);
 		lnameField.setBounds(430, 119, 152, 20);
 		frame.getContentPane().add(lnameField);
@@ -320,6 +347,20 @@ public class updatePatientPage {
 		frame.getContentPane().add(mnameLabel);
 		
 		mnameField = new JTextField();
+		mnameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				
+				if(Character.isLetter(c) || Character.isISOControl(c)) {
+					mnameField.setEditable(true);
+				}
+				else {
+					mnameField.setEditable(false);
+				}
+			}
+			
+		});
 		mnameField.setColumns(10);
 		mnameField.setBounds(687, 119, 36, 20);
 		frame.getContentPane().add(mnameField);
