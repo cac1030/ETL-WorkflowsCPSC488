@@ -384,7 +384,7 @@ def unzip_file(path):
         s.close()
         sys.exit(1)
     else:
-        os.system("rm ./temp/*")
+        os.system("rm ./temp/client.zip")
 
 def zip_file(file_path, meta_path):
     with zipfile.ZipFile('./temp/to_client.zip', 'w') as zip:
