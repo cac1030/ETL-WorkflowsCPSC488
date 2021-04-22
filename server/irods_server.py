@@ -288,7 +288,7 @@ def delete_patient(args):
     address = args[0]
     patient_name = args[1]
 
-    # remove patient dir and all files within
+    # delete patient dir and all files within
     run_cmd(f"irm -rf /tempZone/home/public/{patient_name}")
 
     return f"[O] REQ_PATIENT_DELETE by {address} fulfilled"
@@ -298,6 +298,9 @@ def delete_file(args):
     data = args[1]
 
     patient_name, file_name = data.split(SEPARATOR)
+
+    # delete the specified file
+    run_cmd(f"irm /tempZome/home/public/{patient_name}/{file_name}")
 
     return f"[O] REQ_FILE_DELETE by {address} fulfilled"
 
