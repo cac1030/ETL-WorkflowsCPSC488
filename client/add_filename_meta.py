@@ -18,6 +18,8 @@ dir_names = run_cmd("ils /tempZone/home/public | awk -F '/' '/_/ {print $5}'").s
 for dir_name in dir_names:
     run_cmd("icd " + dir_name)
     files = run_cmd("ils | fgrep . | cut -f3 -d ' '").splitlines()
+    print(files)
     for file in files:
         run_cmd(f"imeta set -d {file} file_name {file}")
     run_cmd("icd ..")
+    break
