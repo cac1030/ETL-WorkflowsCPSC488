@@ -252,19 +252,20 @@ def send_file(args):
 
     patient_name, filename = data.split(SEPARATOR)
     file_path = f"/tempZone/home/public/{patient_name}/{filename}"
-    dest_file = f"./temp/{patient_name}-{filename}"
+    dest_path = f"./temp/{patient_name}-{filename}"
+    meta_path = os.path.splitext(dest_path) + '_meta.txt'
 
     # compile metadata into a txt
     metadata = {}
     result = run_cmd(f"imeta ls -d {file_path} | awk '/^[av]/' | cut -f2 -d ' '").splitlines()
     for i in range(0, len(result), 2):
         metadata[result[i]] = result[i+1]
-    with open(filename + "_meta.txt", 'wb') as f:
+    with open(meta_path, 'wb') as f:
         f.write(json.dumps(metadata).encode())
 
     # fetch, zip, and send the file and metadata
-    run_cmd(f"iget {file_path} {dest_file}")
-    zip_file(file_path)
+    run_cmd(f"iget {file_path} {dest_path}")
+    zip_file(dest_path, meta_path)
     try:
         progress = tqdm.tqdm(range(filesize), f"Sending to_client.zip", unit="B", unit_scale=True, unit_divisor=1024)
         with open('to_client.zip', "rb") as f:
@@ -384,11 +385,10 @@ def unzip_file(path):
     else:
         os.system("rm client.zip")
 
-def zip_file(path):
-    filename = os.path.basename(path)
+def zip_file(file_path, meta_path):
     with zipfile.ZipFile('to_client.zip', 'w') as zip:
-        zip.write(path)
-        zip.write(filename + "_meta.txt")
+        zip.write(file_path)
+        zip.write(meta_path)
     return os.path.getsize('to_client.zip')
 
 def put_to_irods(filename, patient_name):
