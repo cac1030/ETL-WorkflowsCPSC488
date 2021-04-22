@@ -16,7 +16,8 @@ dir_names = run_cmd("ils /tempZone/home/public | awk -F '/' '/_/ {print $5}'").s
 
 # fetch list of file names, then add file name as metadata onto file
 for dir_name in dir_names:
-    run_cmd("cd " + dir_name)
+    run_cmd("icd " + dir_name)
     files = run_cmd("ils").splitlines()
     for file in files:
         run_cmd(f"imeta set -d {file} file_name {file}")
+    run_cmd("icd ..")
