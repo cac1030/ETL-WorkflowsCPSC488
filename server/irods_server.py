@@ -300,7 +300,7 @@ def delete_file(args):
     patient_name, file_name = data.split(SEPARATOR)
 
     # delete the specified file
-    run_cmd(f"irm /tempZome/home/public/{patient_name}/{file_name}")
+    run_cmd(f"irm '/tempZone/home/public/{patient_name}/{file_name}'")
 
     return f"[O] REQ_FILE_DELETE by {address} fulfilled"
 

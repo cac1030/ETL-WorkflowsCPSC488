@@ -27,4 +27,4 @@ data = f"{args.patient_name}{SEPARATOR}{args.filename}{SEPARATOR}{filesize}"
 trans = transaction.Request()
 trans.connect()
 trans.send_req("REQ_FILE_UPLOAD", data)
-trans.send_file(filename, filesize)
+trans.send_file(args.filename, filesize)
