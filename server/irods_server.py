@@ -272,7 +272,7 @@ def send_file(args):
                 bytes_read = f.read(BUFFER_SIZE)
                 if not bytes_read:
                     break
-                s.sendall(bytes_read)
+                client_socket.sendall(bytes_read)
     except Exception as e:
         print(f"[X] Sending file failed: {e}")
         s.shutdown(socket.SHUT_RDWR)
