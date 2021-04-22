@@ -264,7 +264,7 @@ def send_file(args):
         f.write(json.dumps(metadata).encode())
 
     # fetch, zip, and send the file and metadata
-    run_cmd(f"iget {file_path} {dest_path}")
+    run_cmd(f"iget '{file_path}' '{dest_path}'")
     file_size = zip_file(dest_path, meta_path)
     try:
         with open('./temp/to_client.zip', "rb") as f:
