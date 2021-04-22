@@ -1,6 +1,7 @@
 import argparse
 import os
 import socket
+import sys
 import transaction
 import zipfile
 
@@ -34,7 +35,7 @@ trans.send_req("REQ_FILE_DOWNLOAD", data)
 
 # receive and write file
 try:
-    file_zip = file_name + '.zip'
+    file_zip = os.path.splitext(file_name)[0] + '.zip'
     with open(file_zip, "wb") as f:
         f.write(trans.recv_response())
 except OSError as e:

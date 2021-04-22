@@ -265,9 +265,9 @@ def send_file(args):
 
     # fetch, zip, and send the file and metadata
     run_cmd(f"iget {file_path} {dest_path}")
-    zip_file(dest_path, meta_path)
+    file_size = zip_file(dest_path, meta_path)
     try:
-        with open('to_client.zip', "rb") as f:
+        with open('./temp/to_client.zip', "rb") as f:
             while True:
                 bytes_read = f.read(BUFFER_SIZE)
                 if not bytes_read:
@@ -279,7 +279,7 @@ def send_file(args):
         s.close()
         sys.exit(1)
     else:
-        print(f"[>] File sent")
+        print(f"[>] File sent | {file_size} bytes")
 
     # clear temp
     os.system("rm ./temp/*")
@@ -387,7 +387,7 @@ def unzip_file(path):
         os.system("rm ./temp/*")
 
 def zip_file(file_path, meta_path):
-    with zipfile.ZipFile('to_client.zip', 'w') as zip:
+    with zipfile.ZipFile('./temp/to_client.zip', 'w') as zip:
         zip.write(file_path)
         zip.write(meta_path)
     return os.path.getsize('to_client.zip')
