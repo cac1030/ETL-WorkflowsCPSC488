@@ -8,12 +8,12 @@ import zipfile
 def unzip_file(file_zip, file_name):
     try:
         with zipfile.ZipFile(file_zip, 'r') as zip_ref:
-            zip_ref.extractall("./temp/" + file_name)
+            zip_ref.extractall('.')
     except Exception as e:
         print(f"Error unzipping file: {e}")
         sys.exit(1)
     else:
-        os.system("rm " + file_name)
+        os.system("rm " + file_zip)
 
 # parse arguments
 parser = argparse.ArgumentParser()
