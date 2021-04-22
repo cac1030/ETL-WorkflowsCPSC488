@@ -267,14 +267,12 @@ def send_file(args):
     run_cmd(f"iget {file_path} {dest_path}")
     zip_file(dest_path, meta_path)
     try:
-        progress = tqdm.tqdm(range(filesize), f"Sending to_client.zip", unit="B", unit_scale=True, unit_divisor=1024)
         with open('to_client.zip', "rb") as f:
             while True:
                 bytes_read = f.read(BUFFER_SIZE)
                 if not bytes_read:
                     break
                 s.sendall(bytes_read)
-                progress.update(len(bytes_read))
     except Exception as e:
         print(f"[X] Sending file failed: {e}")
         s.shutdown(socket.SHUT_RDWR)
