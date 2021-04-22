@@ -1,10 +1,10 @@
-import socket
 import argparse
-import tqdm
-import sys
 import os
+import socket
 import transaction
+import zipfile
 
+# parse arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("patient_name",
                     help="the patient files are being fetched for")
@@ -22,7 +22,7 @@ data = args.patient_name + SEPARATOR + str(args.age) + SEPARATOR + str(args.sear
 # connect and send
 trans = transaction.Request()
 trans.connect()
-trans.send_req("REQ_FILES", data)
+trans.send_req("REQ_FILE_LIST", data)
 
 # receive and write
 try:
@@ -30,6 +30,8 @@ try:
         f.write(trans.recv_response())
 except OSError as e:
     print(f"[X] Writing to file failed: {e}")
+    s.shutdown(socket.SHUT_RDWR)
+    s.close()
     sys.exit(1)
 else:
     size = os.path.getsize("file_data.json")

@@ -71,19 +71,25 @@ def process_request(client_socket, address):
 
     # execute function based on request
     switcher = {
-        "REQ_UPLOAD_FILE": receive_file,
+        "REQ_FILE_UPLOAD": receive_file,
+        "REQ_FILE_DOWNLOAD": send_file,
+        "REQ_FILE_LIST": send_files_info,
+        "REQ_FILE_DELETE": delete_file,
         "REQ_PATIENT_ADD": add_patient,
         "REQ_PATIENT_EDIT": edit_patient,
-        "REQ_PATIENT_FETCH": send_patients_info,
-        "REQ_FILES": send_patient_files
+        "REQ_PATIENT_LIST": send_patients_info,
+        "REQ_PATIENT_DELETE": delete_patient,
         }
 
     args = {
-        "REQ_UPLOAD_FILE": [client_socket, address, data],
-        "REQ_PATIENT_ADD": [data, address],
-        "REQ_PATIENT_EDIT": [data, address],
-        "REQ_PATIENT_FETCH": [client_socket, address],
-        "REQ_FILES": [client_socket, address, data]
+        "REQ_FILE_UPLOAD": [client_socket, address, data],
+        "REQ_FILE_DOWNLOAD": [client_socket, address, data],
+        "REQ_FILE_LIST": [client_socket, address, data],
+        "REQ_FILE_DELETE": [address, data],
+        "REQ_PATIENT_ADD": address,
+        "REQ_PATIENT_EDIT": address,
+        "REQ_PATIENT_LIST": [client_socket, address],
+        "REQ_PATIENT_DELETE": [address, data]
         }
 
     message = switcher[request](args[request])
@@ -127,10 +133,9 @@ def receive_file(args):
     unzip_file("./client.zip")
     put_to_irods(filename, patient_name)
 
-    return f"[O] REQ_UPLOAD_FILE by {address} fulfilled"
+    return f"[O] REQ_FILE_UPLOAD by {address} fulfilled"
 
-def add_patient(args):
-    address = args[1]
+def add_patient(address):
     try:
         patient_data = json.loads(args[0])
     except ValueError as e:
@@ -159,8 +164,7 @@ def add_patient(args):
 
     return f"[O] REQ_PATIENT_ADD by {address} fulfilled"
 
-def edit_patient(args):
-    address = args[1]
+def edit_patient(address):
     try:
         patient_data = json.loads(args[0])
     except ValueError as e:
@@ -214,7 +218,7 @@ def send_patients_info(args):
 
     return f"[O] REQ_FETCH by {address} fulfilled"
 
-def send_patient_files(args):
+def send_files_info(args):
     client_socket = args[0]
     address = args[1]
     data = args[2]
@@ -239,7 +243,66 @@ def send_patient_files(args):
     else:
         print(f"[>] File data sent successfully | {len(data_bytes)} bytes")
 
-    return f"[O] REQ_FILES by {address} fulfilled"
+    return f"[O] REQ_FILE_LIST by {address} fulfilled"
+
+def send_file(args):
+    client_socket = args[0]
+    address = args[1]
+    data = args[2]
+
+    patient_name, filename = data.split(SEPARATOR)
+    file_path = f"/tempZone/home/public/{patient_name}/{filename}"
+    dest_file = f"./temp/{patient_name}-{filename}"
+
+    # compile metadata into a txt
+    metadata = {}
+    result = run_cmd(f"imeta ls -d {file_path} | awk '/^[av]/' | cut -f2 -d ' '").splitlines()
+    for i in range(0, len(result), 2):
+        metadata[result[i]] = result[i+1]
+    with open(filename + "_meta.txt", 'wb') as f:
+        f.write(json.dumps(metadata))
+
+    # fetch, zip, and send the file and metadata
+    run_cmd(f"iget {file_path} {dest_file}")
+    zip_file(file_path)
+    try:
+        progress = tqdm.tqdm(range(filesize), f"Sending to_client.zip", unit="B", unit_scale=True, unit_divisor=1024)
+        with open('to_client.zip', "rb") as f:
+            while True:
+                bytes_read = f.read(BUFFER_SIZE)
+                if not bytes_read:
+                    break
+                s.sendall(bytes_read)
+                progress.update(len(bytes_read))
+    except Exception as e:
+        print(f"[X] Sending file failed: {e}")
+        s.shutdown(socket.SHUT_RDWR)
+        s.close()
+        sys.exit(1)
+    else:
+        print(f"[>] File sent")
+
+    return f"[O] REQ_FILE_DOWNLOAD by {address} fulfilled"
+
+def delete_patient(args):
+    address = args[0]
+    patient_name = args[1]
+
+    # delete patient dir and all files within
+    run_cmd(f"irm -rf /tempZone/home/public/{patient_name}")
+
+    return f"[O] REQ_PATIENT_DELETE by {address} fulfilled"
+
+def delete_file(args):
+    address = args[0]
+    data = args[1]
+
+    patient_name, file_name = data.split(SEPARATOR)
+
+    # delete the specified file
+    run_cmd(f"irm '/tempZone/home/public/{patient_name}/{file_name}'")
+
+    return f"[O] REQ_FILE_DELETE by {address} fulfilled"
 
 # utility
 def dir_exists(dir):
@@ -258,7 +321,7 @@ def run_cmd(cmd):
         s.close()
         sys.exit(1)
     else:
-        print(f"[O] Executed cmd: \"{cmd}\"")
+        print(f"[ ] Executed cmd: \"{cmd}\"")
         return output
 
 def retreive_matching_file_list(patient_dir, file_age, search_terms):
@@ -320,6 +383,13 @@ def unzip_file(path):
         sys.exit(1)
     else:
         os.system("rm client.zip")
+
+def zip_file(path):
+    filename = os.path.basename(path)
+    with zipfile.ZipFile('to_client.zip', 'w') as zip:
+        zip.write(path)
+        zip.write(filename + "_meta.txt")
+    return os.path.getsize('to_client.zip')
 
 def put_to_irods(filename, patient_name):
     # read data from file
