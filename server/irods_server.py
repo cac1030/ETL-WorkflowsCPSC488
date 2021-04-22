@@ -390,7 +390,7 @@ def zip_file(file_path, meta_path):
     with zipfile.ZipFile('./temp/to_client.zip', 'w') as zip:
         zip.write(file_path)
         zip.write(meta_path)
-    return os.path.getsize('to_client.zip')
+    return os.path.getsize('./temp/to_client.zip')
 
 def put_to_irods(filename, patient_name):
     # read data from file
