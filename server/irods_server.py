@@ -130,7 +130,7 @@ def receive_file(args):
         else:
             print(f"[<] {filename} received from {address}")
 
-    unzip_file("./client.zip")
+    unzip_file("./temp/client.zip")
     put_to_irods(filename, patient_name)
 
     return f"[O] REQ_FILE_UPLOAD by {address} fulfilled"
