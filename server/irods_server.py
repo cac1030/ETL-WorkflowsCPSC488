@@ -253,7 +253,7 @@ def send_file(args):
     patient_name, filename = data.split(SEPARATOR)
     file_path = f"/tempZone/home/public/{patient_name}/{filename}"
     dest_path = f"./temp/{patient_name}-{filename}"
-    meta_path = os.path.splitext(dest_path) + '_meta.txt'
+    meta_path = os.path.splitext(dest_path)[0] + '_meta.txt'
 
     # compile metadata into a txt
     metadata = {}
