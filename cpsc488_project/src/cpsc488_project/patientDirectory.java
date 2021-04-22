@@ -74,6 +74,7 @@ public class patientDirectory {
 	String row="";
 	private final JLabel lblRightClickA = new JLabel("Right click the name to view options*");
 	
+	
 	public class CmdPatients {
 		public void patientName() throws Exception {
 			
@@ -93,6 +94,24 @@ public class patientDirectory {
 		}
 	}
 	
+	public class CmdPatientsDelete {
+		public void patientNameDelete() throws Exception {
+			
+		//Navigate into Client folder and run Python3 script to delete patient
+        ProcessBuilder builder = new ProcessBuilder(
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_delete.py " + "-p"+ " " + lastName.toUpperCase() + "_" + firstName.toUpperCase());
+      
+        builder.redirectErrorStream(true);
+        Process p = builder.start();
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        while (true) {
+            line = r.readLine();
+            if (line == null) { break; }
+            System.out.println(line);
+        	}
+		}
+	}
 	
 	
 	
@@ -315,11 +334,14 @@ public class patientDirectory {
 		JMenuItem view =new JMenuItem("View Info", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/viewpic.png")));
 		//Image Source https://icons8.com/icon/3553/edit-file
 		JMenuItem edit = new JMenuItem("Edit Biometrics", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/editpic.png")));
+		//Image Source https://icons-for-free.com/delete+remove+trash+trash+bin+trash+can+icon-1320073117929397588/
+		JMenuItem delete = new JMenuItem("Delete Patient", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/trash.png")));
 		
 		
 		pop.add(add);
 		pop.add(view);
 		pop.add(edit);
+		pop.add(delete);
 		
 		
 		add.addActionListener(new ActionListener() {
@@ -361,6 +383,25 @@ public class patientDirectory {
 				// TODO Auto-generated method stub
 				updatePatientPage window = new updatePatientPage();
 				window.frame.setVisible(true);
+			}
+			
+		});
+		
+		delete.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CmdPatientsDelete cmd = new CmdPatientsDelete();
+				try {
+					//Run Command Prompt
+					cmd.patientNameDelete();
+					bindData();
+					 //System.out.println();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 			
 		});

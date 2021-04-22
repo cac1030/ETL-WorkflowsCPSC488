@@ -26,6 +26,9 @@ import javax.swing.SwingUtilities;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import cpsc488_project.patientDirectory.CmdPatientsDelete;
+
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -51,6 +54,7 @@ public class viewFilePage {
 	public static String dateModified;
 	public static String overseeing = "";
 	public static String notes = "";
+	public static String fileName = "";
 	public int filterNum=0;
 	
 	
@@ -74,6 +78,26 @@ public class viewFilePage {
         	}
 		}
 	}
+	
+	public class CmdPatientsDeleteFile {
+		public void patientNameDeleteFile() throws Exception {
+			
+		//Navigate into Client folder and run Python3 script to Delete Selected File
+        ProcessBuilder builder = new ProcessBuilder(
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_delete.py " + "-f" + " " + fileName);
+      
+        builder.redirectErrorStream(true);
+        Process p = builder.start();
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        while (true) {
+            line = r.readLine();
+            if (line == null) { break; }
+            System.out.println(line);
+        	}
+		}
+	}
+	
 	
 	private void bindData() throws IOException, org.json.simple.parser.ParseException {
 		getNames().stream().forEach((name) -> {
@@ -494,7 +518,7 @@ public class viewFilePage {
 		b = (JSONArray) parser.parse(reader);
 		//System.out.println(a);
 		// https://stackoverflow.com/questions/10926353/how-to-read-json-file-into-java-with-simple-json-library
-		String name, fileName;
+		String name;
 		for (Object o : b) {
 		    JSONObject person = (JSONObject) o;
 		    
@@ -520,12 +544,14 @@ public class viewFilePage {
 		//https://www.iconfinder.com/icons/115801/settings_icon
 		JMenuItem Open =new JMenuItem("Open File", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/open.png")));
 		JMenuItem Properties =new JMenuItem("Properties", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/properties.png")));
+		JMenuItem Delete =new JMenuItem("Delete File", new ImageIcon(patientDirectory.class.getResource("/cpsc488_project/trash.png")));
 		
 		
 		
 		//Pop up options
 		pop.add(Open);
 		pop.add(Properties);
+		pop.add(Delete);
 		
 		
 		
@@ -549,6 +575,24 @@ public class viewFilePage {
 				
 				//Popup with Properties
 				JOptionPane.showMessageDialog(f,"Title: " + title +"\n" +"Date Created: " + dateCreated + "\n" + "Date Modified: "+dateModified + "\n" + "Overseeing: " +overseeing + "\n" + "Notes: " + notes);
+				
+			}
+			
+		});
+		Delete.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CmdPatientsDeleteFile cmd = new CmdPatientsDeleteFile();
+				try {
+					//Run Command Prompt
+					cmd.patientNameDeleteFile();
+					bindData();
+					 //System.out.println();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 			}
 			
