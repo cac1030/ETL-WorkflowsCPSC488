@@ -19,5 +19,5 @@ for dir_name in dir_names:
     files = run_cmd(f"ils /tempZone/home/public/{dir_name} | fgrep . | cut -f3 -d ' '").splitlines()
     print(files)
     for file in files:
-        run_cmd(f"imeta set -d /tempZone/home/public/{dir_name}/{file} file_name {file}")
+        run_cmd(f"imeta set -d '/tempZone/home/public/{dir_name}/{file}' file_name '{file}'")
     run_cmd("icd ..")
