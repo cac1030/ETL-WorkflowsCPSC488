@@ -386,10 +386,10 @@ def unzip_file(path):
 
 def zip_file(path):
     filename = os.path.basename(path)
-	with zipfile.ZipFile('to_client.zip', 'w') as zip:
-		zip.write(path)
-		zip.write(filename + "_meta.txt")
-	return os.path.getsize('to_client.zip')
+    with zipfile.ZipFile('to_client.zip', 'w') as zip:
+        zip.write(path)
+        zip.write(filename + "_meta.txt")
+    return os.path.getsize('to_client.zip')
 
 def put_to_irods(filename, patient_name):
     # read data from file
