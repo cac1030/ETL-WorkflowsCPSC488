@@ -13,11 +13,11 @@ class Request:
     def connect(self):
         print(f"[...] Connecting to {self.SERVER_HOST}:{self.SERVER_PORT}")
         try:
-        	self.SOCKET.connect((self.SERVER_HOST, self.SERVER_PORT))
+            self.SOCKET.connect((self.SERVER_HOST, self.SERVER_PORT))
         except OSError as e:
             print(f"[X] Connection failed: {e}")
-            s.shutdown(socket.SHUT_RDWR)
-            s.close()
+            self.SOCKET.shutdown(socket.SHUT_RDWR)
+            self.SOCKET.close()
             sys.exit(1)
         else:
             print("[+] Connected")
@@ -27,31 +27,31 @@ class Request:
             self.SOCKET.send(f"{request}!{data}".encode())
         except OSError as e:
             print(f"[X] Sending request failed: {e}")
-            s.shutdown(socket.SHUT_RDWR)
-            s.close()
+            self.SOCKET.shutdown(socket.SHUT_RDWR)
+            self.SOCKET.close()
             sys.exit(1)
         else:
             print(f"[>] {request} sent")
 
     def send_file(self, filename, filesize):
         try:
-        	progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-        	with open('client.zip', "rb") as f:
-        		while True:
-        			bytes_read = f.read(self.BUFFER_SIZE)
-        			if not bytes_read:
-        				break
-        			self.SOCKET.sendall(bytes_read)
-        			progress.update(len(bytes_read))
+            progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
+            with open('client.zip', "rb") as f:
+                while True:
+                    bytes_read = f.read(self.BUFFER_SIZE)
+                    if not bytes_read:
+                        break
+                    self.SOCKET.sendall(bytes_read)
+                    progress.update(len(bytes_read))
         except Exception as e:
-        	print(f"[X] Sending file failed: {e}")
-            s.shutdown(socket.SHUT_RDWR)
-            s.close()
+            print(f"[X] Sending file failed: {e}")
+            self.SOCKET.shutdown(socket.SHUT_RDWR)
+            self.SOCKET.close()
             sys.exit(1)
         else:
-        	print(f"[>] File sent")
+            print(f"[>] File sent")
         finally:
-        	self.SOCKET.close()
+            self.SOCKET.close()
 
     def recv_response(self):
         try:
@@ -63,8 +63,8 @@ class Request:
                 message = message + bytes_read
         except OSError as e:
             print(f"[X] Receiving data failed: {e}")
-            s.shutdown(socket.SHUT_RDWR)
-            s.close()
+            self.SOCKET.shutdown(socket.SHUT_RDWR)
+            self.SOCKET.close()
             sys.exit(1)
         else:
             return message
