@@ -43,7 +43,7 @@ except OSError as e:
     s.close()
     sys.exit(1)
 else:
-    size = os.path.getsize(args.file_path)
+    size = os.path.getsize(file_zip)
     print(f"[<] Received data from server | {size} bytes")
 
 unzip_file(file_zip, file_name)

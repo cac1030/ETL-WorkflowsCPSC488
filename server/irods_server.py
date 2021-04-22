@@ -109,7 +109,7 @@ def receive_file(args):
 
     # receive file
     progress = tqdm.tqdm(range(filesize), f"[<] Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-    with open("client.zip", "wb") as f:
+    with open("./temp/client.zip", "wb") as f:
         try:
             while True:
                 bytes_read = client_socket.recv(BUFFER_SIZE)
@@ -281,6 +281,9 @@ def send_file(args):
     else:
         print(f"[>] File sent")
 
+    # clear temp
+    os.system("rm ./temp/*")
+
     return f"[O] REQ_FILE_DOWNLOAD by {address} fulfilled"
 
 def delete_patient(args):
@@ -381,7 +384,7 @@ def unzip_file(path):
         s.close()
         sys.exit(1)
     else:
-        os.system("rm client.zip")
+        os.system("rm ./temp/*")
 
 def zip_file(file_path, meta_path):
     with zipfile.ZipFile('to_client.zip', 'w') as zip:
@@ -424,6 +427,8 @@ def put_to_irods(filename, patient_name):
         new_filename = filename
 
     run_cmd(f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{new_filename} --metadata=\"date_created;{data['date_created']};;date_modified;{data['date_modified']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\"")
+    os.system("rm ./temp/*")
+
 
 #########################################################
 
