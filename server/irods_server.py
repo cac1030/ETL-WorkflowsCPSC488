@@ -260,7 +260,7 @@ def send_file(args):
     for i in range(0, len(result), 2):
         metadata[result[i]] = result[i+1]
     with open(filename + "_meta.txt", 'wb') as f:
-        f.write(json.dumps(metadata))
+        f.write(json.dumps(metadata).encode())
 
     # fetch, zip, and send the file and metadata
     run_cmd(f"iget {file_path} {dest_file}")
