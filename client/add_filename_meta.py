@@ -22,4 +22,3 @@ for dir_name in dir_names:
     for file in files:
         run_cmd(f"imeta set -d {file} file_name {file}")
     run_cmd("icd ..")
-    break
