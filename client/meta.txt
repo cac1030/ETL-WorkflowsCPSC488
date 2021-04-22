@@ -1,7 +1,0 @@
-{
-"title":"mri",
-"date_created":"1585870677",
-"date_modified":"1585870677",
-"overseeing":"klaus",
-"notes":"insert technical medical jargon here"
-}
