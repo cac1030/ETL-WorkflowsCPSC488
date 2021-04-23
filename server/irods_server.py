@@ -109,7 +109,7 @@ def receive_file(args):
 
     # receive file
     progress = tqdm.tqdm(range(filesize), f"[<] Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-    with open("client.zip", "wb") as f:
+    with open("./temp/client.zip", "wb") as f:
         try:
             while True:
                 bytes_read = client_socket.recv(BUFFER_SIZE)
@@ -130,7 +130,7 @@ def receive_file(args):
         else:
             print(f"[<] {filename} received from {address}")
 
-    unzip_file("./client.zip")
+    unzip_file("./temp/client.zip")
     put_to_irods(filename, patient_name)
 
     return f"[O] REQ_FILE_UPLOAD by {address} fulfilled"
@@ -252,35 +252,37 @@ def send_file(args):
 
     patient_name, filename = data.split(SEPARATOR)
     file_path = f"/tempZone/home/public/{patient_name}/{filename}"
-    dest_file = f"./temp/{patient_name}-{filename}"
+    dest_path = f"./temp/{patient_name}-{filename}"
+    meta_path = os.path.splitext(dest_path)[0] + '_meta.txt'
 
     # compile metadata into a txt
     metadata = {}
     result = run_cmd(f"imeta ls -d {file_path} | awk '/^[av]/' | cut -f2 -d ' '").splitlines()
     for i in range(0, len(result), 2):
         metadata[result[i]] = result[i+1]
-    with open(filename + "_meta.txt", 'wb') as f:
-        f.write(json.dumps(metadata))
+    with open(meta_path, 'wb') as f:
+        f.write(json.dumps(metadata).encode())
 
     # fetch, zip, and send the file and metadata
-    run_cmd(f"iget {file_path} {dest_file}")
-    zip_file(file_path)
+    run_cmd(f"iget '{file_path}' '{dest_path}'")
+    file_size = zip_file(dest_path, meta_path)
     try:
-        progress = tqdm.tqdm(range(filesize), f"Sending to_client.zip", unit="B", unit_scale=True, unit_divisor=1024)
-        with open('to_client.zip', "rb") as f:
+        with open('./temp/to_client.zip', "rb") as f:
             while True:
                 bytes_read = f.read(BUFFER_SIZE)
                 if not bytes_read:
                     break
-                s.sendall(bytes_read)
-                progress.update(len(bytes_read))
+                client_socket.sendall(bytes_read)
     except Exception as e:
         print(f"[X] Sending file failed: {e}")
         s.shutdown(socket.SHUT_RDWR)
         s.close()
         sys.exit(1)
     else:
-        print(f"[>] File sent")
+        print(f"[>] File sent | {file_size} bytes")
+
+    # clear temp
+    os.system("rm ./temp/*")
 
     return f"[O] REQ_FILE_DOWNLOAD by {address} fulfilled"
 
@@ -382,14 +384,13 @@ def unzip_file(path):
         s.close()
         sys.exit(1)
     else:
-        os.system("rm client.zip")
+        os.system("rm ./temp/client.zip")
 
-def zip_file(path):
-    filename = os.path.basename(path)
-    with zipfile.ZipFile('to_client.zip', 'w') as zip:
-        zip.write(path)
-        zip.write(filename + "_meta.txt")
-    return os.path.getsize('to_client.zip')
+def zip_file(file_path, meta_path):
+    with zipfile.ZipFile('./temp/to_client.zip', 'w') as zip:
+        zip.write(file_path)
+        zip.write(meta_path)
+    return os.path.getsize('./temp/to_client.zip')
 
 def put_to_irods(filename, patient_name):
     # read data from file
@@ -425,7 +426,9 @@ def put_to_irods(filename, patient_name):
         # use original filename
         new_filename = filename
 
-    run_cmd(f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{new_filename} --metadata=\"date_created;{data['date_created']};;date_modified;{data['date_modified']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;\"")
+    run_cmd(f"iput ./temp/{filename} /tempZone/home/public/{patient_name}/{new_filename} --metadata=\"date_created;{data['date_created']};;date_modified;{data['date_modified']};;title;{data['title']};;overseeing;{data['overseeing']};;notes;{data['notes']};;file_name;{data['file_name']};;\"")
+    os.system("rm ./temp/*")
+
 
 #########################################################
 

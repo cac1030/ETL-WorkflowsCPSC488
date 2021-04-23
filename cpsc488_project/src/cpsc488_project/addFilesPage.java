@@ -196,7 +196,7 @@ public class addFilesPage {
 		addFileButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String PATIENT_NAME = patientDirectory.nameSelected;
+				//String PATIENT_NAME = patientDirectory.nameSelected;
 				//String address = "54.227.89.39";
 				
 				
@@ -222,13 +222,14 @@ public class addFilesPage {
 					
 					int secs = (int) ((new Date().getTime())/1000);
 					
-					
 					//To JSON format
 					String metadata = "{\n" +  "\""+ "title" + "\"" + ":" + "\"" + metadataTitleField.getText() + "\"" + ",\n" 
+							+ "\"" + "file_name" + "\"" + ":" + "\"" + fileNameLabel.getText()  + "\"" + ",\n" 
 							+ "\"" + "date_created" + "\"" + ":" + "\"" + secs  + "\"" + ",\n" 
 							+ "\"" + "date_modified" + "\"" + ":" + "\"" + secs  + "\"" + ",\n" 
 							+ "\"" + "overseeing" + "\"" + ":" + "\"" + metadataPhysicianField.getText()  + "\"" + ",\n" 
 							+ "\"" + "notes"  + "\"" + ":" + "\"" + metadataNotesField.getText() + "\"" + "\n" + "}";
+					
 					
 					//Write
 					File dir = new File("../client/");

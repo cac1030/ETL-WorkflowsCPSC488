@@ -50,6 +50,7 @@ public class viewFilePage {
 	private final JPopupMenu pop = new JPopupMenu();
 	public int indicies;
 	public static String title = "";
+	public static String SelectedFile = "";
 	public static String dateCreated ;
 	public static String dateModified;
 	public static String overseeing = "";
@@ -84,7 +85,7 @@ public class viewFilePage {
 			
 		//Navigate into Client folder and run Python3 script to Delete Selected File
         ProcessBuilder builder = new ProcessBuilder(
-        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_delete.py " + "-f" + " " + fileName);
+        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_delete.py " + "-p" + " " + patientDirectory.lastName.toUpperCase() + "_" + patientDirectory.firstName.toUpperCase() + " " +  "-f" + " " + SelectedFile);
       
         builder.redirectErrorStream(true);
         Process p = builder.start();
@@ -308,8 +309,10 @@ public class viewFilePage {
 				//Search through array with index number selected
 				JSONObject selected = (JSONObject) b.get(indicies);
 				
+				//All File Properties
 				title = (String) selected.get("title");
 				
+				SelectedFile = (String) selected.get("file_name");
 				dateCreated = (String) selected.get("date_created");
 				dateModified = (String) selected.get("date_modified");
 				
@@ -574,7 +577,7 @@ public class viewFilePage {
 				f= new JFrame();
 				
 				//Popup with Properties
-				JOptionPane.showMessageDialog(f,"Title: " + title +"\n" +"Date Created: " + dateCreated + "\n" + "Date Modified: "+dateModified + "\n" + "Overseeing: " +overseeing + "\n" + "Notes: " + notes);
+				JOptionPane.showMessageDialog(f,"Title: " + title +"\n" +"Date Created: " + dateCreated + "\n" + "Date Modified: "+dateModified + "\n" + "Overseeing: " +overseeing + "\n" + "Notes: " + notes + SelectedFile);
 				
 			}
 			
@@ -584,9 +587,12 @@ public class viewFilePage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				CmdPatientsDeleteFile cmd = new CmdPatientsDeleteFile();
+				CmdFiles cmd2 = new CmdFiles();
 				try {
 					//Run Command Prompt
 					cmd.patientNameDeleteFile();
+					DLMFiles.clear();
+					cmd2.fileNames();
 					bindData();
 					 //System.out.println();
 				} catch (Exception e1) {

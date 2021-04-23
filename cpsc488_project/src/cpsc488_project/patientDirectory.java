@@ -392,9 +392,13 @@ public class patientDirectory {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				CmdPatientsDelete cmd = new CmdPatientsDelete();
+				CmdPatients cmd2 = new CmdPatients();
 				try {
 					//Run Command Prompt
 					cmd.patientNameDelete();
+					DLM.clear();
+					cmd2.patientName();
+					
 					bindData();
 					 //System.out.println();
 				} catch (Exception e1) {
