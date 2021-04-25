@@ -8,6 +8,9 @@ import java.awt.Color;
 import javax.swing.JTabbedPane;
 import java.awt.Panel;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,6 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -39,6 +44,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.*;
 
 public class viewFilePage {
 
@@ -99,6 +105,41 @@ public class viewFilePage {
 		}
 	}
 	
+	
+	// Downloading a file for viewing
+	public class DownloadPatientsFile {
+		public void patientDownloadFile() throws Exception {
+			ProcessBuilder builder = new ProcessBuilder(
+	        		"cmd.exe", "/c", "cd.. && cd Client/ && python3 irods_down.py " + patientDirectory.lastName.toUpperCase() + "_" + patientDirectory.firstName.toUpperCase() + " " + SelectedFile);
+			
+			builder.redirectErrorStream(true);
+	        Process p = builder.start();
+	        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+	        String line;
+	        while (true) {
+	            line = r.readLine();
+	            if (line == null) { break; }
+	            System.out.println(line);
+	        }
+		}
+	}
+	
+	public class OpenImageFile {
+		public void openImage() throws Exception {
+			ProcessBuilder builder = new ProcessBuilder(
+	        		"cmd.exe", "/c", "cd src/cpsc488_project/temp/ && " + patientDirectory.lastName.toUpperCase() + "_" + patientDirectory.firstName.toUpperCase() + "-" + SelectedFile);
+			
+			builder.redirectErrorStream(true);
+	        Process p = builder.start();
+	        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+	        String line;
+	        while (true) {
+	            line = r.readLine();
+	            if (line == null) { break; }
+	            System.out.println(line);
+	        }
+		}
+	}
 	
 	private void bindData() throws IOException, org.json.simple.parser.ParseException {
 		getNames().stream().forEach((name) -> {
@@ -564,13 +605,63 @@ public class viewFilePage {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//Open File
-				JFrame o;
-				o = new JFrame();
 				
+				DownloadPatientsFile cmd = new DownloadPatientsFile();
+				
+				try {
+					//Run Command Prompt
+					cmd.patientDownloadFile();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				// Files now need to be unzipped
+				
+				File directory = new File("../cpsc488_project/src/cpsc488_project");
+				System.out.println("found directory");
+				
+				byte[] buffer = new byte[1024];
+				FileInputStream fileInput;
+				
+				// https://www.journaldev.com/960/java-unzip-file-example
+				try {
+					fileInput = new FileInputStream("../client/" + SelectedFile + ".zip");
+					ZipInputStream zipInput = new ZipInputStream(fileInput);
+					ZipEntry zipEntry = zipInput.getNextEntry();
+					while (zipEntry != null) {
+						String zipFileName = zipEntry.getName();
+						File newFile = new File("../cpsc488_project/src/cpsc488_project" + File.separator + zipFileName);
+						System.out.println("Unzipping to " + newFile.getAbsolutePath());
+						
+						new File(newFile.getParent()).mkdirs();
+						FileOutputStream fileOutput = new FileOutputStream(newFile);
+						int x;
+						while((x = zipInput.read(buffer)) > 0) {
+							fileOutput.write(buffer, 0, x);
+						}
+						fileOutput.close();
+						zipInput.closeEntry();
+						zipEntry = zipInput.getNextEntry();
+					}
+					zipInput.closeEntry();
+					zipInput.close();
+					fileInput.close();
+				} catch(Exception e1) {
+					e1.printStackTrace();
+				}
+				
+				OpenImageFile image = new OpenImageFile();
+				try {
+					image.openImage();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 			}
-			
 		});
+		
 		Properties.addActionListener(new ActionListener() {
 
 			@Override
