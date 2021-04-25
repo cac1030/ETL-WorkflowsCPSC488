@@ -564,6 +564,10 @@ public class viewFilePage {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//Open File
+				JFrame o;
+				o = new JFrame();
+				
+				
 			}
 			
 		});
@@ -573,11 +577,11 @@ public class viewFilePage {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//Create New Popup Frame
-				JFrame f;
-				f= new JFrame();
+				JFrame p;
+				p= new JFrame();
 				
 				//Popup with Properties
-				JOptionPane.showMessageDialog(f,"Title: " + title +"\n" +"Date Created: " + dateCreated + "\n" + "Date Modified: "+dateModified + "\n" + "Overseeing: " +overseeing + "\n" + "Notes: " + notes + SelectedFile);
+				JOptionPane.showMessageDialog(p,"Title: " + title +"\n" +"Date Created: " + dateCreated + "\n" + "Date Modified: "+dateModified + "\n" + "Overseeing: " +overseeing + "\n" + "Notes: " + notes);
 				
 			}
 			
