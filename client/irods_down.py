@@ -35,7 +35,7 @@ trans.send_req("REQ_FILE_DOWNLOAD", data)
 
 # receive and write file
 try:
-    file_zip = os.path.splitext(file_name)[0] + '.zip'
+    file_zip = file_name + '.zip'
     with open(file_zip, "wb") as f:
         f.write(trans.recv_response())
 except OSError as e:
