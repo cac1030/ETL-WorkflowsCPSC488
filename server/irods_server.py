@@ -86,8 +86,8 @@ def process_request(client_socket, address):
         "REQ_FILE_DOWNLOAD": [client_socket, address, data],
         "REQ_FILE_LIST": [client_socket, address, data],
         "REQ_FILE_DELETE": [address, data],
-        "REQ_PATIENT_ADD": address,
-        "REQ_PATIENT_EDIT": address,
+        "REQ_PATIENT_ADD": [address, data],
+        "REQ_PATIENT_EDIT": [address, data],
         "REQ_PATIENT_LIST": [client_socket, address],
         "REQ_PATIENT_DELETE": [address, data]
         }
@@ -135,9 +135,12 @@ def receive_file(args):
 
     return f"[O] REQ_FILE_UPLOAD by {address} fulfilled"
 
-def add_patient(address):
+def add_patient(args):
+    address = args[0]
+    data = args[1]
+
     try:
-        patient_data = json.loads(address)
+        patient_data = json.loads(data)
     except ValueError as e:
         print(f"Error loading json: {e}")
         s.shutdown(socket.SHUT_RDWR)
@@ -165,8 +168,11 @@ def add_patient(address):
     return f"[O] REQ_PATIENT_ADD by {address} fulfilled"
 
 def edit_patient(address):
+    address = args[0]
+    data = args[1]
+
     try:
-        patient_data = json.loads(address)
+        patient_data = json.loads(data)
     except ValueError as e:
         print(f"[X] Error loading json: {e}")
         s.shutdown(socket.SHUT_RDWR)
