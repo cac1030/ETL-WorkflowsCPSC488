@@ -13,7 +13,6 @@ public class IDPasswords {
 		logininfo.put("Christian", "123");
 		logininfo.put("Wayne", "123");
 		logininfo.put("Jeff", "123");
-		
 	}
 	
 	protected HashMap getLoginInfo(){

@@ -301,7 +301,6 @@ public class patientDirectory {
 		JSONParser parser = new JSONParser();
 		
 		a = (JSONArray) parser.parse(reader);
-		//System.out.println(a);
 		// https://stackoverflow.com/questions/10926353/how-to-read-json-file-into-java-with-simple-json-library
 		String name,fname,lname;
 		for (Object o : a) {
