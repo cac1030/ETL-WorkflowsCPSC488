@@ -623,10 +623,12 @@ public class viewFilePage {
 				
 				byte[] buffer = new byte[1024];
 				FileInputStream fileInput;
+				String[] fileParts = SelectedFile.split("\\.");
+				System.out.println(fileParts[0]);
 				
 				// https://www.journaldev.com/960/java-unzip-file-example
 				try {
-					fileInput = new FileInputStream("../client/" + SelectedFile + ".zip");
+					fileInput = new FileInputStream("../client/" + fileParts[0] + ".zip");
 					ZipInputStream zipInput = new ZipInputStream(fileInput);
 					ZipEntry zipEntry = zipInput.getNextEntry();
 					while (zipEntry != null) {
