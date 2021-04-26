@@ -167,7 +167,7 @@ def add_patient(args):
 
     return f"[O] REQ_PATIENT_ADD by {address} fulfilled"
 
-def edit_patient(address):
+def edit_patient(args):
     address = args[0]
     data = args[1]
 
