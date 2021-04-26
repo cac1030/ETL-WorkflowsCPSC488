@@ -137,7 +137,7 @@ def receive_file(args):
 
 def add_patient(address):
     try:
-        patient_data = json.loads(args[0])
+        patient_data = json.loads(address)
     except ValueError as e:
         print(f"Error loading json: {e}")
         s.shutdown(socket.SHUT_RDWR)
@@ -166,7 +166,7 @@ def add_patient(address):
 
 def edit_patient(address):
     try:
-        patient_data = json.loads(args[0])
+        patient_data = json.loads(address)
     except ValueError as e:
         print(f"[X] Error loading json: {e}")
         s.shutdown(socket.SHUT_RDWR)
